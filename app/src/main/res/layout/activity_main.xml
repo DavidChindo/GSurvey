@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="@dimen/margin_four"
+        android:alpha="0.9"
+        app:subtitleTextAppearance="@style/ToolbarAppearanceSubtitle"
+        app:titleTextAppearance="@style/ToolbarAppearanceTitle"
+        android:gravity="end"
+        android:foregroundTint="@color/colorWhite"
+        android:titleTextColor="@color/colorWhite"
+        app:titleTextColor="@color/colorWhite"
+        >
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/navigation"
+        android:layout_below="@id/toolbar"
+        android:animateLayoutChanges="true">
+
+    </FrameLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite"
+        android:overScrollMode="never"
+        app:itemIconTint="@drawable/item_state_list"
+        app:itemTextColor="@drawable/item_state_list"
+        app:menu="@menu/bottom_navigation_items"/>
+</RelativeLayout>

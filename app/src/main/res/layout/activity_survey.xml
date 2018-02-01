@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.hics.g500.SurveyEngine.SurveyActivity">
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/act_survey_recycler"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="70dp"
+    android:clipToPadding="false" />
+<LinearLayout
+    android:id="@+id/act_survey_toolbar_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="bottom|end">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/act_survey_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_sixteen"
+        android:src="@drawable/ic_done"
+        android:tint="@color/colorWhite"
+        app:borderWidth="0dp"
+        />
+</LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/background" />
+
+    <LinearLayout
+        android:id="@+id/main_Login_linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="320dp"
+            android:layout_height="160dp"
+            android:padding="48dp"
+            android:src="@drawable/img_logo"
+            android:id="@+id/act_login_img_logo"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center|top">
+            <Button
+                android:id="@+id/act_login_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entrar"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/font_size_14"
+                android:layout_marginEnd="@dimen/margin_twelve"
+                android:layout_marginBottom="@dimen/margin_twelve"
+                android:background="@android:color/transparent"/>
+            <Button
+                android:id="@+id/act_login_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registrarse"
+                android:layout_marginStart="@dimen/margin_twelve"
+                android:layout_marginBottom="@dimen/margin_twelve"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/font_size_14"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="232dp"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/margin_thirtytwo"
+            android:layout_marginStart="@dimen/margin_thirtytwo">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/act_login_txt_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel"
+                android:layout_marginTop="@dimen/margin_twelve">
+
+                <EditText
+                    android:id="@+id/act_login_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_sixteen"
+                    android:layout_marginRight="@dimen/margin_sixteen"
+                    android:drawableEnd="@drawable/ico_login_user"
+                    android:drawableTint="@color/colorWhite"
+                    android:drawablePadding="8dp"
+                    android:hint="@string/act_login_edt_user"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:textColor="@color/colorWhite"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/act_login_txt_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/act_login_txt_username"
+                android:theme="@style/TextLabel"
+                android:layout_marginTop="@dimen/margin_twelve">
+
+                <EditText
+                    android:id="@+id/act_login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_sixteen"
+                    android:layout_marginRight="@dimen/margin_sixteen"
+                    android:drawablePadding="@dimen/margin_eigth"
+                    android:drawableEnd="@drawable/ico_login_pass"
+                    android:drawableTint="@color/colorWhite"
+                    android:hint="@string/act_login_password"
+                    android:inputType="textPassword"
+                    android:maxLength="100"
+                    android:textColor="@color/colorWhite"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/act_login_txt_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/act_login_txt_pass"
+                android:theme="@style/TextLabel"
+                android:layout_marginTop="@dimen/margin_twelve">
+
+                <EditText
+                    android:id="@+id/act_login_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_sixteen"
+                    android:layout_marginRight="@dimen/margin_sixteen"
+                    android:drawablePadding="@dimen/margin_eigth"
+                    android:drawableEnd="@drawable/ico_login_pass"
+                    android:foregroundTint="@color/colorWhite"
+                    android:hint="@string/act_login_confirm"
+                    android:inputType="textPassword"
+                    android:maxLength="100"
+                    android:textColor="@color/colorWhite"
+                     android:visibility="gone"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/act_login_enter"
+                style="@style/StrokeButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_fortyeight"
+                android:layout_marginLeft="@dimen/margin_sixteen"
+                android:layout_marginRight="@dimen/margin_sixteen"
+                android:layout_marginTop="@dimen/margin_twelve"
+                android:elevation="@dimen/raised_button"
+                android:text="@string/act_login_login"
+                android:layout_below="@id/act_login_txt_confirm"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white_background"
+                android:alpha="0.4"></View>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/act_login_recovery"
+        android:text="@string/act_login_remember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textColor="@color/colorWhite"
+        android:layout_gravity="center|bottom"
+        android:textAllCaps="false"
+        />
+
+
+</FrameLayout>

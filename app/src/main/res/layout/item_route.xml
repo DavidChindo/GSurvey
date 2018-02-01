@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    card_view:cardCornerRadius="4dp"
+    android:elevation="8dp"
+    android:layout_marginTop="@dimen/margin_eigth"
+    android:layout_marginBottom="@dimen/margin_eigth">
+    <LinearLayout
+        android:id="@+id/item_sync_linear_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".7"
+            android:layout_marginLeft="@dimen/margin_eigth"
+            android:layout_marginBottom="@dimen/margin_eigth"
+            android:layout_marginTop="@dimen/margin_eigth"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_route_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2202"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_size_16"
+                android:layout_marginLeft="@dimen/margin_eigth"
+                android:maxLines="3"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".4"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".9"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/item_route_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight=".3"
+                        android:text="Nombre de gasolinera"
+                        android:textSize="@dimen/font_size_14"
+                        android:layout_marginLeft="@dimen/margin_eigth"
+                        android:maxLines="2"/>
+                    <TextView
+                        android:id="@+id/item_route_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dirección"
+                        android:textSize="@dimen/font_size_14"
+                        android:layout_marginLeft="@dimen/margin_eigth"
+                        android:maxLines="3"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray"
+            android:layout_marginBottom="@dimen/margin_twelve"
+            android:layout_marginTop="@dimen/margin_twelve" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".1"
+            android:layout_marginLeft="@dimen/margin_eigth"
+            android:layout_marginRight="@dimen/margin_eigth"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/item_route_survey">
+
+            <ImageView
+                android:id="@+id/item_sync_btn_sync"
+                android:src="@drawable/ic_test"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".1" />
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
