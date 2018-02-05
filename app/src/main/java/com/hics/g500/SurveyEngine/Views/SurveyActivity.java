@@ -1,4 +1,4 @@
-package com.hics.g500.SurveyEngine;
+package com.hics.g500.SurveyEngine.Views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -9,9 +9,9 @@
     <string name="act_login_edt_user">Usuario</string>
     <string name="act_login_password">Contraseña</string>
     <string name="act_login_confirm">Confirmar contraseña</string>
-    <string name="act_login_login">Entrar</string>
+    <string name="act_login_login">Ingresar</string>
     <string name="act_login_signup">Registrarse</string>
-    <string name="act_login_remember">Recuperar contraseña</string>
+    <string name="act_login_remember">¿Olvidó su contraseña?</string>
     <string name="act_login_enter">Ingresar</string>
     <string name="act_login_register">Registrar</string>
 
