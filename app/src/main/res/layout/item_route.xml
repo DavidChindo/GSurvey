@@ -10,31 +10,74 @@
     android:elevation="8dp"
     android:layout_marginTop="@dimen/margin_eigth"
     android:layout_marginBottom="@dimen/margin_eigth">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/item_sync_linear_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="@dimen/margin_fiftyeigth"
+            android:layout_height="@dimen/margin_fiftyeigth"
+            android:orientation="horizontal"
+            android:id="@+id/item_route_survey"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/margin_eigth">
+
+            <ImageView
+                android:id="@+id/item_route_img_gas"
+                android:src="@drawable/foto01a"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+               />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/item_route_btn_container"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".7"
-            android:layout_marginLeft="@dimen/margin_eigth"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/margin_twelve">
+            <ImageView
+                android:id="@+id/item_route_open_survey"
+                android:layout_width="@dimen/margin_thirtytwo"
+                android:layout_height="@dimen/margin_thirtytwo"
+                android:src="@drawable/ic_encuesta"
+                android:tint="@color/icon_color"
+                android:layout_marginBottom="@dimen/margin_four"
+                android:layout_marginTop="@dimen/margin_four"/>
+            <ImageView
+                android:id="@+id/item_route_open_map"
+                android:layout_width="@dimen/margin_thirtytwo"
+                android:layout_height="@dimen/margin_thirtytwo"
+                android:src="@drawable/ic_ubicacion"
+                android:tint="@color/icon_color"
+                android:layout_marginBottom="@dimen/margin_four"
+                android:layout_marginTop="@dimen/margin_four"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_toRightOf="@id/item_route_survey"
+            android:layout_toLeftOf="@id/item_route_btn_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_eigth"
             android:layout_marginBottom="@dimen/margin_eigth"
             android:layout_marginTop="@dimen/margin_eigth"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/item_route_id"
+                android:id="@+id/item_route_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2202"
-                android:textStyle="bold"
-                android:textSize="@dimen/font_size_16"
+                android:text="Nombre de gasolinera"
+                android:textSize="@dimen/font_size_14"
                 android:layout_marginLeft="@dimen/margin_eigth"
-                android:maxLines="3"/>
+                android:layout_marginBottom="@dimen/margin_four"
+                android:textColor="@color/font_title_gray"
+                android:maxLines="2"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -47,19 +90,21 @@
                     android:layout_weight=".9"
                     android:orientation="vertical">
                     <TextView
-                        android:id="@+id/item_route_name"
+                        android:id="@+id/item_route_id"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight=".3"
-                        android:text="Nombre de gasolinera"
-                        android:textSize="@dimen/font_size_14"
+                        android:text="2202"
+                        android:textColor="@color/font_gray"
+                        android:textSize="@dimen/font_size_16"
                         android:layout_marginLeft="@dimen/margin_eigth"
-                        android:maxLines="2"/>
+                        android:maxLines="3"/>
                     <TextView
                         android:id="@+id/item_route_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dirección"
+                        android:textColor="@color/font_gray"
                         android:textSize="@dimen/font_size_14"
                         android:layout_marginLeft="@dimen/margin_eigth"
                         android:maxLines="3"/>
@@ -67,30 +112,6 @@
             </LinearLayout>
 
         </LinearLayout>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray"
-            android:layout_marginBottom="@dimen/margin_twelve"
-            android:layout_marginTop="@dimen/margin_twelve" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".1"
-            android:layout_marginLeft="@dimen/margin_eigth"
-            android:layout_marginRight="@dimen/margin_eigth"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/item_route_survey">
-
-            <ImageView
-                android:id="@+id/item_sync_btn_sync"
-                android:src="@drawable/ic_test"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".1" />
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

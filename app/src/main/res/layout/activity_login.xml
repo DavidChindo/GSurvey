@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/background" />
+        android:src="@drawable/login_back" />
 
     <LinearLayout
         android:id="@+id/main_Login_linear"
@@ -20,10 +20,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="320dp"
-            android:layout_height="160dp"
-            android:padding="48dp"
-            android:src="@drawable/img_logo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginTop="@dimen/margin_fortyeight"
             android:id="@+id/act_login_img_logo"/>
 
         <LinearLayout
@@ -35,37 +36,36 @@
                 android:id="@+id/act_login_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Entrar"
-                android:textColor="@color/colorWhite"
+                android:text="Ingreso"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/font_size_14"
                 android:layout_marginEnd="@dimen/margin_twelve"
                 android:layout_marginBottom="@dimen/margin_twelve"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                />
             <Button
                 android:id="@+id/act_login_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registrarse"
+                android:text="Registro"
                 android:layout_marginStart="@dimen/margin_twelve"
                 android:layout_marginBottom="@dimen/margin_twelve"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/font_size_14"
                 android:background="@android:color/transparent"/>
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="232dp"
-            android:background="@android:color/transparent"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/margin_thirtytwo"
-            android:layout_marginStart="@dimen/margin_thirtytwo">
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/act_login_txt_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/TextLabel"
-                android:layout_marginTop="@dimen/margin_twelve">
+                android:layout_marginTop="@dimen/margin_twelve"
+                android:background="@drawable/shadow_elevation"
+                android:elevation="2dp"
+                android:layout_marginStart="@dimen/margin_fortyeight"
+                android:layout_marginEnd="@dimen/margin_fortyeight">
 
                 <EditText
                     android:id="@+id/act_login_username"
@@ -73,13 +73,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_sixteen"
                     android:layout_marginRight="@dimen/margin_sixteen"
-                    android:drawableEnd="@drawable/ico_login_user"
-                    android:drawableTint="@color/colorWhite"
+                    android:drawableStart="@drawable/ic_user"
                     android:drawablePadding="8dp"
                     android:hint="@string/act_login_edt_user"
                     android:inputType="text"
                     android:maxLength="100"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorPrimary"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -90,7 +89,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/act_login_txt_username"
                 android:theme="@style/TextLabel"
-                android:layout_marginTop="@dimen/margin_twelve">
+                android:layout_marginTop="@dimen/margin_twelve"
+                android:background="@drawable/shadow_elevation"
+                android:elevation="2dp"
+                android:layout_marginStart="@dimen/margin_fortyeight"
+                android:layout_marginEnd="@dimen/margin_fortyeight"
+                >
 
                 <EditText
                     android:id="@+id/act_login_password"
@@ -99,12 +103,12 @@
                     android:layout_marginLeft="@dimen/margin_sixteen"
                     android:layout_marginRight="@dimen/margin_sixteen"
                     android:drawablePadding="@dimen/margin_eigth"
-                    android:drawableEnd="@drawable/ico_login_pass"
-                    android:drawableTint="@color/colorWhite"
+                    android:drawableStart="@drawable/ic_pass"
                     android:hint="@string/act_login_password"
                     android:inputType="textPassword"
                     android:maxLength="100"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorPrimary"
+
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -115,7 +119,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/act_login_txt_pass"
                 android:theme="@style/TextLabel"
-                android:layout_marginTop="@dimen/margin_twelve">
+                android:layout_marginTop="@dimen/margin_twelve"
+                android:background="@drawable/shadow_elevation"
+                android:elevation="2dp"
+                android:layout_marginStart="@dimen/margin_fortyeight"
+                android:layout_marginEnd="@dimen/margin_fortyeight"
+                android:visibility="gone"
+                >
 
                 <EditText
                     android:id="@+id/act_login_confirm"
@@ -124,50 +134,47 @@
                     android:layout_marginLeft="@dimen/margin_sixteen"
                     android:layout_marginRight="@dimen/margin_sixteen"
                     android:drawablePadding="@dimen/margin_eigth"
-                    android:drawableEnd="@drawable/ico_login_pass"
-                    android:foregroundTint="@color/colorWhite"
+                    android:drawableStart="@drawable/ic_pass"
                     android:hint="@string/act_login_confirm"
                     android:inputType="textPassword"
                     android:maxLength="100"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorPrimary"
                      android:visibility="gone"
                     />
 
             </android.support.design.widget.TextInputLayout>
 
             <Button
+                android:id="@+id/act_login_recovery"
+                android:text="@string/act_login_remember"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_thirtytwo"
+                android:layout_marginTop="@dimen/margin_eigth"
+                android:background="@android:color/transparent"
+                android:textColor="@color/gray_secondary_button"
+                android:layout_below="@id/act_login_txt_confirm"
+                android:textAllCaps="false"
+                android:layout_marginBottom="@dimen/margin_eigth"
+                android:layout_gravity="end"
+                android:textStyle="normal"
+                android:layout_marginEnd="@dimen/margin_fortyeight"
+                />
+
+            <Button
                 android:id="@+id/act_login_enter"
                 style="@style/StrokeButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_fortyeight"
-                android:layout_marginLeft="@dimen/margin_sixteen"
-                android:layout_marginRight="@dimen/margin_sixteen"
-                android:layout_marginTop="@dimen/margin_twelve"
+                android:layout_marginEnd="@dimen/margin_fortyeight"
+                android:layout_marginStart="@dimen/margin_fortyeight"
+                android:layout_marginTop="@dimen/margin_four"
                 android:elevation="@dimen/raised_button"
                 android:text="@string/act_login_login"
                 android:layout_below="@id/act_login_txt_confirm"
                 android:textAllCaps="false" />
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/white_background"
-                android:alpha="0.4"></View>
-        </RelativeLayout>
-
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/act_login_recovery"
-        android:text="@string/act_login_remember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:textColor="@color/colorWhite"
-        android:layout_gravity="center|bottom"
-        android:textAllCaps="false"
-        />
 
 
 </FrameLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/item_survey_list_edit_text_date"
+        android:inputType="text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".6"
+        android:hint="Fecha"
+        android:textCursorDrawable="@drawable/text_cursor_primary"
+        tools:ignore="UnusedAttribute" />
+
+    <EditText
+        android:id="@+id/item_survey_list_edit_text_date_time"
+        android:inputType="text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".4"
+        android:hint="Hora"
+        android:textCursorDrawable="@drawable/text_cursor_primary"
+        tools:ignore="UnusedAttribute" />
+
+</LinearLayout>

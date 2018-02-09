@@ -3,6 +3,7 @@ package com.hics.g500.Views.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ public class LoginActivity extends Activity {
     @BindView(R.id.act_login_password)EditText edtPassword;
     @BindView(R.id.act_login_enter)Button btnEnter;
     @BindView(R.id.act_login_recovery)Button btnRecovery;
+    @BindView(R.id.act_login_txt_confirm)TextInputLayout tilConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class LoginActivity extends Activity {
     @OnClick(R.id.act_login_signup)
     void onSignUpChange(){
         edtConfirmPass.setVisibility(View.VISIBLE);
+        tilConfirm.setVisibility(View.VISIBLE);
         btnEnter.setText(R.string.act_login_register);
         btnRecovery.setVisibility(View.GONE);
     }
@@ -43,6 +46,7 @@ public class LoginActivity extends Activity {
     @OnClick(R.id.act_login_login)
     void onSignInChange(){
         edtConfirmPass.setVisibility(View.GONE);
+        tilConfirm.setVisibility(View.GONE);
         btnEnter.setText(R.string.act_login_enter);
         btnRecovery.setVisibility(View.VISIBLE);
     }

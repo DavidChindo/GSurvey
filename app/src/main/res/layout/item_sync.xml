@@ -10,54 +10,76 @@
     android:elevation="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/item_sync_linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:background="@drawable/shape_success"
+        android:padding="@dimen/margin_eigth">
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".1"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
             android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/item_saved_survey">
+            android:id="@+id/item_sync_survey"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp">
 
             <ImageView
-                android:id="@+id/item_sync_btn_sync"
-                android:layout_width="0dp"
+                android:id="@+id/item_sync_img_gas"
+                android:src="@drawable/foto01a"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".1"
-                android:src="@drawable/ic_test"/>
+                android:scaleType="fitXY"
+                />
         </LinearLayout>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="12dp" />
-
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/item_sync_btn_container"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".7"
-            android:layout_marginLeft="8dp"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp">
+            <ImageView
+                android:id="@+id/item_sync_open_survey"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_ico_sync"
+                android:tint="@color/icon_color"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"/>
+            <ImageView
+                android:id="@+id/item_sync_open_map"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_ubicacion"
+                android:tint="@color/icon_color"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_toRightOf="@id/item_sync_survey"
+            android:layout_toLeftOf="@id/item_sync_btn_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/item_sync_id"
+                android:id="@+id/item_sync_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2407"
-                android:textStyle="bold"
-                android:textSize="16sp"
+                android:text="Nombre de gasolinera"
+                android:textSize="14sp"
                 android:layout_marginLeft="8dp"
-                android:maxLines="3"/>
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/font_title_gray"
+                android:maxLines="2"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -70,19 +92,30 @@
                     android:layout_weight=".9"
                     android:orientation="vertical">
                     <TextView
-                        android:id="@+id/item_sync_name"
+                        android:id="@+id/item_sync_id"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight=".3"
-                        android:text="Nombre de gasolinera"
-                        android:textSize="14sp"
+                        android:text="2202"
+                        android:textColor="@color/font_gray"
+                        android:textSize="16sp"
                         android:layout_marginLeft="8dp"
-                        android:maxLines="2"/>
+                        android:maxLines="3"/>
                     <TextView
-                        android:id="@+id/item_sync_address"
+                        android:id="@+id/item_sync_creacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dirección"
+                        android:text="Creación:"
+                        android:textColor="@color/font_gray"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="8dp"
+                        android:maxLines="3"/>
+                    <TextView
+                        android:id="@+id/item_sync_sincro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sincronización:"
+                        android:textColor="@color/font_gray"
                         android:textSize="14sp"
                         android:layout_marginLeft="8dp"
                         android:maxLines="3"/>
@@ -91,6 +124,5 @@
 
         </LinearLayout>
 
-
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

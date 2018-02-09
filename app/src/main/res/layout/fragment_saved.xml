@@ -42,10 +42,10 @@
         android:layout_height="wrap_content"
         app:borderWidth="0dp"
         app:elevation="4dp"
-        android:layout_alignParentBottom="false"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_save"
+        android:src="@drawable/ic_nav_guardadas"
         android:tint="@color/white_background"/>
 
 </RelativeLayout>

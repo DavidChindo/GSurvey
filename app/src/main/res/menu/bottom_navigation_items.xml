@@ -6,7 +6,7 @@
         android:title="@string/main_activity_gas"/>
     <item
         android:id="@+id/action_item2"
-        android:icon="@drawable/ic_save"
+        android:icon="@drawable/ic_nav_guardadas"
         android:title="@string/main_activity_saved"/>
     <item
         android:id="@+id/action_item3"
