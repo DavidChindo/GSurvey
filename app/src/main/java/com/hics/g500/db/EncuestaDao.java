@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "ENCUESTA".
 */
-public class EncuestaDao extends AbstractDao<Encuesta, Integer> {
+public class EncuestaDao extends AbstractDao<Encuesta, Long> {
 
     public static final String TABLENAME = "ENCUESTA";
 
@@ -22,7 +22,7 @@ public class EncuestaDao extends AbstractDao<Encuesta, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Encuesta_id = new Property(0, Integer.class, "encuesta_id", true, "ENCUESTA_ID");
+        public final static Property Encuesta_id = new Property(0, Long.class, "encuesta_id", true, "ENCUESTA_ID");
         public final static Property Encuesta_nombre = new Property(1, String.class, "encuesta_nombre", false, "ENCUESTA_NOMBRE");
         public final static Property Encuesta_desc = new Property(2, String.class, "encuesta_desc", false, "ENCUESTA_DESC");
     }
@@ -55,7 +55,7 @@ public class EncuestaDao extends AbstractDao<Encuesta, Integer> {
     protected final void bindValues(DatabaseStatement stmt, Encuesta entity) {
         stmt.clearBindings();
  
-        Integer encuesta_id = entity.getEncuesta_id();
+        Long encuesta_id = entity.getEncuesta_id();
         if (encuesta_id != null) {
             stmt.bindLong(1, encuesta_id);
         }
@@ -75,7 +75,7 @@ public class EncuestaDao extends AbstractDao<Encuesta, Integer> {
     protected final void bindValues(SQLiteStatement stmt, Encuesta entity) {
         stmt.clearBindings();
  
-        Integer encuesta_id = entity.getEncuesta_id();
+        Long encuesta_id = entity.getEncuesta_id();
         if (encuesta_id != null) {
             stmt.bindLong(1, encuesta_id);
         }
@@ -92,14 +92,14 @@ public class EncuestaDao extends AbstractDao<Encuesta, Integer> {
     }
 
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public Encuesta readEntity(Cursor cursor, int offset) {
         Encuesta entity = new Encuesta( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // encuesta_id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // encuesta_id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // encuesta_nombre
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // encuesta_desc
         );
@@ -108,18 +108,19 @@ public class EncuestaDao extends AbstractDao<Encuesta, Integer> {
      
     @Override
     public void readEntity(Cursor cursor, Encuesta entity, int offset) {
-        entity.setEncuesta_id(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setEncuesta_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setEncuesta_nombre(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setEncuesta_desc(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     
     @Override
-    protected final Integer updateKeyAfterInsert(Encuesta entity, long rowId) {
-        return entity.getEncuesta_id();
+    protected final Long updateKeyAfterInsert(Encuesta entity, long rowId) {
+        entity.setEncuesta_id(rowId);
+        return rowId;
     }
     
     @Override
-    public Integer getKey(Encuesta entity) {
+    public Long getKey(Encuesta entity) {
         if(entity != null) {
             return entity.getEncuesta_id();
         } else {

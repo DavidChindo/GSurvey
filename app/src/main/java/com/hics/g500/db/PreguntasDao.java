@@ -23,13 +23,14 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
      */
     public static class Properties {
         public final static Property Pregunta_id = new Property(0, Long.class, "pregunta_id", true, "PREGUNTA_ID");
-        public final static Property Encuesta_id = new Property(1, Integer.class, "encuesta_id", false, "ENCUESTA_ID");
-        public final static Property Pregunta_obligatoria = new Property(2, String.class, "pregunta_obligatoria", false, "PREGUNTA_OBLIGATORIA");
+        public final static Property Encuesta_id = new Property(1, Long.class, "encuesta_id", false, "ENCUESTA_ID");
+        public final static Property Pregunta_obligatoria = new Property(2, Integer.class, "pregunta_obligatoria", false, "PREGUNTA_OBLIGATORIA");
         public final static Property Pregunta_encabezado = new Property(3, String.class, "pregunta_encabezado", false, "PREGUNTA_ENCABEZADO");
         public final static Property Pregunta_tipo = new Property(4, String.class, "pregunta_tipo", false, "PREGUNTA_TIPO");
         public final static Property Tipo_min = new Property(5, Integer.class, "tipo_min", false, "TIPO_MIN");
         public final static Property Tipo_max = new Property(6, Integer.class, "tipo_max", false, "TIPO_MAX");
         public final static Property Tipo_dato = new Property(7, String.class, "tipo_dato", false, "TIPO_DATO");
+        public final static Property Num_opciones = new Property(8, Integer.class, "num_opciones", false, "NUM_OPCIONES");
     }
 
 
@@ -45,14 +46,15 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PREGUNTAS\" (" + //
-                "\"PREGUNTA_ID\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: pregunta_id
+                "\"PREGUNTA_ID\" INTEGER PRIMARY KEY ," + // 0: pregunta_id
                 "\"ENCUESTA_ID\" INTEGER," + // 1: encuesta_id
-                "\"PREGUNTA_OBLIGATORIA\" TEXT," + // 2: pregunta_obligatoria
+                "\"PREGUNTA_OBLIGATORIA\" INTEGER," + // 2: pregunta_obligatoria
                 "\"PREGUNTA_ENCABEZADO\" TEXT," + // 3: pregunta_encabezado
                 "\"PREGUNTA_TIPO\" TEXT," + // 4: pregunta_tipo
                 "\"TIPO_MIN\" INTEGER," + // 5: tipo_min
                 "\"TIPO_MAX\" INTEGER," + // 6: tipo_max
-                "\"TIPO_DATO\" TEXT);"); // 7: tipo_dato
+                "\"TIPO_DATO\" TEXT," + // 7: tipo_dato
+                "\"NUM_OPCIONES\" INTEGER);"); // 8: num_opciones
     }
 
     /** Drops the underlying database table. */
@@ -70,14 +72,14 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
             stmt.bindLong(1, pregunta_id);
         }
  
-        Integer encuesta_id = entity.getEncuesta_id();
+        Long encuesta_id = entity.getEncuesta_id();
         if (encuesta_id != null) {
             stmt.bindLong(2, encuesta_id);
         }
  
-        String pregunta_obligatoria = entity.getPregunta_obligatoria();
+        Integer pregunta_obligatoria = entity.getPregunta_obligatoria();
         if (pregunta_obligatoria != null) {
-            stmt.bindString(3, pregunta_obligatoria);
+            stmt.bindLong(3, pregunta_obligatoria);
         }
  
         String pregunta_encabezado = entity.getPregunta_encabezado();
@@ -103,6 +105,11 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
         String tipo_dato = entity.getTipo_dato();
         if (tipo_dato != null) {
             stmt.bindString(8, tipo_dato);
+        }
+ 
+        Integer num_opciones = entity.getNum_opciones();
+        if (num_opciones != null) {
+            stmt.bindLong(9, num_opciones);
         }
     }
 
@@ -115,14 +122,14 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
             stmt.bindLong(1, pregunta_id);
         }
  
-        Integer encuesta_id = entity.getEncuesta_id();
+        Long encuesta_id = entity.getEncuesta_id();
         if (encuesta_id != null) {
             stmt.bindLong(2, encuesta_id);
         }
  
-        String pregunta_obligatoria = entity.getPregunta_obligatoria();
+        Integer pregunta_obligatoria = entity.getPregunta_obligatoria();
         if (pregunta_obligatoria != null) {
-            stmt.bindString(3, pregunta_obligatoria);
+            stmt.bindLong(3, pregunta_obligatoria);
         }
  
         String pregunta_encabezado = entity.getPregunta_encabezado();
@@ -149,6 +156,11 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
         if (tipo_dato != null) {
             stmt.bindString(8, tipo_dato);
         }
+ 
+        Integer num_opciones = entity.getNum_opciones();
+        if (num_opciones != null) {
+            stmt.bindLong(9, num_opciones);
+        }
     }
 
     @Override
@@ -160,13 +172,14 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
     public Preguntas readEntity(Cursor cursor, int offset) {
         Preguntas entity = new Preguntas( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // pregunta_id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // encuesta_id
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // pregunta_obligatoria
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // encuesta_id
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // pregunta_obligatoria
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // pregunta_encabezado
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // pregunta_tipo
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // tipo_min
             cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // tipo_max
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // tipo_dato
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // tipo_dato
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // num_opciones
         );
         return entity;
     }
@@ -174,13 +187,14 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
     @Override
     public void readEntity(Cursor cursor, Preguntas entity, int offset) {
         entity.setPregunta_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setEncuesta_id(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setPregunta_obligatoria(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setEncuesta_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setPregunta_obligatoria(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
         entity.setPregunta_encabezado(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setPregunta_tipo(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setTipo_min(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
         entity.setTipo_max(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
         entity.setTipo_dato(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setNum_opciones(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
      }
     
     @Override

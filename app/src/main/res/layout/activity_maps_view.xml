@@ -1,0 +1,34 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/toolbar"/>
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/act_map"
+        tools:context="intermex.producto.lennken.intermex.xsurvey.activities.MapsHolderActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/act_map_holder_save"
+        app:borderWidth="0dp"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@color/colorAccent"
+        android:src="@drawable/ic_save"
+        android:tint="@color/colorWhite"
+        tools:ignore="RtlHardcoded" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="#88000000"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@+id/toolbar"
+        android:text="@string/maps_indications"
+        tools:ignore="UnknownIdInLayout" />
+</RelativeLayout>

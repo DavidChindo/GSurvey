@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "GASOLINERAS".
 */
-public class GasolinerasDao extends AbstractDao<Gasolineras, Integer> {
+public class GasolinerasDao extends AbstractDao<Gasolineras, Long> {
 
     public static final String TABLENAME = "GASOLINERAS";
 
@@ -22,7 +22,7 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Gas_id = new Property(0, Integer.class, "gas_id", true, "GAS_ID");
+        public final static Property Gas_id = new Property(0, Long.class, "gas_id", true, "GAS_ID");
         public final static Property Nombre_gas = new Property(1, String.class, "nombre_gas", false, "NOMBRE_GAS");
         public final static Property Coordenadas = new Property(2, String.class, "coordenadas", false, "COORDENADAS");
         public final static Property Direccion = new Property(3, String.class, "direccion", false, "DIRECCION");
@@ -61,7 +61,7 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Integer> {
     protected final void bindValues(DatabaseStatement stmt, Gasolineras entity) {
         stmt.clearBindings();
  
-        Integer gas_id = entity.getGas_id();
+        Long gas_id = entity.getGas_id();
         if (gas_id != null) {
             stmt.bindLong(1, gas_id);
         }
@@ -96,7 +96,7 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Integer> {
     protected final void bindValues(SQLiteStatement stmt, Gasolineras entity) {
         stmt.clearBindings();
  
-        Integer gas_id = entity.getGas_id();
+        Long gas_id = entity.getGas_id();
         if (gas_id != null) {
             stmt.bindLong(1, gas_id);
         }
@@ -128,14 +128,14 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Integer> {
     }
 
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public Gasolineras readEntity(Cursor cursor, int offset) {
         Gasolineras entity = new Gasolineras( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // gas_id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // gas_id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nombre_gas
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // coordenadas
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // direccion
@@ -147,7 +147,7 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Integer> {
      
     @Override
     public void readEntity(Cursor cursor, Gasolineras entity, int offset) {
-        entity.setGas_id(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setGas_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setNombre_gas(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCoordenadas(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDireccion(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -156,12 +156,13 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Integer> {
      }
     
     @Override
-    protected final Integer updateKeyAfterInsert(Gasolineras entity, long rowId) {
-        return entity.getGas_id();
+    protected final Long updateKeyAfterInsert(Gasolineras entity, long rowId) {
+        entity.setGas_id(rowId);
+        return rowId;
     }
     
     @Override
-    public Integer getKey(Gasolineras entity) {
+    public Long getKey(Gasolineras entity) {
         if(entity != null) {
             return entity.getGas_id();
         } else {

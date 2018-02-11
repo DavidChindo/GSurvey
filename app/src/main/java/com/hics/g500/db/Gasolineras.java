@@ -14,7 +14,7 @@ import org.greenrobot.greendao.annotation.*;
 public class Gasolineras {
 
     @Id
-    private Integer gas_id;
+    private Long gas_id;
     private String nombre_gas;
     private String coordenadas;
     private String direccion;
@@ -28,12 +28,12 @@ public class Gasolineras {
     public Gasolineras() {
     }
 
-    public Gasolineras(Integer gas_id) {
+    public Gasolineras(Long gas_id) {
         this.gas_id = gas_id;
     }
 
     @Generated
-    public Gasolineras(Integer gas_id, String nombre_gas, String coordenadas, String direccion, Boolean visited, String fecha) {
+    public Gasolineras(Long gas_id, String nombre_gas, String coordenadas, String direccion, Boolean visited, String fecha) {
         this.gas_id = gas_id;
         this.nombre_gas = nombre_gas;
         this.coordenadas = coordenadas;
@@ -42,11 +42,11 @@ public class Gasolineras {
         this.fecha = fecha;
     }
 
-    public Integer getGas_id() {
+    public Long getGas_id() {
         return gas_id;
     }
 
-    public void setGas_id(Integer gas_id) {
+    public void setGas_id(Long gas_id) {
         this.gas_id = gas_id;
     }
 

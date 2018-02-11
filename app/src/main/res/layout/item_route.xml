@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    card_view:cardCornerRadius="4dp"
-    android:elevation="8dp"
-    android:layout_marginTop="@dimen/margin_eigth"
-    android:layout_marginBottom="@dimen/margin_eigth">
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/item_sync_linear_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/background">
         <LinearLayout
-            android:layout_width="@dimen/margin_fiftyeigth"
-            android:layout_height="@dimen/margin_fiftyeigth"
+            android:layout_width="@dimen/margin_sixtyfour"
+            android:layout_height="@dimen/margin_sixtyfour"
             android:orientation="horizontal"
             android:id="@+id/item_route_survey"
             android:gravity="center"
@@ -32,13 +23,11 @@
                 android:scaleType="fitXY"
                />
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/item_route_btn_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/margin_twelve">
             <ImageView
                 android:id="@+id/item_route_open_survey"
@@ -47,16 +36,22 @@
                 android:src="@drawable/ic_encuesta"
                 android:tint="@color/icon_color"
                 android:layout_marginBottom="@dimen/margin_four"
-                android:layout_marginTop="@dimen/margin_four"/>
+                android:layout_marginTop="@dimen/margin_eigth"
+                android:layout_alignParentTop="true"
+                />
             <ImageView
                 android:id="@+id/item_route_open_map"
                 android:layout_width="@dimen/margin_thirtytwo"
                 android:layout_height="@dimen/margin_thirtytwo"
                 android:src="@drawable/ic_ubicacion"
                 android:tint="@color/icon_color"
-                android:layout_marginBottom="@dimen/margin_four"
-                android:layout_marginTop="@dimen/margin_four"/>
-        </LinearLayout>
+                android:layout_marginBottom="@dimen/margin_sixteen"
+                android:layout_marginTop="@dimen/margin_four"
+                android:layout_below="@id/item_route_open_survey"
+                android:layout_alignParentBottom="true"
+
+                />
+        </RelativeLayout>
         <LinearLayout
             android:layout_toRightOf="@id/item_route_survey"
             android:layout_toLeftOf="@id/item_route_btn_container"
@@ -65,14 +60,17 @@
             android:layout_marginEnd="@dimen/margin_eigth"
             android:layout_marginBottom="@dimen/margin_eigth"
             android:layout_marginTop="@dimen/margin_eigth"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:id="@+id/item_route_ln_info">
 
             <TextView
                 android:id="@+id/item_route_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nombre de gasolinera"
-                android:textSize="@dimen/font_size_14"
+                android:textSize="@dimen/font_size_16"
+                android:textStyle="bold"
                 android:layout_marginLeft="@dimen/margin_eigth"
                 android:layout_marginBottom="@dimen/margin_four"
                 android:textColor="@color/font_title_gray"
@@ -96,7 +94,7 @@
                         android:layout_weight=".3"
                         android:text="2202"
                         android:textColor="@color/font_gray"
-                        android:textSize="@dimen/font_size_16"
+                        android:textSize="@dimen/font_size_14"
                         android:layout_marginLeft="@dimen/margin_eigth"
                         android:maxLines="3"/>
                     <TextView
@@ -112,6 +110,13 @@
             </LinearLayout>
 
         </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider"
+        android:layout_below="@id/item_route_ln_info"
+        android:layout_marginTop="@dimen/margin_twelve"
+        android:layout_alignStart="@id/item_route_ln_info"
+        android:layout_alignEnd="@id/item_route_btn_container"
+        android:layout_marginBottom="@dimen/margin_four"/>
     </RelativeLayout>
-</android.support.v7.widget.CardView>

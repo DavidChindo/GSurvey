@@ -32,14 +32,14 @@ public class MyGenerator {
 
     private static Entity addUserEntities(final Schema schema) {
         Entity user = schema.addEntity("User");
-        user.addIntProperty("email").primaryKey().notNull();
+        user.addStringProperty("email").primaryKey().notNull();
         user.addStringProperty("token");
         return user;
     }
 
     private static Entity addGasolinerasEntities(final Schema schema){
         Entity gasolinera = schema.addEntity("Gasolineras");
-        gasolinera.addIntProperty("gas_id").primaryKey();
+        gasolinera.addLongProperty("gas_id").primaryKey();
         gasolinera.addStringProperty("nombre_gas");
         gasolinera.addStringProperty("coordenadas");
         gasolinera.addStringProperty("direccion");
@@ -51,7 +51,7 @@ public class MyGenerator {
 
     private static Entity addSurvey(final Schema schema){
         Entity survey = schema.addEntity("Encuesta");
-        survey.addIntProperty("encuesta_id").primaryKey();
+        survey.addLongProperty("encuesta_id").primaryKey();
         survey.addStringProperty("encuesta_nombre");
         survey.addStringProperty("encuesta_desc");
 
@@ -60,27 +60,29 @@ public class MyGenerator {
 
     private static Entity addQuestions(final Schema schema){
         Entity question = schema.addEntity("Preguntas");
-        question.addLongProperty("pregunta_id").primaryKey().autoincrement();
-        question.addIntProperty("encuesta_id");
-        question.addStringProperty("pregunta_obligatoria");
+        question.addLongProperty("pregunta_id").primaryKey();
+        question.addLongProperty("encuesta_id");
+        question.addIntProperty("pregunta_obligatoria");
         question.addStringProperty("pregunta_encabezado");
         question.addStringProperty("pregunta_tipo");
         question.addIntProperty("tipo_min");
         question.addIntProperty("tipo_max");
         question.addStringProperty("tipo_dato");
+        question.addIntProperty("num_opciones");
 
         return question;
     }
 
     private static Entity addOptions(final Schema schema){
         Entity option = schema.addEntity("Opciones");
-        option.addLongProperty("id").primaryKey().autoincrement();
-        option.addIntProperty("pregunta_id");
-        option.addIntProperty("encuenta_id");
-        option.addIntProperty("opcion_id");
+        option.addLongProperty("pregunta_id");
+        option.addLongProperty("encuenta_id");
+        option.addLongProperty("opcion_id").primaryKey();
         option.addStringProperty("opcion_contenido");
 
         return option;
     }
+
+
 
 }

@@ -22,20 +22,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/item_survey_file_required"
-            android:textSize="@dimen/font_size_18"
-            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/font_size_14"
+            android:textColor="@color/font_gray"
             tools:text="Image name" />
 
     </RelativeLayout>
 
-    <Button
+    <ImageView
         android:id="@+id/item_survey_file_capture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/margin_sixtyfour"
+        android:layout_height="@dimen/margin_fiftytwo"
         android:layout_margin="4dp"
-        android:background="@drawable/shape_status_indemand"
-        android:text="Agregar Archivo"
+        android:padding="@dimen/margin_twelve"
+        android:background="@drawable/shape_rectangle"
+        android:src="@drawable/ic_folder"
+        android:tint="@color/blue_icon"
         android:textColor="@color/colorWhite"
-        tools:ignore="ButtonStyle" />
+        tools:ignore="ButtonStyle"
+        android:layout_gravity="end"/>
 
 </LinearLayout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_eigth"
-    android:background="@color/blue_background">
+    android:background="@color/background">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_error_open"
@@ -45,7 +45,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
+        android:backgroundTint="@color/floating_color"
         android:src="@drawable/ic_microphone"
-        android:tint="@color/white_background"/>
+        android:tint="@color/colorWhite"/>
 
 </RelativeLayout>

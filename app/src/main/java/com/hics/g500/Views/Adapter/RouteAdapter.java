@@ -14,12 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hics.g500.R;
 import com.hics.g500.SurveyEngine.Views.SurveyActivity;
 import com.hics.g500.db.Gasolineras;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,18 +51,39 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bitmap mBitmap;
-        mBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.foto01a);
+        mBitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableResource(position));
         setCorner(holder.imgViewGas,mBitmap,mContext);
         Gasolineras gasolinera = mGasos.get(position);
         if (gasolinera != null){
             holder.mId.setText(String.valueOf(gasolinera.getGas_id()));
-            holder.mName.setText(String.valueOf(gasolinera.getNombre_gas()));
-            holder.mAddress.setText(String.valueOf(gasolinera.getDireccion()));
+            holder.mName.setText(gasolinera.getNombre_gas());
+            holder.mAddress.setText(capitalize(gasolinera.getDireccion()));
 
             holder.mSurvey.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mContext.startActivity(new Intent(mContext, SurveyActivity.class));
+                }
+            });
+
+            holder.mInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(new Intent(mContext, SurveyActivity.class));
+                }
+            });
+
+            holder.imgViewOpenSurvey.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(new Intent(mContext, SurveyActivity.class));
+                }
+            });
+
+            holder.imgViewOpenMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mContext, "Muestrar en mapa", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -76,7 +100,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         @BindView(R.id.item_route_name)TextView mName;
         @BindView(R.id.item_route_address)TextView mAddress;
         @BindView(R.id.item_route_survey)LinearLayout mSurvey;
+        @BindView(R.id.item_route_ln_info)LinearLayout mInfo;
         @BindView(R.id.item_route_img_gas)ImageView imgViewGas;
+        @BindView(R.id.item_route_open_survey)ImageView imgViewOpenSurvey;
+        @BindView(R.id.item_route_open_map)ImageView imgViewOpenMap;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -99,4 +127,32 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
         imgView.setImageDrawable(roundedBitmapDrawable);
     }
+
+    private int drawableResource(int position){
+        if (position > -1){
+            switch (position){
+                case 0:
+                    return R.drawable.foto01a;
+                case 1:
+                    return R.drawable.foto02a;
+                case 2:
+                    return R.drawable.foto04a;
+                default:
+                    return R.drawable.foto05a;
+            }
+        }else{
+            return R.drawable.foto03a;
+        }
+    }
+
+    private String capitalize(String capString){
+        StringBuffer capBuffer = new StringBuffer();
+        Matcher capMatcher = Pattern.compile("([a-z-áéíóú])([a-z-áéíóú]*)", Pattern.CASE_INSENSITIVE).matcher(capString);
+        while (capMatcher.find()){
+            capMatcher.appendReplacement(capBuffer, capMatcher.group(1).toUpperCase() + capMatcher.group(2).toLowerCase());
+        }
+
+        return capMatcher.appendTail(capBuffer).toString();
+    }
+
 }

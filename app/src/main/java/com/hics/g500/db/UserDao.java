@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "USER".
 */
-public class UserDao extends AbstractDao<User, Integer> {
+public class UserDao extends AbstractDao<User, String> {
 
     public static final String TABLENAME = "USER";
 
@@ -22,7 +22,7 @@ public class UserDao extends AbstractDao<User, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Email = new Property(0, int.class, "email", true, "EMAIL");
+        public final static Property Email = new Property(0, String.class, "email", true, "EMAIL");
         public final static Property Token = new Property(1, String.class, "token", false, "TOKEN");
     }
 
@@ -39,7 +39,7 @@ public class UserDao extends AbstractDao<User, Integer> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER\" (" + //
-                "\"EMAIL\" INTEGER PRIMARY KEY NOT NULL ," + // 0: email
+                "\"EMAIL\" TEXT PRIMARY KEY NOT NULL ," + // 0: email
                 "\"TOKEN\" TEXT);"); // 1: token
     }
 
@@ -52,7 +52,7 @@ public class UserDao extends AbstractDao<User, Integer> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, User entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getEmail());
+        stmt.bindString(1, entity.getEmail());
  
         String token = entity.getToken();
         if (token != null) {
@@ -63,7 +63,7 @@ public class UserDao extends AbstractDao<User, Integer> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, User entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getEmail());
+        stmt.bindString(1, entity.getEmail());
  
         String token = entity.getToken();
         if (token != null) {
@@ -72,14 +72,14 @@ public class UserDao extends AbstractDao<User, Integer> {
     }
 
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.getInt(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.getString(offset + 0);
     }    
 
     @Override
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
-            cursor.getInt(offset + 0), // email
+            cursor.getString(offset + 0), // email
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // token
         );
         return entity;
@@ -87,17 +87,17 @@ public class UserDao extends AbstractDao<User, Integer> {
      
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
-        entity.setEmail(cursor.getInt(offset + 0));
+        entity.setEmail(cursor.getString(offset + 0));
         entity.setToken(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     @Override
-    protected final Integer updateKeyAfterInsert(User entity, long rowId) {
+    protected final String updateKeyAfterInsert(User entity, long rowId) {
         return entity.getEmail();
     }
     
     @Override
-    public Integer getKey(User entity) {
+    public String getKey(User entity) {
         if(entity != null) {
             return entity.getEmail();
         } else {

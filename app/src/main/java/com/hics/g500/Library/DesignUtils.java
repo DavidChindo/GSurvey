@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.hics.g500.R;
 
@@ -55,6 +56,10 @@ public class DesignUtils {
                 .show();
     }
 
+    public static void showToast(Context context,String message){
+        Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+    }
+
     public static void setListViewHeightBasedOnChildrenAdapter(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -85,5 +90,13 @@ public class DesignUtils {
             InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    public static int getToolbarHeight(Context context) {
+        return (int) context.getResources().getDimension(R.dimen.abc_action_bar_default_height_material);
+    }
+
+    public static int getStatusBarHeight(Context context) {
+        return (int) context.getResources().getDimension(R.dimen.status_bar_size);
     }
 }

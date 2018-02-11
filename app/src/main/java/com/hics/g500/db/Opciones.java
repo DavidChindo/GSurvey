@@ -12,12 +12,11 @@ import org.greenrobot.greendao.annotation.*;
  */
 @Entity
 public class Opciones {
+    private Long pregunta_id;
+    private Long encuenta_id;
 
-    @Id(autoincrement = true)
-    private Long id;
-    private Integer pregunta_id;
-    private Integer encuenta_id;
-    private Integer opcion_id;
+    @Id
+    private Long opcion_id;
     private String opcion_contenido;
 
     // KEEP FIELDS - put your custom fields here
@@ -27,48 +26,39 @@ public class Opciones {
     public Opciones() {
     }
 
-    public Opciones(Long id) {
-        this.id = id;
+    public Opciones(Long opcion_id) {
+        this.opcion_id = opcion_id;
     }
 
     @Generated
-    public Opciones(Long id, Integer pregunta_id, Integer encuenta_id, Integer opcion_id, String opcion_contenido) {
-        this.id = id;
+    public Opciones(Long pregunta_id, Long encuenta_id, Long opcion_id, String opcion_contenido) {
         this.pregunta_id = pregunta_id;
         this.encuenta_id = encuenta_id;
         this.opcion_id = opcion_id;
         this.opcion_contenido = opcion_contenido;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getPregunta_id() {
+    public Long getPregunta_id() {
         return pregunta_id;
     }
 
-    public void setPregunta_id(Integer pregunta_id) {
+    public void setPregunta_id(Long pregunta_id) {
         this.pregunta_id = pregunta_id;
     }
 
-    public Integer getEncuenta_id() {
+    public Long getEncuenta_id() {
         return encuenta_id;
     }
 
-    public void setEncuenta_id(Integer encuenta_id) {
+    public void setEncuenta_id(Long encuenta_id) {
         this.encuenta_id = encuenta_id;
     }
 
-    public Integer getOpcion_id() {
+    public Long getOpcion_id() {
         return opcion_id;
     }
 
-    public void setOpcion_id(Integer opcion_id) {
+    public void setOpcion_id(Long opcion_id) {
         this.opcion_id = opcion_id;
     }
 
@@ -81,6 +71,11 @@ public class Opciones {
     }
 
     // KEEP METHODS - put your custom methods here
+
+    @Override
+    public String toString() {
+        return this.getOpcion_contenido();
+    }
     // KEEP METHODS END
 
 }

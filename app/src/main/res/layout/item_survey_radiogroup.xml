@@ -23,15 +23,27 @@
 
         <TextView
             android:id="@+id/item_survey_list_list_radio_title"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_toRightOf="@id/item_survey_list_list_radio_required"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Pregunta combo"
+            android:textSize="@dimen/font_size_14"
+            android:textColor="@color/font_gray"/>
     </RelativeLayout>
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/item_survey_list_radio_group" />
+        android:id="@+id/item_survey_list_radio_group"
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatRadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opción Uno"/>
+        <android.support.v7.widget.AppCompatRadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opción Dos"/>
+    </RadioGroup>
     <LinearLayout
         android:id="@+id/item_survey_list_linear_edit"
         android:layout_width="match_parent"

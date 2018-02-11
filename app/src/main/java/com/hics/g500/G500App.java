@@ -33,7 +33,7 @@ public class G500App extends Application {
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 
-        hicsService= RetrofitEnvironments.createEnvironment(Urls.initStatics(this, Urls.STAGE_PRODUCTION));
+        hicsService= RetrofitEnvironments.createEnvironment(Urls.initStatics(this, Urls.STAGE_QA));
         initDFolders();
     }
 

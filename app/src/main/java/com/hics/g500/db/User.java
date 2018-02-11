@@ -14,7 +14,8 @@ import org.greenrobot.greendao.annotation.*;
 public class User {
 
     @Id
-    private int email;
+    @NotNull
+    private String email;
     private String token;
 
     // KEEP FIELDS - put your custom fields here
@@ -24,21 +25,23 @@ public class User {
     public User() {
     }
 
-    public User(int email) {
+    public User(String email) {
         this.email = email;
     }
 
     @Generated
-    public User(int email, String token) {
+    public User(String email, String token) {
         this.email = email;
         this.token = token;
     }
 
-    public int getEmail() {
+    @NotNull
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(int email) {
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setEmail(@NotNull String email) {
         this.email = email;
     }
 

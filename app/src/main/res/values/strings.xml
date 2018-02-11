@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">G500</string>
+    <string name="app_name">Gasobook</string>
 
     <!-- URLS -->
-    <string name="url_qa">http://workflowbf.azurewebsites.net/workflow/qa_v1/index.php/POST/</string>
-    <string name="url_prod">http://workflowbf.azurewebsites.net/workflow/qa_v1/index.php/POST/</string>
+    <string name="url_qa">http://mandragoragourmet.com/wsb/app/index.php/</string>
+    <string name="url_prod">http://mandragoragourmet.com/wsb/app/index.php/</string>
 
     <!--Login -->
     <string name="act_login_edt_user">Usuario</string>
@@ -15,6 +15,7 @@
     <string name="act_login_enter">Ingresar</string>
     <string name="act_login_register">Registrar</string>
 
+
     <!-- Gasolineras item-->
     <string name="fr_gasolinera_name">Nombre</string>
     <string name="fr_gasolinera_address">Dirección</string>
@@ -23,9 +24,16 @@
     <string name="main_activity_gas">Gasolineras</string>
     <string name="main_activity_saved">Guardadas</string>
     <string name="main_activity_sync">Sincronizar</string>
+    <string name="main_activity_map">Mapa</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="network_error">No hay conexión a internet</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="validate_field">%s es requerido</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!--Survey -->
+    <string name="capture_coordinate">Capturar Coordenadas</string>
+    <string name="maps_indications">Mueva el mapa para cambiar la ubicación del marcador</string>
 </resources>

@@ -78,7 +78,8 @@
                     android:hint="@string/act_login_edt_user"
                     android:inputType="text"
                     android:maxLength="100"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_font_form"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -107,8 +108,8 @@
                     android:hint="@string/act_login_password"
                     android:inputType="textPassword"
                     android:maxLength="100"
-                    android:textColor="@color/colorPrimary"
-
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_font_form"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -138,8 +139,9 @@
                     android:hint="@string/act_login_confirm"
                     android:inputType="textPassword"
                     android:maxLength="100"
-                    android:textColor="@color/colorPrimary"
-                     android:visibility="gone"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_font_form"
+                    android:visibility="gone"
                     />
 
             </android.support.design.widget.TextInputLayout>

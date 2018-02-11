@@ -26,17 +26,15 @@
             android:id="@+id/item_survey_open_ended_txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_size_18"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textSize="@dimen/font_size_14"
+            android:textColor="@color/font_gray"/>
     </LinearLayout>
     <EditText
         android:id="@+id/item_survey_list_edit_text_open_ended"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_size_16"
-        android:textColor="@color/colorPrimaryDark"
-        android:textColorHighlight="@color/colorPrimaryDark"
-        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="@dimen/font_size_14"
+        android:textColor="@color/black"
         android:textCursorDrawable="@drawable/text_cursor_primary"
         tools:ignore="UnusedAttribute"
         android:inputType="textAutoCorrect"/>

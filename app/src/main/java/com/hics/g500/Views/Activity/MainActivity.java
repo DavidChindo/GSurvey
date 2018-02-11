@@ -10,7 +10,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.R;
+import com.hics.g500.Views.Fragment.MapFragment;
 import com.hics.g500.Views.Fragment.RouteFragment;
 import com.hics.g500.Views.Fragment.SavedFragment;
 import com.hics.g500.Views.Fragment.SyncFragment;
@@ -23,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)Toolbar toolbar;
     @BindView(R.id.navigation)BottomNavigationView bottomNavigationView;
+
+    private final static int PLAY_SERVICES_REQUEST = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = new RouteFragment();
                                 break;
                             case R.id.action_item2:
-                                selectedFragment = new SavedFragment();
+                                selectedFragment = new SyncFragment();
                                 break;
                             case R.id.action_item3:
-                                selectedFragment = new SyncFragment();
+                                selectedFragment = new MapFragment();
                                 break;
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -64,5 +70,29 @@ public class MainActivity extends AppCompatActivity {
 
         //Used to select an item programmatically
         //bottomNavigationView.getMenu().getItem(2).setChecked(true);
+    }
+
+    private boolean checkPlayServices() {
+
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this);
+
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(resultCode)) {
+                googleApiAvailability.getErrorDialog(this,resultCode,
+                        PLAY_SERVICES_REQUEST).show();
+            } else {
+
+                DesignUtils.errorMessage(this,"","No es posible obtener la ubicación");
+            }
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPlayServices();
     }
 }
