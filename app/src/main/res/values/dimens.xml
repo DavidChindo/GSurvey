@@ -23,6 +23,7 @@
     <dimen name="margin_six">6dp</dimen>
     <dimen name="margin_twenty">20dp</dimen>
     <dimen name="margin_twentyfour">24dp</dimen>
+    <dimen name="margin_twentyeight">28dp</dimen>
     <dimen name="margin_sixteen">16dp</dimen>
     <dimen name="margin_thirtytwo">32dp</dimen>
     <dimen name="margin_forty">40dp</dimen>

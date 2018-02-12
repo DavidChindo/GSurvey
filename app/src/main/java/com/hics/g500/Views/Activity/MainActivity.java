@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -16,8 +15,7 @@ import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.R;
 import com.hics.g500.Views.Fragment.MapFragment;
 import com.hics.g500.Views.Fragment.RouteFragment;
-import com.hics.g500.Views.Fragment.SavedFragment;
-import com.hics.g500.Views.Fragment.SyncFragment;
+import com.hics.g500.Views.Fragment.SyncParentFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = new RouteFragment();
                                 break;
                             case R.id.action_item2:
-                                selectedFragment = new SyncFragment();
+                                selectedFragment = new SyncParentFragment();
                                 break;
                             case R.id.action_item3:
                                 selectedFragment = new MapFragment();

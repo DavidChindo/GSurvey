@@ -42,6 +42,7 @@ public class GasolinerasPresenter {
                     public void onResponse(Call<GasolinerasResponse> call, Response<GasolinerasResponse> response) {
                         if (response.code() == 200){
                             if (response.body() != null) {
+                                Dal.deleteRoutes();
                                 mGasolinerasCallback.onSuccessLoadGasolineras(response.body().getGasolinerases());
                             }
                         }else{

@@ -4,6 +4,7 @@
         android:id="@+id/action_item1"
         android:icon="@drawable/ic_gasolineras"
         android:title="@string/main_activity_gas"/>
+
     <item
         android:id="@+id/action_item3"
         android:icon="@drawable/ic_mapa"

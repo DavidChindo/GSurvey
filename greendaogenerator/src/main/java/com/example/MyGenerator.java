@@ -27,6 +27,8 @@ public class MyGenerator {
         addSurvey(schema);
         addQuestions(schema);
         addOptions(schema);
+        addAnswers(schema);
+        addAnswersDetail(schema);
 
     }
 
@@ -83,6 +85,30 @@ public class MyGenerator {
         return option;
     }
 
+    private static Entity addAnswers(final Schema schema){
+        Entity answer = schema.addEntity("Respuesta");
+        answer.addLongProperty("id").primaryKey().autoincrement();
+        answer.addLongProperty("encuesta_id");
+        answer.addLongProperty("gas_id");
+        answer.addStringProperty("email");
+        answer.addBooleanProperty("completada");
+        answer.addBooleanProperty("enviada");
+        answer.addStringProperty("ticket");
 
+        return answer;
+
+    }
+
+    private static Entity addAnswersDetail(final Schema schema){
+        Entity answerDetail = schema.addEntity("RespuestaDetalle");
+        answerDetail.addLongProperty("id").primaryKey().autoincrement();
+        answerDetail.addLongProperty("pregunta_id");
+        answerDetail.addIntProperty("tipo_id");
+        answerDetail.addIntProperty("respuestacodigo");
+        answerDetail.addStringProperty("respuestatexto");
+        answerDetail.addLongProperty("id_parent");
+
+        return answerDetail;
+    }
 
 }

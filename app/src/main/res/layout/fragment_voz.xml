@@ -16,7 +16,7 @@
         android:layout_marginTop="-28dp" />
 
     <TextView
-        android:id="@+id/fr_saved_txt_error"
+        android:id="@+id/fr_voz_txt_error"
         android:layout_below="@id/animation_error_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,12 +24,12 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_centerInParent="true"
-        android:textSize="@dimen/font_size_16"
-        android:layout_marginTop="@dimen/margin_eigth"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/fr_saved_recycler"
+        android:id="@+id/fr_voz_recycler"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:clipToPadding="false"
@@ -37,7 +37,7 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fr_saved_record"
+        android:id="@+id/fr_voz_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:borderWidth="0dp"
@@ -45,7 +45,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_nav_guardadas"
+        android:src="@drawable/ic_sync_button"
         android:tint="@color/white_background"/>
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.hics.g500.Dal;
 
 import android.util.Log;
 
+import com.hics.g500.Dal.Model.Coordinates;
 import com.hics.g500.G500App;
 import com.hics.g500.Network.Response.OptionResponse;
 import com.hics.g500.Network.Response.QuestionResponse;
@@ -17,6 +18,7 @@ import com.hics.g500.db.User;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +116,26 @@ public class Dal {
         }
     }
 
+    public static List<Coordinates> positionsGasolineras(){
+        try {
+            List<Gasolineras> gasolinerasTemp = G500App.getDaoSession().getGasolinerasDao().queryBuilder().list();
+            if (gasolinerasTemp != null && gasolinerasTemp.size() > 0 ){
+                List<Coordinates> coordinates = new ArrayList<>();
+                for (Gasolineras gasolinera : gasolinerasTemp){
+                    String[] coordinatesString = gasolinera.getCoordenadas().split(",");
+                    coordinates.add(new Coordinates(new Long(coordinatesString[0]),new Long(coordinatesString[1])));
+                }
+                return coordinates;
+            }else{
+                return null;
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static SurveyComplete surveyComplete(){
         try {
             SurveyComplete surveyComplete = new SurveyComplete();
@@ -157,5 +179,17 @@ public class Dal {
         }
     }
 
+    //endregion
+
+    //regionDelete
+    public static void deleteRoutes(){
+        try {
+            G500App.getDaoSession().getGasolinerasDao().deleteAll();
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d("DAL","Error en deleteRoutes "+e.getMessage());
+
+        }
+    }
     //endregion
 }

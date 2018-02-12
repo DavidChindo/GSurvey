@@ -1,0 +1,39 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/nestedScrollView"
+    tools:context="com.hics.g500.Views.Fragment.SyncParentFragment">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <in.galaxyofandroid.awesometablayout.AwesomeTabBar
+        android:id="@+id/tabBar"
+        app:atb_indicatorHeight="2dp"
+        app:atb_indicatorColor="@color/colorPrimaryDark"
+        app:atb_tabWidth="28dp"
+        app:atb_tabHeight="@dimen/margin_fortyeight"
+        app:atb_selectedTabTextColor="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="always"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp"
+        >
+    </in.galaxyofandroid.awesometablayout.AwesomeTabBar>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_below="@id/tabBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

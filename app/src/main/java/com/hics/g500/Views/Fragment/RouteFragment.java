@@ -36,8 +36,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.*;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.hics.g500.Dal.Dal;
@@ -257,7 +256,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
             {
                 mLastLocation = LocationServices.FusedLocationApi
                         .getLastLocation(mGoogleApiClient);
-
+                MapFragment.lastLocation = mLastLocation;
                 Log.d("UBICACIÓNFragment","location "+mLastLocation);
                 if (!focusing){
                     focusing = true;

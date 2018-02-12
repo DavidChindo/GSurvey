@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.Prefs;
 import com.hics.g500.Library.Statics;
 import com.hics.g500.R;
@@ -21,8 +22,7 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Prefs prefs = Prefs.with(SplashActivity.this);
-                if (prefs.getBoolean(Statics.LOGIN_PREFS)) {
+                if (Dal.token() != null && !Dal.token().isEmpty()) {
                     start(MainActivity.class);
                 } else {
                     start(LoginActivity.class);

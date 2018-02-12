@@ -26,7 +26,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.github.ganfra:material-spinner:1.1.1'
@@ -41,6 +40,7 @@ dependencies {
     compile 'com.airbnb.android:lottie:2.2.0'
     compile 'org.aviran.cookiebar2:cookiebar2:1.0.5'
     compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.github.MdFarhanRaja:ColorFullTabLayout:1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.google.android.gms:play-services-location:11.0.4'

@@ -15,10 +15,11 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hics.g500.Library.AnnimationsBuilding;
+import com.hics.g500.Network.Request.AnswerSync;
+import com.hics.g500.Network.Request.SurveySync;
 import com.hics.g500.R;
-import com.hics.g500.Views.Adapter.RouteAdapter;
-import com.hics.g500.Views.Adapter.SavedAdapter;
-import com.hics.g500.db.Gasolineras;
+import com.hics.g500.Views.Adapter.NotesVoiceAdapter;
+import com.hics.g500.Views.Adapter.SyncAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,22 +30,22 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SavedFragment extends Fragment {
+public class NotesVoiceFragment extends Fragment {
 
-    @BindView(R.id.fr_saved_txt_error)TextView txtError;
-    @BindView(R.id.fr_saved_recycler)RecyclerView recyclerView;
-    @BindView(R.id.fr_saved_record)FloatingActionButton btnRecord;
-    @BindView(R.id.animation_error_open)LottieAnimationView animationView;
+    @BindView(R.id.fr_notes_txt_error)TextView txtError;
+    @BindView(R.id.fr_notes_recycler)RecyclerView recyclerView;
+    @BindView(R.id.fr_notes_record)FloatingActionButton btnRecord;
+    @BindView(R.id.notes_animation_error_open)LottieAnimationView animationView;
 
     Activity mActivity;
-    List<String> saved;
+    List<SurveySync> sync;
 
     private RecyclerView.LayoutManager mLayoutManager;
 
-
-    public SavedFragment() {
+    public NotesVoiceFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -55,8 +56,7 @@ public class SavedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_saved, container, false);
+        View view =  inflater.inflate(R.layout.fragment_notes_voice, container, false);
         ButterKnife.bind(this,view);
         return view;
     }
@@ -65,20 +65,15 @@ public class SavedFragment extends Fragment {
         mActivity = getActivity();
         btnRecord.setAnimation(AnnimationsBuilding.getDown(mActivity));
         /*Dummy*/
-        saved = new ArrayList<String>();
+        sync = new ArrayList<SurveySync>();
 
-        /**Gasolineras gas1 = new Gasolineras(1,"GasG500 Noorte","19.222222,99.22020202","Av. Insurgentes #24, Benito Juarez, CDMX",false,"2018/22/02");
-        Gasolineras gas2 = new Gasolineras(2,"GasG500 Suur","19.222222,99.22020202","Eje 6, CDMX",false,"2018/22/04");
-        Gasolineras gas3 = new Gasolineras(3,"GasG500 Esste","19.222222,99.22020202","Av. Central, Benito Juarez, CDMX",false,"2018/27/01");
-*/
-        saved.add("1");
-        saved.add("2");
-        saved.add("3");
+        sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));
+        sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));
 
         mLayoutManager = new LinearLayoutManager(mActivity);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        recyclerView.setAdapter(new SavedAdapter(saved,mActivity));
+        recyclerView.setAdapter(new NotesVoiceAdapter(sync,mActivity));
     }
 
 }

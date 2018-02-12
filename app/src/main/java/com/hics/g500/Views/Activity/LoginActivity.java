@@ -156,10 +156,10 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     void onEnterClick(){
         String message = loginPresenter.validateCredentials(this,edtUsername.getText().toString().trim(),edtPassword.getText().toString().trim());
         if (message.isEmpty()) {
-            //final String pass = LogicUtils.MD5(edtPassword.getText().toString().trim());
+            final String pass = LogicUtils.MD5(edtPassword.getText().toString().trim());
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setEmail(edtUsername.getText().toString().trim());
-            loginRequest.setPassword(edtPassword.getText().toString().trim());
+            loginRequest.setPassword(pass);
             mProgressDialog = ProgressDialog.show(this, null, "Autenticando...");
             mProgressDialog.setCancelable(false);
             loginPresenter.login(loginRequest);
