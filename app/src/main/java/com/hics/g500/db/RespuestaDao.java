@@ -30,6 +30,7 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         public final static Property Enviada = new Property(5, Boolean.class, "enviada", false, "ENVIADA");
         public final static Property Ticket = new Property(6, String.class, "ticket", false, "TICKET");
         public final static Property FechaFin = new Property(7, String.class, "fechaFin", false, "FECHA_FIN");
+        public final static Property FechaSyn = new Property(8, String.class, "fechaSyn", false, "FECHA_SYN");
     }
 
 
@@ -52,7 +53,8 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
                 "\"COMPLETADA\" INTEGER," + // 4: completada
                 "\"ENVIADA\" INTEGER," + // 5: enviada
                 "\"TICKET\" TEXT," + // 6: ticket
-                "\"FECHA_FIN\" TEXT);"); // 7: fechaFin
+                "\"FECHA_FIN\" TEXT," + // 7: fechaFin
+                "\"FECHA_SYN\" TEXT);"); // 8: fechaSyn
     }
 
     /** Drops the underlying database table. */
@@ -104,6 +106,11 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         if (fechaFin != null) {
             stmt.bindString(8, fechaFin);
         }
+ 
+        String fechaSyn = entity.getFechaSyn();
+        if (fechaSyn != null) {
+            stmt.bindString(9, fechaSyn);
+        }
     }
 
     @Override
@@ -149,6 +156,11 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         if (fechaFin != null) {
             stmt.bindString(8, fechaFin);
         }
+ 
+        String fechaSyn = entity.getFechaSyn();
+        if (fechaSyn != null) {
+            stmt.bindString(9, fechaSyn);
+        }
     }
 
     @Override
@@ -166,7 +178,8 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // completada
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // enviada
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ticket
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // fechaFin
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // fechaFin
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // fechaSyn
         );
         return entity;
     }
@@ -181,6 +194,7 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         entity.setEnviada(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setTicket(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setFechaFin(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setFechaSyn(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     @Override

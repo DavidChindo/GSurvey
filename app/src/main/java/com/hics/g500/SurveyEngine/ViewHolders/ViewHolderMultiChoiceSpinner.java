@@ -41,7 +41,7 @@ public class ViewHolderMultiChoiceSpinner extends RecyclerView.ViewHolder {
                             Preguntas question = (Preguntas) adapterView.getTag();
                             Opciones value = (Opciones) adapterView.getSelectedItem();
                             //AQUI SE ENVIA LA RESPUESTA
-                            mSurveyCallback.onSaveAnswer(null,value.getOpcion_id().intValue(),question.getPregunta_id(),
+                            mSurveyCallback.onSaveAnswer(null,value.getOpcion_id().intValue(),question,
                                     Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
                             Log.d("MultiSpinner","Option selected " + position);
                         }

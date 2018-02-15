@@ -56,6 +56,15 @@ public class DesignUtils {
                 .show();
     }
 
+    public static void infoMessage(Activity activity, String title, String message){
+        CookieBar.Build(activity)
+                .setTitle(title)
+                .setMessage(message)
+                .setBackgroundColor(R.color.colorAccent)
+                .setTitleColor(R.color.colorWhite)
+                .show();
+    }
+
     public static void showToast(Context context,String message){
         Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
     }

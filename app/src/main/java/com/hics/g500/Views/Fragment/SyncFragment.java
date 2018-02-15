@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.AnnimationsBuilding;
 import com.hics.g500.Network.Request.AnswerSync;
 import com.hics.g500.Network.Request.SurveySync;
@@ -68,21 +69,24 @@ public class SyncFragment extends Fragment {
         mActivity = getActivity();
         btnRecord.setAnimation(AnnimationsBuilding.getDown(mActivity));
         /*Dummy*/
-        sync = new ArrayList<SurveySync>();
+        sync = Dal.surveysSync();
 
-        /**Gasolineras gas1 = new Gasolineras(1,"GasG500 Noorte","19.222222,99.22020202","Av. Insurgentes #24, Benito Juarez, CDMX",false,"2018/22/02");
-         Gasolineras gas2 = new Gasolineras(2,"GasG500 Suur","19.222222,99.22020202","Eje 6, CDMX",false,"2018/22/04");
-         Gasolineras gas3 = new Gasolineras(3,"GasG500 Esste","19.222222,99.22020202","Av. Central, Benito Juarez, CDMX",false,"2018/27/01");
-         */
+        /*sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));
         sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));
         sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));
-        sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));
-        sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));
+        sync.add(new SurveySync(new Long(1),"user1.@qa.com",new Long(1),new ArrayList<AnswerSync>(),new Long(1),false));*/
 
-        mLayoutManager = new LinearLayoutManager(mActivity);
-        recyclerView.setLayoutManager(mLayoutManager);
+        if (sync != null && sync.size() > 0) {
+            mLayoutManager = new LinearLayoutManager(mActivity);
+            recyclerView.setLayoutManager(mLayoutManager);
 
-        recyclerView.setAdapter(new SyncAdapter(sync,mActivity));
+            recyclerView.setAdapter(new SyncAdapter(sync, mActivity));
+        }else{
+            txtError.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            btnRecord.setVisibility(View.GONE);
+            txtError.setText("No hay encuestas para sincronizar");
+        }
     }
 
 

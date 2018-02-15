@@ -112,7 +112,7 @@ public class ViewHolderSearch extends RecyclerView.ViewHolder {
                 //ENVIAR LA RESPUESTA TO SAVED
                 /*EventBus.getDefault().postSticky(new EventSaveAnswer(question, editText.getText().toString(),
                         question.getRespuestadetalle()));*/
-                mSurveyCallback.onSaveAnswer(null,option.getOpcion_id().intValue(),question.getPregunta_id(),
+                mSurveyCallback.onSaveAnswer(null,option.getOpcion_id().intValue(),question,
                         Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
                 listValues.clear();
                 lnContainer.setPadding(32,8,32,8);

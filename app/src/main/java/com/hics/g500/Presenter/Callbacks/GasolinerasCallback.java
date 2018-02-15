@@ -13,4 +13,6 @@ public interface GasolinerasCallback {
     void onSuccessLoadGasolineras(ArrayList<com.hics.g500.db.Gasolineras> gasolineras);
 
     void onErrorLoadGasolineras(String msgError);
+
+    void onRefreshGasolineras();
 }

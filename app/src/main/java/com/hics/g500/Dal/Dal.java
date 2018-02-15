@@ -5,12 +5,15 @@ import android.util.Log;
 import com.hics.g500.Dal.Model.Coordinates;
 import com.hics.g500.G500App;
 import com.hics.g500.Library.LogicUtils;
+import com.hics.g500.Network.Request.AnswerSync;
+import com.hics.g500.Network.Request.SurveySync;
 import com.hics.g500.Network.Response.OptionResponse;
 import com.hics.g500.Network.Response.QuestionResponse;
 import com.hics.g500.Network.Response.SurveyResponse;
 import com.hics.g500.SurveyEngine.Model.SurveyComplete;
 import com.hics.g500.db.Encuesta;
 import com.hics.g500.db.Gasolineras;
+import com.hics.g500.db.GasolinerasDao;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.OpcionesDao;
 import com.hics.g500.db.Preguntas;
@@ -102,11 +105,11 @@ public class Dal {
     }
 
 
-    public static Respuesta insertRespuestaParent(long encuesta_id,long gas_id,boolean completada, boolean enviada){
+    public static Respuesta insertRespuestaParent(long encuesta_id,long gas_id,boolean completada, boolean enviada,String fechaFin,String fechaSync){
         Respuesta respuesta = null;
         try {
             Respuesta answerParent = getAnswerParent(encuesta_id,gas_id);
-            if (answerParent != null) {
+            if (answerParent == null) {
                 Respuesta respuestaTemp = new Respuesta();
                 respuestaTemp.setEncuesta_id(encuesta_id);
                 respuestaTemp.setGas_id(gas_id);
@@ -117,6 +120,13 @@ public class Dal {
                 respuesta = getAnswerParent(encuesta_id,gas_id);
                 return respuesta;
             }else{
+                if (!answerParent.getCompletada()){
+                    answerParent.setCompletada(completada);
+                    answerParent.setEnviada(enviada);
+                    answerParent.setFechaFin(fechaFin);
+                    answerParent.setFechaSyn(fechaSync);
+                    G500App.getDaoSession().getRespuestaDao().updateInTx(answerParent);
+                }
                 return answerParent;
             }
         }catch (Exception e){
@@ -140,7 +150,19 @@ public class Dal {
         }
     }
 
-    public static void insertRespuestaDetalle(long idParent,long preguntaId,int tipoId,int respuestaCodigo,String respuestaTexto,RespuestaDetalle respuestaDetalleT){
+    public static Respuesta getAnsweParentById(long id){
+        try {
+            List<Respuesta> respuesta = G500App.getDaoSession().getRespuestaDao().queryBuilder().
+                    where(RespuestaDao.Properties.Id.eq(id)).list();
+            return respuesta != null && respuesta.size() > 0 ? respuesta.get(0) : null;
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error getAnswerParent: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static long insertRespuestaDetalle(long idParent,long preguntaId,int tipoId,int respuestaCodigo,String respuestaTexto,RespuestaDetalle respuestaDetalleT){
         try {
             if (respuestaDetalleT != null && respuestaDetalleT.getId() != null && respuestaDetalleT.getId() > 0) {
                 RespuestaDetalle answerDetail = getRespuestaDetalleById(idParent,preguntaId);
@@ -151,22 +173,30 @@ public class Dal {
                     respuestaDetalle.setTipo_id(tipoId);
                     respuestaDetalle.setRespuestacodigo(respuestaCodigo);
                     respuestaDetalle.setRespuestatexto(respuestaTexto);
-                    G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
+                 return    G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
                 }else{
                     answerDetail.setRespuestacodigo(respuestaCodigo);
                     answerDetail.setRespuestatexto(respuestaTexto);
                     G500App.getDaoSession().getRespuestaDetalleDao().updateInTx(answerDetail);
+                    return answerDetail.getId();
                 }
 
             }else{
-
+                RespuestaDetalle respuestaDetalle = new RespuestaDetalle();
+                respuestaDetalle.setId_parent(idParent);
+                respuestaDetalle.setPregunta_id(preguntaId);
+                respuestaDetalle.setTipo_id(tipoId);
+                respuestaDetalle.setRespuestacodigo(respuestaCodigo);
+                respuestaDetalle.setRespuestatexto(respuestaTexto);
+              return   G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
             }
         }catch (Exception e){
             e.printStackTrace();
+            return -1;
         }
     }
 
-    public static void insertRespuestaDetalleMultiOption(boolean isChecked, long idParent,long preguntaId,int tipoId,int respuestaCodigo,RespuestaDetalle respuestaDetalleT){
+    public static long insertRespuestaDetalleMultiOption(boolean isChecked, long idParent,long preguntaId,int tipoId,int respuestaCodigo,RespuestaDetalle respuestaDetalleT){
         try {
             if (respuestaDetalleT != null && respuestaDetalleT.getId() != null && respuestaDetalleT.getId() > 0) {
                 if (isChecked) {
@@ -177,17 +207,20 @@ public class Dal {
                         respuestaDetalle.setPregunta_id(preguntaId);
                         respuestaDetalle.setTipo_id(tipoId);
                         respuestaDetalle.setRespuestacodigo(respuestaCodigo);
-                        G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
+                        return  G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
                     } else {
                         if (!isChecked){
                             G500App.getDaoSession().getRespuestaDetalleDao().delete(answerDetail);
+                            return -1;
                         }else {
                             answerDetail.setRespuestacodigo(respuestaCodigo);
                             G500App.getDaoSession().getRespuestaDetalleDao().updateInTx(answerDetail);
+                            return answerDetail.getId();
                         }
                     }
                 }else{
                     //VALIDAR QUE HACER
+                    return -1;
                 }
             }else{
                 RespuestaDetalle respuestaDetalle = new RespuestaDetalle();
@@ -195,10 +228,11 @@ public class Dal {
                 respuestaDetalle.setPregunta_id(preguntaId);
                 respuestaDetalle.setTipo_id(tipoId);
                 respuestaDetalle.setRespuestacodigo(respuestaCodigo);
-                G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
+                return  G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
             }
         }catch (Exception e){
             e.printStackTrace();
+            return  -1;
         }
     }
 
@@ -226,6 +260,18 @@ public class Dal {
             return  null;
         }
     }
+
+    public static List<RespuestaDetalle> getRespuestaDetalleByIdParent(long idParent){
+        try{
+            QueryBuilder qb = G500App.getDaoSession().getRespuestaDetalleDao().queryBuilder();
+            List<RespuestaDetalle> respuestaDetalles = qb.where(RespuestaDetalleDao.Properties.Id_parent.eq(idParent)).list();
+            return respuestaDetalles != null && respuestaDetalles.size() > 0 ? respuestaDetalles : null;
+        }catch (Exception e ){
+            e.printStackTrace();
+            return  null;
+        }
+    }
+
 
     public static RespuestaDetalle getRespuestaDetalleByIdCodigo(long idParent, long preguntaId,int idCodigo){
         try{
@@ -346,6 +392,19 @@ public class Dal {
         return respuestaDetalle;
     }
 
+    public static RespuestaDetalle getRespuestaDetalleByIdLong(long id){
+        try {
+            List<RespuestaDetalle> answer = G500App.getDaoSession().getRespuestaDetalleDao().queryBuilder().
+                    where(RespuestaDetalleDao.Properties.Id.eq(id)).list();
+            return answer != null && answer.size() > 0 ? answer.get(0) : null;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error getRespuestaDetalleByLong "+e.getMessage());
+            return null;
+        }
+    }
+
     public static long idSurvey(){
         try {
             List<Encuesta> encuestas = G500App.getDaoSession().getEncuestaDao().queryBuilder().list();
@@ -356,6 +415,53 @@ public class Dal {
         }
     }
 
+    public static ArrayList<SurveySync> surveysSync(){
+        try {
+            ArrayList<SurveySync> surveySyncs = null;
+            List<Respuesta> respuestas = G500App.getDaoSession().getRespuestaDao().queryBuilder().list();
+            if (respuestas != null && respuestas.size() > 0 ){
+                surveySyncs = new ArrayList<>();
+                for (Respuesta answerParent : respuestas){
+                    SurveySync surveySync = new SurveySync();
+                    List<RespuestaDetalle> respuestaDetalles = getRespuestaDetalleByIdParent(answerParent.getId());
+                    if (respuestaDetalles != null && respuestaDetalles.size() > 0){
+                        ArrayList<AnswerSync> answers = new ArrayList<>();
+                        for (RespuestaDetalle answer : respuestaDetalles){
+                            AnswerSync answerSync = new AnswerSync(answer.getPregunta_id(),answer.getTipo_id(),answer.getRespuestacodigo(),answer.getRespuestatexto());
+                            answers.add(answerSync);
+                        }
+                        surveySync.setAnswerSyncs(answers);
+                        surveySync.setEmail(email());
+                        surveySync.setGasolineraId(answerParent.getGas_id());
+                        surveySync.setSurveyId(idSurvey());
+                        surveySync.setParentId(answerParent.getId());
+                        surveySync.setSync(answerParent.getEnviada());
+
+                        surveySyncs.add(surveySync);
+                    }
+                }
+                return surveySyncs;
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error surveysSync "+e.getMessage());
+            return null;
+        }
+    }
+
+    public static Gasolineras gasolineraById(long id){
+        try {
+            List<Gasolineras> gasolinera = G500App.getDaoSession().getGasolinerasDao().queryBuilder().
+                    where(GasolinerasDao.Properties.Gas_id.eq(id)).list();
+            return  gasolinera != null && gasolinera.size() > 0 ? gasolinera.get(0) : null;
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error gasolineraById: "+e.getMessage());
+            return null;
+        }
+    }
     //endregion
 
     //regionDelete

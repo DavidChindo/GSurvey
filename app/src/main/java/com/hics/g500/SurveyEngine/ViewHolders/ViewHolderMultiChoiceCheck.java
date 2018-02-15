@@ -64,12 +64,12 @@ public class ViewHolderMultiChoiceCheck extends RecyclerView.ViewHolder {
                     if (b) {
                       /* si requiere el otro
                         EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), true, question.getRespuestadetalle(),b));*/
-                      mSurveyCallback.onSaveAnswerMultiOption(b,null,answerTag.getOpcion_id().intValue(),question.getPregunta_id(),
+                      mSurveyCallback.onSaveAnswerMultiOption(b,null,answerTag.getOpcion_id().intValue(),question,
                               Integer.valueOf(question.getPregunta_tipo()),question.getRespuestaDetalle());
                         Log.d(getClass().getName(), "Position saved " + position);
 
                     }else{
-                        mSurveyCallback.onSaveAnswerMultiOption(b,null,answerTag.getOpcion_id().intValue(),question.getPregunta_id(),
+                        mSurveyCallback.onSaveAnswerMultiOption(b,null,answerTag.getOpcion_id().intValue(),question,
                                 Integer.valueOf(question.getPregunta_tipo()),question.getRespuestaDetalle());
                        // EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), true, question.getRespuestadetalle(),b));
                         Log.d(getClass().getName(),"Position saved "+position);

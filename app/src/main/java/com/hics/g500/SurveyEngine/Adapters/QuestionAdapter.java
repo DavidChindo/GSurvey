@@ -92,13 +92,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case (QuestionType.OPEN_ENDED_NUMBER):{
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_survey_number,parent,false);
-                    return new ViewHolderEditTextNumber(v,question);
+                    return new ViewHolderEditTextNumber(v,question,mSurveySaveCallback);
                 }
                 case (QuestionType.OPEN_SEARCH):{
                     List<Opciones> values = question.getOpciones();
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_survey_catalog,parent,false);
-                    return new ViewHolderSearch(v,question,values,parent.getContext(),mRecyclerView);
+                    return new ViewHolderSearch(v,question,values,parent.getContext(),mRecyclerView,mSurveySaveCallback);
                 }
                 case (QuestionType.GPS):{
                     View v = LayoutInflater.from(parent.getContext())
@@ -113,23 +113,23 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case (QuestionType.MULTI_CHOICE_RADIO): {
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_survey_radiogroup, parent, false);
-                    return new ViewHolderRadIoGroup(v,parent.getContext());
+                    return new ViewHolderRadIoGroup(v,parent.getContext(),mSurveySaveCallback);
                 }
                 case (QuestionType.MULTI_CHOICE_CHECK): {
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_survey_choice_check, parent, false);
-                    return new ViewHolderMultiChoiceCheck(v);
+                    return new ViewHolderMultiChoiceCheck(v,mSurveySaveCallback);
                 }
                 case (QuestionType.MULTI_CHOICE_SPINNER): {
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_suvey_choice_spinner, parent, false);
-                    return new ViewHolderMultiChoiceSpinner(v);
+                    return new ViewHolderMultiChoiceSpinner(v,mSurveySaveCallback);
                 }
 
                 default:
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_suvey_choice_spinner, parent, false);
-                    return new ViewHolderMultiChoiceSpinner(v);
+                    return new ViewHolderMultiChoiceSpinner(v,mSurveySaveCallback);
             }
     }
 

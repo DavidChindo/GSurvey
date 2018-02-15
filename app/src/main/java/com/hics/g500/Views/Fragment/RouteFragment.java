@@ -320,7 +320,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
                 mLayoutManager = new LinearLayoutManager(mActivity);
                 recyclerView.setLayoutManager(mLayoutManager);
 
-                recyclerView.setAdapter(new RouteAdapter(gasos,mActivity));
+                recyclerView.setAdapter(new RouteAdapter(gasos,mActivity,mActivity));
             }
         }
         mProgressDialog.dismiss();

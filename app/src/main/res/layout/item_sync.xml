@@ -11,10 +11,10 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp">
     <RelativeLayout
-        android:id="@+id/item_sync_linear_container"
+        android:id="@+id/item_sync_rl_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_success"
+        android:background="@drawable/shape_error"
         android:padding="@dimen/margin_eigth">
         <LinearLayout
             android:layout_width="58dp"

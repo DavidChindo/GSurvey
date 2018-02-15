@@ -53,7 +53,7 @@ public class ViewHolderEditText extends RecyclerView.ViewHolder {
             public void afterTextChanged(Editable editable) {
                 Preguntas question = (Preguntas) editText.getTag();
                 if (!editable.toString().trim().isEmpty() && editable.toString().trim().length() > 0) {
-                mSurveyCallback.onSaveAnswer(editable.toString().trim(),-1,question.getPregunta_id(),
+                mSurveyCallback.onSaveAnswer(editable.toString().trim(),-1,question,
                         Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
                 }
                 Log.d("EditText",editable.toString().trim());

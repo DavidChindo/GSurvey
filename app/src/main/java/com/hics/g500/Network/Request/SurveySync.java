@@ -29,6 +29,10 @@ public class SurveySync {
     @Expose(serialize = false, deserialize = false)
     private boolean sync;
 
+    public SurveySync(){
+
+    }
+
     public SurveySync(long surveyId, String email, long gasolineraId, ArrayList<AnswerSync> answerSyncs, long parentId, boolean sync) {
         this.surveyId = surveyId;
         this.email = email;

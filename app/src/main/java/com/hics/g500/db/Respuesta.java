@@ -22,6 +22,7 @@ public class Respuesta {
     private Boolean enviada;
     private String ticket;
     private String fechaFin;
+    private String fechaSyn;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -35,7 +36,7 @@ public class Respuesta {
     }
 
     @Generated
-    public Respuesta(Long id, Long encuesta_id, Long gas_id, String email, Boolean completada, Boolean enviada, String ticket, String fechaFin) {
+    public Respuesta(Long id, Long encuesta_id, Long gas_id, String email, Boolean completada, Boolean enviada, String ticket, String fechaFin, String fechaSyn) {
         this.id = id;
         this.encuesta_id = encuesta_id;
         this.gas_id = gas_id;
@@ -44,6 +45,7 @@ public class Respuesta {
         this.enviada = enviada;
         this.ticket = ticket;
         this.fechaFin = fechaFin;
+        this.fechaSyn = fechaSyn;
     }
 
     public Long getId() {
@@ -108,6 +110,14 @@ public class Respuesta {
 
     public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public String getFechaSyn() {
+        return fechaSyn;
+    }
+
+    public void setFechaSyn(String fechaSyn) {
+        this.fechaSyn = fechaSyn;
     }
 
     // KEEP METHODS - put your custom methods here

@@ -1,5 +1,6 @@
 package com.hics.g500.Views.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hics.g500.Dal.Dal;
+import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.R;
 import com.hics.g500.SurveyEngine.Views.SurveyActivity;
 import com.hics.g500.db.Gasolineras;
@@ -38,10 +40,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
     List<Gasolineras> mGasos;
     Context mContext;
-
-    public RouteAdapter(List<Gasolineras> mGasos, Context mContext) {
+    Activity mActivity;
+    public RouteAdapter(List<Gasolineras> mGasos, Context mContext, Activity activity) {
         this.mGasos = mGasos;
         this.mContext = mContext;
+        this.mActivity = activity;
     }
 
 
@@ -53,56 +56,48 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bitmap mBitmap;
-        mBitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableResource(position));
-        setCorner(holder.imgViewGas,mBitmap,mContext);
+
         final Gasolineras gasolinera = mGasos.get(position);
         if (gasolinera != null){
             holder.mId.setText(String.valueOf(gasolinera.getGas_id()));
             holder.mName.setText(gasolinera.getNombre_gas());
             holder.mAddress.setText(capitalize(gasolinera.getDireccion()));
-/*
-Respuesta answer = GreenDao.saveAnswerParent(mContext, visit.getRutaid(),
-                                            visit.getCheckPointKey(), visit.getPearsonKey(),
-//                                        ((Cuestionario) surveyList.getItemAtPosition(eopSurvey.position)).getXid());
-                                            eopSurvey.mSurvey.getXid());
-                                    if (answer != null) {
-                                        if (!GreenDao.isSurveyComplete(answer.getUuid())) {
-                                            mBus.postSticky(new EventVisitSurvey(visit, eopSurvey.mSurvey, answer));
-                                            Intent intent = new Intent(mContext, SurveyActivity.class);
-                                            intent.putExtra("cvePDV", visit.getCheckPointKey());
-                                            startActivity(intent);
-//                                        finish();
-                                        } else {
-                                            Alerts.showToastMessage(mContext, "Tarea concluida");
-                                        }
-                                    }
-                                }
- */
+            final Bitmap mBitmap;
+            Respuesta respuesta = Dal.getAnswerParent(Dal.idSurvey(),gasolinera.getGas_id());
+            if (respuesta != null) {
+                mBitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableResource(position, respuesta.getCompletada() != null ? respuesta.getCompletada() : false));
+                setCorner(holder.imgViewGas, mBitmap, mContext);
+            }else{
+                mBitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableResource(position, false));
+                setCorner(holder.imgViewGas, mBitmap, mContext);
+            }
             holder.mSurvey.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Respuesta answer = Dal.insertRespuestaParent(Dal.idSurvey(),gasolinera.getGas_id(),false,false);
+                    Respuesta answer = Dal.insertRespuestaParent(Dal.idSurvey(),gasolinera.getGas_id(),false,false,"","");
                     if (answer != null){
                         if (!answer.getCompletada()){
                             Intent intent = new Intent(mContext,SurveyActivity.class);
                             intent.putExtra("answerParent", (new Gson()).toJson(answer));
-                            mContext.startActivity(new Intent(mContext, SurveyActivity.class));
+                            mContext.startActivity(intent);
+                        }else{
+                            DesignUtils.infoMessage(mActivity,"Contestada","La gasolinera ya fue contestada");
                         }
                     }
-
                 }
             });
 
             holder.mInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Respuesta answer = Dal.insertRespuestaParent(Dal.idSurvey(),gasolinera.getGas_id(),false,false);
+                    Respuesta answer = Dal.insertRespuestaParent(Dal.idSurvey(),gasolinera.getGas_id(),false,false,"","");
                     if (answer != null){
                         if (!answer.getCompletada()){
                             Intent intent = new Intent(mContext,SurveyActivity.class);
                             intent.putExtra("answerParent", (new Gson()).toJson(answer));
-                            mContext.startActivity(new Intent(mContext, SurveyActivity.class));
+                            mContext.startActivity(intent);
+                        }else{
+                            DesignUtils.infoMessage(mActivity,"Contestada","La gasolinera ya fue contestada");
                         }
                     }
                 }
@@ -111,12 +106,14 @@ Respuesta answer = GreenDao.saveAnswerParent(mContext, visit.getRutaid(),
             holder.imgViewOpenSurvey.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Respuesta answer = Dal.insertRespuestaParent(Dal.idSurvey(),gasolinera.getGas_id(),false,false);
+                    Respuesta answer = Dal.insertRespuestaParent(Dal.idSurvey(),gasolinera.getGas_id(),false,false,"","");
                     if (answer != null){
                         if (!answer.getCompletada()){
                             Intent intent = new Intent(mContext,SurveyActivity.class);
                             intent.putExtra("answerParent", (new Gson()).toJson(answer));
-                            mContext.startActivity(new Intent(mContext, SurveyActivity.class));
+                            mContext.startActivity(intent);
+                        }else{
+                            DesignUtils.infoMessage(mActivity,"Contestada","La gasolinera ya fue contestada");
                         }
                     }
                 }
@@ -125,7 +122,7 @@ Respuesta answer = GreenDao.saveAnswerParent(mContext, visit.getRutaid(),
             holder.imgViewOpenMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mContext, "Muestrar en mapa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Mostrar en mapa", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -170,20 +167,20 @@ Respuesta answer = GreenDao.saveAnswerParent(mContext, visit.getRutaid(),
         imgView.setImageDrawable(roundedBitmapDrawable);
     }
 
-    private int drawableResource(int position){
+    private int drawableResource(int position,boolean visited){
         if (position > -1){
             switch (position){
                 case 0:
-                    return R.drawable.foto01a;
+                    return visited ? R.drawable.foto01b : R.drawable.foto01a ;
                 case 1:
-                    return R.drawable.foto02a;
+                    return visited ? R.drawable.foto02b  : R.drawable.foto02a ;
                 case 2:
-                    return R.drawable.foto04a;
+                    return visited ? R.drawable.foto04b  : R.drawable.foto04a ;
                 default:
-                    return R.drawable.foto05a;
+                    return visited ? R.drawable.foto05b  : R.drawable.foto05a ;
             }
         }else{
-            return R.drawable.foto03a;
+            return visited ? R.drawable.foto03b  : R.drawable.foto03a ;
         }
     }
 

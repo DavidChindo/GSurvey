@@ -9,8 +9,8 @@ import com.hics.g500.db.RespuestaDetalle;
 
 public interface SurveySaveCallback {
 
-    void onSaveAnswer(String answer, int answerid, long idQuestion, int typeQuestion, RespuestaDetalle answerDetail);
+    void onSaveAnswer(String answer, int answerid, Preguntas pregunta, int typeQuestion, RespuestaDetalle answerDetail);
 
-    void onSaveAnswerMultiOption(boolean isChecked,String answer, int answerid, long idQuestion, int typeQuestion, RespuestaDetalle answerDetail);
+    void onSaveAnswerMultiOption(boolean isChecked,String answer, int answerid, Preguntas pregunta, int typeQuestion, RespuestaDetalle answerDetail);
 
 }

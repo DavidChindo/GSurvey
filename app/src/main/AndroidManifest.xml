@@ -16,10 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Views.Activity.MainActivity" />
-        <activity android:name=".Views.Activity.LoginActivity" />
-        <activity android:name=".SurveyEngine.Views.SurveyActivity" />
-        <activity android:name=".Views.Activity.SplashActivity">
+        <activity android:name=".Views.Activity.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Views.Activity.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SurveyEngine.Views.SurveyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Views.Activity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,8 +44,10 @@
 
         <activity
             android:name=".Views.Fragment.MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".SurveyEngine.Views.MapsViewActivity"></activity>
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SurveyEngine.Views.MapsViewActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

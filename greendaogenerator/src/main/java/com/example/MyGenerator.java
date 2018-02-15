@@ -95,6 +95,7 @@ public class MyGenerator {
         answer.addBooleanProperty("enviada");
         answer.addStringProperty("ticket");
         answer.addStringProperty("fechaFin");
+        answer.addStringProperty("fechaSyn");
 
         return answer;
 

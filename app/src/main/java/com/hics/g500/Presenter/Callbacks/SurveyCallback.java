@@ -11,4 +11,6 @@ public interface SurveyCallback {
     void onSuccessSurvey(SurveyResponse surveyResponse);
 
     void onErrorSurvey(String msgError);
+
+
 }

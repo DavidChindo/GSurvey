@@ -14,12 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hics.g500.Dal.Dal;
 import com.hics.g500.Network.Request.SurveySync;
 import com.hics.g500.R;
 import com.hics.g500.SurveyEngine.Views.SurveyActivity;
+import com.hics.g500.db.DaoMaster;
 import com.hics.g500.db.Gasolineras;
+import com.hics.g500.db.Respuesta;
 
 import java.util.List;
 
@@ -54,6 +58,20 @@ public class SyncAdapter extends RecyclerView.Adapter<SyncAdapter.ViewHolder> {
         setCorner(holder.imgViewGas,mBitmap,mContext);
 
         SurveySync sync = mSync.get(position);
+        if (sync != null){
+            Gasolineras gasolinera = Dal.gasolineraById(sync.getGasolineraId());
+            Respuesta answer = Dal.getAnsweParentById(sync.getParentId());
+            if (gasolinera != null) {
+                holder.mId.setText(String.valueOf(sync.getGasolineraId()));
+                holder.mName.setText(gasolinera.getNombre_gas());
+                holder.mCreacion.setText("Creación:\t"+answer.getFechaFin());
+                holder.mSincro.setText("Sincronización:\t"+answer.getFechaSyn());
+                if (answer.getEnviada()){
+                    holder.mStatus.setBackground(mContext.getResources().getDrawable(R.drawable.shape_success));
+                    holder.imgSync.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_ico_sync));
+                }
+            }
+        }
 
     }
 
@@ -70,6 +88,8 @@ public class SyncAdapter extends RecyclerView.Adapter<SyncAdapter.ViewHolder> {
         @BindView(R.id.item_sync_sincro)TextView mSincro;
         @BindView(R.id.item_sync_survey)LinearLayout mSurvey;
         @BindView(R.id.item_sync_img_gas)ImageView imgViewGas;
+        @BindView(R.id.item_sync_rl_container)RelativeLayout mStatus;
+        @BindView(R.id.item_sync_open_survey)ImageView imgSync;
 
         public ViewHolder(View itemView) {
             super(itemView);
