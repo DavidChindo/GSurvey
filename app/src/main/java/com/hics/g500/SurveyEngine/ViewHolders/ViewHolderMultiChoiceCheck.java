@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hics.g500.R;
+import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.Preguntas;
 
@@ -24,14 +25,16 @@ public class ViewHolderMultiChoiceCheck extends RecyclerView.ViewHolder {
     public TextView txtRequired;
     public LinearLayout linearLayout,linearEdt;
     public HashMap<Long, CheckedChangeImpl> checkedChangeListenerHashMap;
+    SurveySaveCallback mSurveyCallback;
 
-    public ViewHolderMultiChoiceCheck(View v) {
+    public ViewHolderMultiChoiceCheck(View v,SurveySaveCallback surveyCallback) {
         super(v);
         linearLayout = (LinearLayout) v.findViewById(R.id.item_survey_list_check_container);
         textView = (TextView) v.findViewById(R.id.item_survey_list_chk_title);
         txtRequired = (TextView)v.findViewById(R.id.item_survey_list_check_required);
         linearEdt = (LinearLayout) v.findViewById(R.id.item_survey_check_linear_edit);
         checkedChangeListenerHashMap = new HashMap<>();
+        this.mSurveyCallback = surveyCallback;
     }
 
     public CompoundButton.OnCheckedChangeListener getCheckedChangeListener(CheckBox checkBox,
@@ -61,9 +64,13 @@ public class ViewHolderMultiChoiceCheck extends RecyclerView.ViewHolder {
                     if (b) {
                       /* si requiere el otro
                         EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), true, question.getRespuestadetalle(),b));*/
+                      mSurveyCallback.onSaveAnswerMultiOption(b,null,answerTag.getOpcion_id().intValue(),question.getPregunta_id(),
+                              Integer.valueOf(question.getPregunta_tipo()),question.getRespuestaDetalle());
                         Log.d(getClass().getName(), "Position saved " + position);
 
                     }else{
+                        mSurveyCallback.onSaveAnswerMultiOption(b,null,answerTag.getOpcion_id().intValue(),question.getPregunta_id(),
+                                Integer.valueOf(question.getPregunta_tipo()),question.getRespuestaDetalle());
                        // EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), true, question.getRespuestadetalle(),b));
                         Log.d(getClass().getName(),"Position saved "+position);
                     }

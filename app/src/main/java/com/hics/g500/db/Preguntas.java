@@ -28,6 +28,7 @@ public class Preguntas {
 
     // KEEP FIELDS - put your custom fields here
     private List<Opciones> opciones;
+    private RespuestaDetalle respuestaDetalle;
     // KEEP FIELDS END
 
     @Generated
@@ -131,6 +132,14 @@ public class Preguntas {
 
     public void setOpciones(List<Opciones> opciones) {
         this.opciones = opciones;
+    }
+
+    public RespuestaDetalle getRespuestaDetalle() {
+        return respuestaDetalle;
+    }
+
+    public void setRespuestaDetalle(RespuestaDetalle respuestaDetalle) {
+        this.respuestaDetalle = respuestaDetalle;
     }
     // KEEP METHODS END
 

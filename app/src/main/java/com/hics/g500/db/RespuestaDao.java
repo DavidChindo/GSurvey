@@ -29,6 +29,7 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         public final static Property Completada = new Property(4, Boolean.class, "completada", false, "COMPLETADA");
         public final static Property Enviada = new Property(5, Boolean.class, "enviada", false, "ENVIADA");
         public final static Property Ticket = new Property(6, String.class, "ticket", false, "TICKET");
+        public final static Property FechaFin = new Property(7, String.class, "fechaFin", false, "FECHA_FIN");
     }
 
 
@@ -50,7 +51,8 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
                 "\"EMAIL\" TEXT," + // 3: email
                 "\"COMPLETADA\" INTEGER," + // 4: completada
                 "\"ENVIADA\" INTEGER," + // 5: enviada
-                "\"TICKET\" TEXT);"); // 6: ticket
+                "\"TICKET\" TEXT," + // 6: ticket
+                "\"FECHA_FIN\" TEXT);"); // 7: fechaFin
     }
 
     /** Drops the underlying database table. */
@@ -97,6 +99,11 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         if (ticket != null) {
             stmt.bindString(7, ticket);
         }
+ 
+        String fechaFin = entity.getFechaFin();
+        if (fechaFin != null) {
+            stmt.bindString(8, fechaFin);
+        }
     }
 
     @Override
@@ -137,6 +144,11 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         if (ticket != null) {
             stmt.bindString(7, ticket);
         }
+ 
+        String fechaFin = entity.getFechaFin();
+        if (fechaFin != null) {
+            stmt.bindString(8, fechaFin);
+        }
     }
 
     @Override
@@ -153,7 +165,8 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // email
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // completada
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // enviada
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // ticket
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ticket
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // fechaFin
         );
         return entity;
     }
@@ -167,6 +180,7 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         entity.setCompletada(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setEnviada(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setTicket(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setFechaFin(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.R;
+import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.SurveyEngine.Utils.Utils;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.Preguntas;
@@ -44,9 +45,9 @@ public class ViewHolderSearch extends RecyclerView.ViewHolder {
     public TextView txtRequired;
     public LinearLayout lnContainer;
     public RecyclerView mRecyclerView;
+    SurveySaveCallback mSurveyCallback;
 
-
-    public ViewHolderSearch(View v, Preguntas questiont, List<Opciones> values, Context context,RecyclerView recyclerView) {
+    public ViewHolderSearch(View v, Preguntas questiont, List<Opciones> values, Context context,RecyclerView recyclerView,SurveySaveCallback surveyCallback) {
         super(v);
         editText = (EditText) v.findViewById(R.id.item_catalog_edt_search);
         lvResults = (ListView) v.findViewById(R.id.item_catalog_list_results);
@@ -56,7 +57,7 @@ public class ViewHolderSearch extends RecyclerView.ViewHolder {
         question = questiont;
         mContext = context;
         mRecyclerView = recyclerView;
-
+        this.mSurveyCallback = surveyCallback;
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -105,11 +106,14 @@ public class ViewHolderSearch extends RecyclerView.ViewHolder {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.hideKeyboard((Activity) mContext);
                 searching = false;
-                editText.setText(((Opciones) lvResults.getItemAtPosition(position)).getOpcion_contenido());
+                Opciones option = ((Opciones) lvResults.getItemAtPosition(position));
+                editText.setText(option.getOpcion_contenido());
                 Log.d("VIEWHOLDERSEARCH", editText.getText().toString());
                 //ENVIAR LA RESPUESTA TO SAVED
                 /*EventBus.getDefault().postSticky(new EventSaveAnswer(question, editText.getText().toString(),
                         question.getRespuestadetalle()));*/
+                mSurveyCallback.onSaveAnswer(null,option.getOpcion_id().intValue(),question.getPregunta_id(),
+                        Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
                 listValues.clear();
                 lnContainer.setPadding(32,8,32,8);
                 lvResults.setAdapter(null);

@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.hics.g500.R;
+import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.Preguntas;
 
@@ -35,8 +36,9 @@ public class ViewHolderRadIoGroup extends RecyclerView.ViewHolder {
     public HashMap<Long, CheckedChangeImpl> checkedChangeHashMap;
     public String responsefortype3radio;
     private Context mContext;
+    SurveySaveCallback mSurveyCallback;
 
-    public ViewHolderRadIoGroup(View v,Context context) {
+    public ViewHolderRadIoGroup(View v,Context context,SurveySaveCallback surveyCallback) {
         super(v);
         mContext = context;
         radioGroup = (RadioGroup) v.findViewById(R.id.item_survey_list_radio_group);
@@ -45,6 +47,7 @@ public class ViewHolderRadIoGroup extends RecyclerView.ViewHolder {
         linear = (LinearLayout) v.findViewById(R.id.linear_radios);
         txtRequired = (TextView) v.findViewById(R.id.item_survey_list_list_radio_required);
         checkedChangeHashMap = new HashMap<>();
+        this.mSurveyCallback = surveyCallback;
     }
     public CheckedChangeImpl getCheckedChangeListener(RadioButton radioButton, Preguntas question,
                                                       int position){
@@ -73,6 +76,8 @@ public class ViewHolderRadIoGroup extends RecyclerView.ViewHolder {
                         //else {
                 //Se envia la opcion seleccionda to saves
                         //EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), false, question.getRespuestadetalle(),false));
+                mSurveyCallback.onSaveAnswer(null,answerTag.getOpcion_id().intValue(),question.getPregunta_id(),
+                        Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
                         Log.d(getClass().getName(), "Position saved: " + position);
 
 
@@ -97,6 +102,8 @@ public class ViewHolderRadIoGroup extends RecyclerView.ViewHolder {
                 if (firstSave){
                     Log.d("RadioGroup","position first "+position);
                     //EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), false, question.getRespuestadetalle(),false));
+                    mSurveyCallback.onSaveAnswer(null,answerTag.getOpcion_id().intValue(),question.getPregunta_id(),
+                            Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
                 }
                 Log.d(getClass().getName(), "Position saved: " + position);
             }

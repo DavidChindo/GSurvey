@@ -5,7 +5,10 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by david.barrera on 2/8/18.
@@ -76,4 +79,15 @@ public class LogicUtils {
         }
     }
 
+    public static String getCurrentHour(){
+
+        DateFormat df = DateFormat.getTimeInstance();
+
+        String gmtTime = df.format(new Date());
+
+        SimpleDateFormat sdf = new SimpleDateFormat( "dd MMM yyyy HH:mm 'hrs'" );
+
+        return sdf.format(new Date());
+
+    }
 }

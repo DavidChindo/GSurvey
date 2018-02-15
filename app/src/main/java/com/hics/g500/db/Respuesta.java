@@ -21,6 +21,7 @@ public class Respuesta {
     private Boolean completada;
     private Boolean enviada;
     private String ticket;
+    private String fechaFin;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -34,7 +35,7 @@ public class Respuesta {
     }
 
     @Generated
-    public Respuesta(Long id, Long encuesta_id, Long gas_id, String email, Boolean completada, Boolean enviada, String ticket) {
+    public Respuesta(Long id, Long encuesta_id, Long gas_id, String email, Boolean completada, Boolean enviada, String ticket, String fechaFin) {
         this.id = id;
         this.encuesta_id = encuesta_id;
         this.gas_id = gas_id;
@@ -42,6 +43,7 @@ public class Respuesta {
         this.completada = completada;
         this.enviada = enviada;
         this.ticket = ticket;
+        this.fechaFin = fechaFin;
     }
 
     public Long getId() {
@@ -98,6 +100,14 @@ public class Respuesta {
 
     public void setTicket(String ticket) {
         this.ticket = ticket;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     // KEEP METHODS - put your custom methods here

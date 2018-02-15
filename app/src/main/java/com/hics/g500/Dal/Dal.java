@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.hics.g500.Dal.Model.Coordinates;
 import com.hics.g500.G500App;
+import com.hics.g500.Library.LogicUtils;
 import com.hics.g500.Network.Response.OptionResponse;
 import com.hics.g500.Network.Response.QuestionResponse;
 import com.hics.g500.Network.Response.SurveyResponse;
@@ -14,6 +15,10 @@ import com.hics.g500.db.Opciones;
 import com.hics.g500.db.OpcionesDao;
 import com.hics.g500.db.Preguntas;
 import com.hics.g500.db.PreguntasDao;
+import com.hics.g500.db.Respuesta;
+import com.hics.g500.db.RespuestaDao;
+import com.hics.g500.db.RespuestaDetalle;
+import com.hics.g500.db.RespuestaDetalleDao;
 import com.hics.g500.db.User;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -53,6 +58,18 @@ public class Dal {
         }
     }
 
+    public static void insertOrUpdateGasolinera(Gasolineras gasolineras,boolean visited){
+        try {
+            if (gasolineras != null){
+                gasolineras.setVisited(visited);
+                gasolineras.setFecha(LogicUtils.getCurrentHour());
+                G500App.getDaoSession().getGasolinerasDao().insertOrReplaceInTx(gasolineras);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public static long insertSurvey(SurveyResponse surveyResponse){
         long idEncuesta = -1;
         try {
@@ -83,6 +100,108 @@ public class Dal {
         }
         return idEncuesta;
     }
+
+
+    public static Respuesta insertRespuestaParent(long encuesta_id,long gas_id,boolean completada, boolean enviada){
+        Respuesta respuesta = null;
+        try {
+            Respuesta answerParent = getAnswerParent(encuesta_id,gas_id);
+            if (answerParent != null) {
+                Respuesta respuestaTemp = new Respuesta();
+                respuestaTemp.setEncuesta_id(encuesta_id);
+                respuestaTemp.setGas_id(gas_id);
+                respuestaTemp.setEmail(email());
+                respuestaTemp.setCompletada(completada);
+                respuestaTemp.setEnviada(enviada);
+                G500App.getDaoSession().getRespuestaDao().insertOrReplace(respuestaTemp);
+                respuesta = getAnswerParent(encuesta_id,gas_id);
+                return respuesta;
+            }else{
+                return answerParent;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    public static Respuesta getAnswerParent(long encuestaId, long gasId){
+        try {
+            QueryBuilder qb = G500App.getDaoSession().getRespuestaDao().queryBuilder();
+            List<Respuesta> answerParent = qb.where(qb.and(RespuestaDao.Properties.Encuesta_id.eq(encuestaId),RespuestaDao.Properties.Gas_id.eq(gasId),
+                    RespuestaDao.Properties.Email.eq(email()))).list();
+            return answerParent != null && answerParent.size() > 0 ? answerParent.get(0) : null;
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error en getAnswerParent "+e.getMessage());
+            return null;
+        }
+    }
+
+    public static void insertRespuestaDetalle(long idParent,long preguntaId,int tipoId,int respuestaCodigo,String respuestaTexto,RespuestaDetalle respuestaDetalleT){
+        try {
+            if (respuestaDetalleT != null && respuestaDetalleT.getId() != null && respuestaDetalleT.getId() > 0) {
+                RespuestaDetalle answerDetail = getRespuestaDetalleById(idParent,preguntaId);
+                if (answerDetail == null){
+                    RespuestaDetalle respuestaDetalle = new RespuestaDetalle();
+                    respuestaDetalle.setId_parent(idParent);
+                    respuestaDetalle.setPregunta_id(preguntaId);
+                    respuestaDetalle.setTipo_id(tipoId);
+                    respuestaDetalle.setRespuestacodigo(respuestaCodigo);
+                    respuestaDetalle.setRespuestatexto(respuestaTexto);
+                    G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
+                }else{
+                    answerDetail.setRespuestacodigo(respuestaCodigo);
+                    answerDetail.setRespuestatexto(respuestaTexto);
+                    G500App.getDaoSession().getRespuestaDetalleDao().updateInTx(answerDetail);
+                }
+
+            }else{
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertRespuestaDetalleMultiOption(boolean isChecked, long idParent,long preguntaId,int tipoId,int respuestaCodigo,RespuestaDetalle respuestaDetalleT){
+        try {
+            if (respuestaDetalleT != null && respuestaDetalleT.getId() != null && respuestaDetalleT.getId() > 0) {
+                if (isChecked) {
+                    RespuestaDetalle answerDetail = getRespuestaDetalleByIdCodigo(idParent, preguntaId, respuestaCodigo);
+                    if (answerDetail == null) {
+                        RespuestaDetalle respuestaDetalle = new RespuestaDetalle();
+                        respuestaDetalle.setId_parent(idParent);
+                        respuestaDetalle.setPregunta_id(preguntaId);
+                        respuestaDetalle.setTipo_id(tipoId);
+                        respuestaDetalle.setRespuestacodigo(respuestaCodigo);
+                        G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
+                    } else {
+                        if (!isChecked){
+                            G500App.getDaoSession().getRespuestaDetalleDao().delete(answerDetail);
+                        }else {
+                            answerDetail.setRespuestacodigo(respuestaCodigo);
+                            G500App.getDaoSession().getRespuestaDetalleDao().updateInTx(answerDetail);
+                        }
+                    }
+                }else{
+                    //VALIDAR QUE HACER
+                }
+            }else{
+                RespuestaDetalle respuestaDetalle = new RespuestaDetalle();
+                respuestaDetalle.setId_parent(idParent);
+                respuestaDetalle.setPregunta_id(preguntaId);
+                respuestaDetalle.setTipo_id(tipoId);
+                respuestaDetalle.setRespuestacodigo(respuestaCodigo);
+                G500App.getDaoSession().getRespuestaDetalleDao().insertOrReplace(respuestaDetalle);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 //endregion
 
     //regionSelect
@@ -96,11 +215,45 @@ public class Dal {
         }
     }
 
+    public static RespuestaDetalle getRespuestaDetalleById(long idParent, long preguntaId){
+        try{
+            QueryBuilder qb = G500App.getDaoSession().getRespuestaDetalleDao().queryBuilder();
+            List<RespuestaDetalle> respuestaDetalles = qb.where(qb.and(RespuestaDetalleDao.Properties.Id_parent.eq(idParent),
+                    RespuestaDetalleDao.Properties.Pregunta_id.eq(preguntaId))).list();
+            return respuestaDetalles != null && respuestaDetalles.size() > 0 ? respuestaDetalles.get(0) : null;
+        }catch (Exception e ){
+            e.printStackTrace();
+            return  null;
+        }
+    }
+
+    public static RespuestaDetalle getRespuestaDetalleByIdCodigo(long idParent, long preguntaId,int idCodigo){
+        try{
+            QueryBuilder qb = G500App.getDaoSession().getRespuestaDetalleDao().queryBuilder();
+            List<RespuestaDetalle> respuestaDetalles = qb.where(qb.and(RespuestaDetalleDao.Properties.Id_parent.eq(idParent),
+                    RespuestaDetalleDao.Properties.Pregunta_id.eq(preguntaId),
+                    RespuestaDetalleDao.Properties.Respuestacodigo.eq(idCodigo))).list();
+            return respuestaDetalles != null && respuestaDetalles.size() > 0 ? respuestaDetalles.get(0) : null;
+        }catch (Exception e ){
+            e.printStackTrace();
+            return  null;
+        }
+    }
+
 
     public static String token(){
         try {
             User user = user();
             return user != null ? user.getToken() : "";
+        }catch (Exception e){
+            return "";
+        }
+    }
+
+    public static String email(){
+        try {
+            User user = user();
+            return user != null ? user.getEmail() : "";
         }catch (Exception e){
             return "";
         }
@@ -136,7 +289,7 @@ public class Dal {
         }
     }
 
-    public static SurveyComplete surveyComplete(){
+    public static SurveyComplete surveyComplete(long idParent){
         try {
             SurveyComplete surveyComplete = new SurveyComplete();
             List<Encuesta> encuestas = G500App.getDaoSession().getEncuestaDao().queryBuilder().list();
@@ -150,6 +303,7 @@ public class Dal {
                         if (opciones != null && opciones.size() > 0 ){
                             pregunta.setOpciones(opciones);
                         }
+                        pregunta.setRespuestaDetalle(getRespuestaDetallByIdParentIdQuestion(idParent,pregunta.getPregunta_id()));
                     }
                     encuestas.get(0).setPreguntas(preguntas);
                 }
@@ -176,6 +330,29 @@ public class Dal {
             e.printStackTrace();
             Log.d("DAL", "Error en getValueByName " + e.getMessage());
             return null;
+        }
+    }
+
+    public static RespuestaDetalle getRespuestaDetallByIdParentIdQuestion(long idParent, long idQuestion){
+        RespuestaDetalle respuestaDetalle = null;
+        try {
+            QueryBuilder qb = G500App.getDaoSession().getRespuestaDetalleDao().queryBuilder();
+            List<RespuestaDetalle> answer = qb.where(qb.and(RespuestaDetalleDao.Properties.Id_parent.eq(idParent),
+                    RespuestaDetalleDao.Properties.Pregunta_id.eq(idQuestion))).list();
+            respuestaDetalle = answer != null && answer.size() > 0 ? answer.get(0) : null;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return respuestaDetalle;
+    }
+
+    public static long idSurvey(){
+        try {
+            List<Encuesta> encuestas = G500App.getDaoSession().getEncuestaDao().queryBuilder().list();
+            return encuestas != null && encuestas.size() > 0 ? encuestas.get(0).getEncuesta_id() : -1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
         }
     }
 

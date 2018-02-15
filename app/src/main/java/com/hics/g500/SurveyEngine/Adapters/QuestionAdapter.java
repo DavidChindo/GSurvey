@@ -21,6 +21,7 @@ import com.hics.g500.SurveyEngine.Enums.QuestionType;
 import com.hics.g500.SurveyEngine.ImageCallback;
 import com.hics.g500.SurveyEngine.Model.SurveyComplete;
 import com.hics.g500.SurveyEngine.Presenter.MapCallback;
+import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.SurveyEngine.Utils.Constants;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderDate;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderEditText;
@@ -35,6 +36,7 @@ import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderSearch;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderTime;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.Preguntas;
+import com.hics.g500.db.Respuesta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +62,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     SurveyComplete mSurveyComplete;
     ImageCallback mImageCallback;
     MapCallback mMapCallback;
+    SurveySaveCallback mSurveySaveCallback;
+    Respuesta mAnswerParent;
 
-    public QuestionAdapter(Activity context, FragmentManager fm, List<Preguntas> questions, boolean isTable,String cve,RecyclerView recyclerView,SurveyComplete surveyComplete) {
+
+    public QuestionAdapter(Activity context, FragmentManager fm, List<Preguntas> questions, boolean isTable, String cve, RecyclerView recyclerView, SurveyComplete surveyComplete, SurveySaveCallback surveySaveCallback, Respuesta answerParent) {
         this.questions = questions;
         this.context = context;
         this.fm = fm;
@@ -69,6 +74,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.cve = cve;
         this.mRecyclerView = recyclerView;
         this.mSurveyComplete = surveyComplete;
+        this.mSurveySaveCallback = surveySaveCallback;
+        this.mAnswerParent = answerParent;
     }
 
 
@@ -80,7 +87,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case (QuestionType.OPEN_ENDED): {
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_survey_edittext, parent, false);
-                    return new ViewHolderEditText(v,question);
+                    return new ViewHolderEditText(v,question,mSurveySaveCallback);
                 }
                 case (QuestionType.OPEN_ENDED_NUMBER):{
                     View v = LayoutInflater.from(parent.getContext())

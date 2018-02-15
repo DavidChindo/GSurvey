@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hics.g500.R;
+import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.Preguntas;
 
@@ -22,12 +23,15 @@ public class ViewHolderMultiChoiceSpinner extends RecyclerView.ViewHolder {
     public LinearLayout mLinearSp;
     public TextView txtRequired;
     public TextView txtTitle;
-    public ViewHolderMultiChoiceSpinner(final View v) {
+    SurveySaveCallback mSurveyCallback;
+
+    public ViewHolderMultiChoiceSpinner(final View v,SurveySaveCallback surveyCallback) {
         super(v);
         mSpinner = (Spinner) v.findViewById(R.id.item_survey_multi_list_spinner);
         mLinearSp = (LinearLayout) v.findViewById(R.id.container_spinner);
         txtRequired = (TextView) v.findViewById(R.id.item_survey_list_spinner_required);
         txtTitle = (TextView)v.findViewById(R.id.item_survey_spinner_txt_title);
+        this.mSurveyCallback = surveyCallback;
 
         mSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
@@ -37,7 +41,8 @@ public class ViewHolderMultiChoiceSpinner extends RecyclerView.ViewHolder {
                             Preguntas question = (Preguntas) adapterView.getTag();
                             Opciones value = (Opciones) adapterView.getSelectedItem();
                             //AQUI SE ENVIA LA RESPUESTA
-                            //EventBus.getDefault().postSticky(new EventSaveOption(question,value,String.valueOf(position),false,question.getRespuestadetalle(),false));
+                            mSurveyCallback.onSaveAnswer(null,value.getOpcion_id().intValue(),question.getPregunta_id(),
+                                    Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
                             Log.d("MultiSpinner","Option selected " + position);
                         }
                     }

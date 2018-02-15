@@ -10,7 +10,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hics.g500.Presenter.Callbacks.SurveyCallback;
 import com.hics.g500.R;
+import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.db.Preguntas;
 
 /**
@@ -24,14 +26,16 @@ public class ViewHolderEditText extends RecyclerView.ViewHolder {
     public EditText editText;
     public TextView txtRequired;
     public TextView txtTitle;
+    SurveySaveCallback mSurveyCallback;
 
-    public ViewHolderEditText(View v,Preguntas questiont) {
+    public ViewHolderEditText(View v,Preguntas questiont,SurveySaveCallback surveyCallback) {
         super(v);
         linearLayout = (LinearLayout) v.findViewById(R.id.open_ended_linear_layout);
         editText = (EditText) v.findViewById(R.id.item_survey_list_edit_text_open_ended);
         txtTitle = (TextView)v.findViewById(R.id.item_survey_open_ended_txt_title);
         txtRequired = (TextView) v.findViewById(R.id.item_survey_list_open_ended_required);
         Preguntas questionv = (Preguntas) editText.getTag();
+        this.mSurveyCallback = surveyCallback;
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -48,9 +52,10 @@ public class ViewHolderEditText extends RecyclerView.ViewHolder {
             @Override
             public void afterTextChanged(Editable editable) {
                 Preguntas question = (Preguntas) editText.getTag();
-                //if (!editable.toString().trim().isEmpty() && editable.toString().trim().length() > 0) {
-                //SENT ANSWER
-                //}
+                if (!editable.toString().trim().isEmpty() && editable.toString().trim().length() > 0) {
+                mSurveyCallback.onSaveAnswer(editable.toString().trim(),-1,question.getPregunta_id(),
+                        Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
+                }
                 Log.d("EditText",editable.toString().trim());
             }
         });

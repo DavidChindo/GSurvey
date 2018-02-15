@@ -14,6 +14,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
 import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.R;
@@ -22,9 +23,12 @@ import com.hics.g500.SurveyEngine.Enums.QuestionType;
 import com.hics.g500.SurveyEngine.ImageCallback;
 import com.hics.g500.SurveyEngine.Model.SurveyComplete;
 import com.hics.g500.SurveyEngine.Presenter.MapCallback;
+import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.SurveyEngine.Utils.CameraUtils;
 import com.hics.g500.SurveyEngine.Utils.RecyclerScroll;
 import com.hics.g500.db.Preguntas;
+import com.hics.g500.db.Respuesta;
+import com.hics.g500.db.RespuestaDetalle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.internal.Utils;
 
-public class SurveyActivity extends AppCompatActivity implements ImageCallback, MapCallback {
+public class SurveyActivity extends AppCompatActivity implements ImageCallback, MapCallback,SurveySaveCallback {
 
     @BindView(R.id.act_survey_recycler)RecyclerView recyclerView;
     @BindView(R.id.toolbar)Toolbar toolbar;
@@ -44,30 +48,27 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     private List<Preguntas> mQuestions;
     SurveyComplete surveyComplete;
     boolean fadeToolbar = true;
-
+    Respuesta mAnswerParent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
         ButterKnife.bind(this);
+        Intent ActivityIntent = getIntent();
+        Bundle GetData=ActivityIntent.getExtras();
+        String jsonContent=GetData.getString("answerParent");
+        mAnswerParent = (new Gson()).fromJson(jsonContent,Respuesta.class);
         mQuestionAdapter = new QuestionAdapter(this, getSupportFragmentManager(), mQuestions, false,"CveRoute"
-                ,recyclerView,surveyComplete);
+                ,recyclerView,surveyComplete,this,mAnswerParent);
         setupLayout();
         loadViews();
-
-
     }
 
     private void setupLayout() {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.simple_grow);
 
-        //  FAB margin needed for animation
-
         toolbarHeight = DesignUtils.getToolbarHeight(this);
 
-        /* Set top padding= toolbar height.
-         So there is no overlap when the toolbar hides.
-         Avoid using 0 for the other parameters as it resets padding set via XML!*/
         recyclerView.setPadding(recyclerView.getPaddingLeft(), toolbarHeight,
                 recyclerView.getPaddingRight(), recyclerView.getPaddingBottom()*3);
 
@@ -101,7 +102,7 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     }
 
     private void loadViews(){
-        surveyComplete = Dal.surveyComplete();
+        surveyComplete = Dal.surveyComplete(mAnswerParent.getId());
         mQuestionAdapter.setmSurveyComplete(surveyComplete);
         mQuestionAdapter.setQuestionsList(surveyComplete.getEncuesta().getPreguntas());
         mQuestionAdapter.setImageCallback(this);
@@ -119,4 +120,16 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     public void mapCoordinate(Preguntas pregunta) {
         startActivity(new Intent(this,MapsViewActivity.class));
     }
+
+    @Override
+    public void onSaveAnswer(String answer, int answerid, long idQuestion, int typeQuestion, RespuestaDetalle answerDetail) {
+        Dal.insertRespuestaDetalle(mAnswerParent.getId(),idQuestion,typeQuestion,answerid,answer,answerDetail);
+    }
+
+    @Override
+    public void onSaveAnswerMultiOption(boolean isChecked, String answer, int answerid, long idQuestion, int typeQuestion, RespuestaDetalle answerDetail) {
+        Dal.insertRespuestaDetalleMultiOption(isChecked,mAnswerParent.getId(),idQuestion,typeQuestion,answerid,answerDetail);
+    }
+
+
 }
