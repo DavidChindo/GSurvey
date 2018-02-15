@@ -14,5 +14,4 @@ public interface GasolinerasCallback {
 
     void onErrorLoadGasolineras(String msgError);
 
-    void onRefreshGasolineras();
 }
