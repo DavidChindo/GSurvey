@@ -1,9 +1,13 @@
 package com.hics.g500.SurveyEngine.Views;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +24,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hics.g500.Dal.Dal;
+import com.hics.g500.Library.Connection;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Library.LogicUtils;
 import com.hics.g500.Library.Statics;
+import com.hics.g500.Network.Request.SurveySync;
+import com.hics.g500.Network.Response.SentDataReponse;
+import com.hics.g500.Network.Response.UploadFileResponse;
 import com.hics.g500.Presenter.Callbacks.GasolinerasCallback;
+import com.hics.g500.Presenter.Callbacks.SyncCallback;
+import com.hics.g500.Presenter.Implementations.SyncPresenter;
 import com.hics.g500.R;
 import com.hics.g500.SurveyEngine.Adapters.QuestionAdapter;
 import com.hics.g500.SurveyEngine.Enums.QuestionType;
@@ -38,6 +48,8 @@ import com.hics.g500.db.Gasolineras;
 import com.hics.g500.db.Preguntas;
 import com.hics.g500.db.Respuesta;
 import com.hics.g500.db.RespuestaDetalle;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,7 +66,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.internal.Utils;
 
-public class SurveyActivity extends AppCompatActivity implements ImageCallback, MapCallback,SurveySaveCallback {
+import static com.hics.g500.SurveyEngine.Utils.CameraUtils.resizeBitmap;
+
+public class SurveyActivity extends AppCompatActivity implements ImageCallback, MapCallback,SurveySaveCallback,SyncCallback {
 
     @BindView(R.id.act_survey_recycler)RecyclerView recyclerView;
     @BindView(R.id.toolbar)Toolbar toolbar;
@@ -69,6 +83,9 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     private final String TAG = SurveyActivity.class.getSimpleName();
     String namePhoto = "";
     Preguntas question = null;
+    SyncPresenter syncPresenter;
+    ProgressDialog mProgressDialog;
+    SurveySync surveySync;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +146,8 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
         mQuestionAdapter.setmMapCallback(this);
         mQuestionAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(mQuestionAdapter);
+        syncPresenter = new SyncPresenter(this,this);
+        surveySync  = null;
     }
 
     @Override
@@ -173,13 +192,51 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     @OnClick(R.id.act_survey_finish)
     void onSaveSurveyClick(){
         try {
-            if (mAnswerParent != null){
-                Dal.insertRespuestaParent(mAnswerParent.getEncuesta_id(),mAnswerParent.getGas_id(),true,false, LogicUtils.getCurrentHour(),"");
-                Gasolineras gasolinera = Dal.gasolineraById(mAnswerParent.getGas_id());
-                if (gasolinera != null){
-                    Dal.insertOrUpdateGasolinera(gasolinera,true);
-                    finish();
-                }
+            if (Connection.isConnected(SurveyActivity.this)) {
+                final AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(SurveyActivity.this);
+                builder.setTitle("Finalizar")
+                        .setMessage("La información se sincronizara")
+                        .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (mAnswerParent != null) {
+                                    Dal.insertRespuestaParent(mAnswerParent.getEncuesta_id(), mAnswerParent.getGas_id(), true, false, LogicUtils.getCurrentHour(), "");
+                                    Gasolineras gasolinera = Dal.gasolineraById(mAnswerParent.getGas_id());
+                                    if (gasolinera != null) {
+                                        Dal.insertOrUpdateGasolinera(gasolinera, true);
+                                        //finish();
+                                        surveySync = Dal.surveysSyncById(mAnswerParent.getId());
+                                        mProgressDialog = ProgressDialog.show(SurveyActivity.this, null, "Enviando...");
+                                        mProgressDialog.setCancelable(false);
+                                        syncPresenter.uploadFile(surveySync);
+                                    }
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+            }else{
+                final AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(SurveyActivity.this);
+                builder.setTitle("Guardar")
+                        .setMessage("La información se guardara solamente para su sincronización manúal, cuando tenga conexión a internet")
+                        .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (mAnswerParent != null) {
+                                    Dal.insertRespuestaParent(mAnswerParent.getEncuesta_id(), mAnswerParent.getGas_id(), true, false, LogicUtils.getCurrentHour(), "");
+                                    Gasolineras gasolinera = Dal.gasolineraById(mAnswerParent.getGas_id());
+                                    if (gasolinera != null) {
+                                        Dal.insertOrUpdateGasolinera(gasolinera, true);
+                                        finish();
+                                    }
+                                }
+                            }
+                        })
+                        .show();
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -191,7 +248,10 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CameraUtils.REQUEST_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
-                Bitmap imageBitmap = CameraUtils.fullBitmap();
+                boolean imageBitmap = CameraUtils.fullBitmap();
+
+                Log.d("SURVEYactivity","valor imagebitmap "+imageBitmap);
+
                 File storagePath = new File(Environment.getExternalStorageDirectory(), Statics.NAME_FOLDER);
                 boolean created = storagePath.mkdirs();
                 if(created){
@@ -211,5 +271,48 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
                 onSavePhoto(f2.getAbsolutePath());
             }
         }
+    }
+
+
+    @Override
+    public void onSentData(SurveySync respuesta) {
+
+    }
+
+    @Override
+    public void onUploadFile(SurveySync respuesta) {
+
+    }
+
+    @Override
+    public void onSyncDataSuccess(SentDataReponse sentDataReponse) {
+        if (sentDataReponse != null){
+            Respuesta respuesta = Dal.getAnsweParentById(mAnswerParent.getId());
+            if (respuesta != null) {
+                Dal.updateRespuestaParent(respuesta.getEncuesta_id(),respuesta.getGas_id(),
+                        respuesta.getCompletada(),true,respuesta.getFechaFin(), LogicUtils.getCurrentHour());
+            }
+            mProgressDialog.dismiss();
+            DesignUtils.showDialogWithFinish("Sincronización",sentDataReponse.getMessage() +" y archivos recibidos",this);
+        }
+    }
+
+    @Override
+    public void onSyncDataError(String msg) {
+        mProgressDialog.dismiss();
+        DesignUtils.errorMessage(this,"",msg);
+    }
+
+    @Override
+    public void onUploadFileSuccess(UploadFileResponse uploadFileResponse) {
+        if (uploadFileResponse != null){
+            syncPresenter.syncData(surveySync);
+        }
+    }
+
+    @Override
+    public void onUploadFileErro(String msg) {
+        mProgressDialog.dismiss();
+        DesignUtils.errorMessage(this,"",msg);
     }
 }

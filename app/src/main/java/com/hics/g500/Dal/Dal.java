@@ -10,6 +10,7 @@ import com.hics.g500.Network.Request.SurveySync;
 import com.hics.g500.Network.Response.OptionResponse;
 import com.hics.g500.Network.Response.QuestionResponse;
 import com.hics.g500.Network.Response.SurveyResponse;
+import com.hics.g500.SurveyEngine.Enums.QuestionType;
 import com.hics.g500.SurveyEngine.Model.SurveyComplete;
 import com.hics.g500.db.Encuesta;
 import com.hics.g500.db.Gasolineras;
@@ -67,6 +68,7 @@ public class Dal {
                 gasolineras.setVisited(visited);
                 gasolineras.setFecha(LogicUtils.getCurrentHour());
                 G500App.getDaoSession().getGasolinerasDao().insertOrReplaceInTx(gasolineras);
+
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -116,6 +118,7 @@ public class Dal {
                 respuestaTemp.setEmail(email());
                 respuestaTemp.setCompletada(completada);
                 respuestaTemp.setEnviada(enviada);
+                respuestaTemp.setName_gas(gasolineraById(gas_id).getNombre_gas());
                 G500App.getDaoSession().getRespuestaDao().insertOrReplace(respuestaTemp);
                 respuesta = getAnswerParent(encuesta_id,gas_id);
                 return respuesta;
@@ -129,6 +132,28 @@ public class Dal {
                 }
                 return answerParent;
             }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public static Respuesta updateRespuestaParent(long encuesta_id,long gas_id,boolean completada, boolean enviada,String fechaFin,String fechaSync){
+        Respuesta respuesta = null;
+        try {
+            Respuesta answerParent = getAnswerParent(encuesta_id,gas_id);
+            if (answerParent != null) {
+                    answerParent.setCompletada(completada);
+                    answerParent.setEnviada(enviada);
+                    answerParent.setFechaFin(fechaFin);
+                    answerParent.setFechaSyn(fechaSync);
+                    G500App.getDaoSession().getRespuestaDao().updateInTx(answerParent);
+                return answerParent;
+                }else {
+                return null;
+            }
+
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -418,7 +443,7 @@ public class Dal {
     public static ArrayList<SurveySync> surveysSync(){
         try {
             ArrayList<SurveySync> surveySyncs = null;
-            List<Respuesta> respuestas = G500App.getDaoSession().getRespuestaDao().queryBuilder().list();
+            List<Respuesta> respuestas = G500App.getDaoSession().getRespuestaDao().queryBuilder().where(RespuestaDao.Properties.Completada.eq(true)).list();
             if (respuestas != null && respuestas.size() > 0 ){
                 surveySyncs = new ArrayList<>();
                 for (Respuesta answerParent : respuestas){
@@ -451,6 +476,39 @@ public class Dal {
         }
     }
 
+    public static SurveySync surveysSyncById(long idRespuesta){
+        try {
+            Respuesta respuesta = getAnsweParentById(idRespuesta);
+            if (respuesta != null ){
+                    SurveySync surveySync = new SurveySync();
+                    List<RespuestaDetalle> respuestaDetalles = getRespuestaDetalleByIdParent(respuesta.getId());
+                    if (respuestaDetalles != null && respuestaDetalles.size() > 0){
+                        ArrayList<AnswerSync> answers = new ArrayList<>();
+                        for (RespuestaDetalle answer : respuestaDetalles){
+                            AnswerSync answerSync = new AnswerSync(answer.getPregunta_id(),answer.getTipo_id(),answer.getRespuestacodigo(),answer.getRespuestatexto());
+                            answers.add(answerSync);
+                        }
+                        surveySync.setAnswerSyncs(answers);
+                        surveySync.setEmail(email());
+                        surveySync.setGasolineraId(respuesta.getGas_id());
+                        surveySync.setSurveyId(idSurvey());
+                        surveySync.setParentId(respuesta.getId());
+                        surveySync.setSync(respuesta.getEnviada());
+
+                        return surveySync;
+                    }else{
+                        return null;
+                    }
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error surveysSync "+e.getMessage());
+            return null;
+        }
+    }
+
     public static Gasolineras gasolineraById(long id){
         try {
             List<Gasolineras> gasolinera = G500App.getDaoSession().getGasolinerasDao().queryBuilder().
@@ -460,6 +518,27 @@ public class Dal {
             e.printStackTrace();
             Log.d(Dal.class.getSimpleName(),"Error gasolineraById: "+e.getMessage());
             return null;
+        }
+    }
+
+    public static ArrayList<String> getFilesPath(long idParent,long idQuestion){
+        try {
+            QueryBuilder queryBuilder = G500App.getDaoSession().getRespuestaDetalleDao().queryBuilder();
+            List<RespuestaDetalle> respuestaDetalles = queryBuilder.where(queryBuilder.and(RespuestaDetalleDao.Properties.Id_parent.eq(idParent),
+                    RespuestaDetalleDao.Properties.Tipo_id.eq(QuestionType.IMAGE))).list();
+            if (respuestaDetalles != null && respuestaDetalles.size() > 0){
+                ArrayList<String> paths = new ArrayList<>();
+                for (RespuestaDetalle respuestaDetalle : respuestaDetalles){
+                    paths.add(respuestaDetalle.getRespuestatexto());
+                }
+                return paths;
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error en getFilesPath "+e.getMessage());
+            return  null;
         }
     }
     //endregion

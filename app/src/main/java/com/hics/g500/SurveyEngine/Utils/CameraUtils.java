@@ -8,13 +8,19 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import com.hics.g500.Library.Statics;
+import com.hics.g500.Network.Response.LogOutResponse;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static android.provider.MediaStore.AUTHORITY;
 
 /**
  * Created by david.barrera on 2/8/18.
@@ -24,6 +30,7 @@ public abstract class CameraUtils {
 
     public static final int REQUEST_TAKE_PHOTO = 0x999;
     public static File lastPhotoPath;
+    public static Uri lastPhotoUri;
 
     @SuppressLint("SimpleDateFormat")
     private static File createImageFile(String namePhoto) throws IOException {
@@ -49,27 +56,48 @@ public abstract class CameraUtils {
             File photoFile = null;
             try {
                 photoFile = createImageFile(namePhoto);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
+                Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".com.hics.g500.provider",photoFile);
+                lastPhotoUri  = photoURI;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
                 context.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
     }
+    /*
 
-    public static Bitmap fullBitmap() {
+       public static void takePhoto(Activity context,String namePhoto) {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile(namePhoto);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                /*takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                context.startActivityForResult(i, REQUEST_TAKE_PHOTO);
+}
+        }
+                }
+     */
+
+    public static boolean fullBitmap() {
         try {
-
-
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(lastPhotoPath.getAbsolutePath(), bmOptions);
+            //BitmapFactory.decodeFile(lastPhotoPath.getAbsolutePath(), bmOptions);
             int photoW = bmOptions.outWidth;
             int photoH = bmOptions.outHeight;
-
+            bmOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
             /* Determine how much to scale down the image*/
             int scaleFactor = Math.min(photoW / 300, photoH / 300);
 
@@ -78,12 +106,42 @@ public abstract class CameraUtils {
             bmOptions.inSampleSize = scaleFactor;
 
 
-            return BitmapFactory.decodeFile(lastPhotoPath.getAbsolutePath(), bmOptions);
+            Bitmap bi = BitmapFactory.decodeFile(lastPhotoPath.getAbsolutePath(), bmOptions);
+            FileOutputStream mCameraOutputStream = new FileOutputStream(lastPhotoPath.getPath());
+            boolean a = bi.compress(Bitmap.CompressFormat.JPEG, 80,
+                    mCameraOutputStream);
+            return a;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            Log.d("CameraUtils","Error "+e.getMessage());
+            return false;
         }
     }
+
+    public static Bitmap resizeBitmap(Bitmap bitmapToResize, int maxDimension) {
+
+        int bitmapHeight = bitmapToResize.getHeight();
+        int bitmapWidth = bitmapToResize.getWidth();
+
+        Bitmap newBitmap;
+
+        if (bitmapWidth > bitmapHeight) {
+            int newHeight = (int) ((float) maxDimension * ((float) bitmapHeight / (float)
+                    bitmapWidth));
+            newBitmap = Bitmap.createScaledBitmap(bitmapToResize, maxDimension, newHeight, false);
+        } else if (bitmapWidth < bitmapHeight) {
+            int newWidth = (int) ((float) maxDimension * ((float) bitmapWidth / (float)
+                    bitmapHeight));
+            newBitmap = Bitmap.createScaledBitmap(bitmapToResize, newWidth, maxDimension, false);
+        } else {
+            newBitmap = Bitmap.createScaledBitmap(bitmapToResize, maxDimension, maxDimension,
+                    false);
+        }
+
+        return newBitmap;
+
+    }
+
 
     public static String getNamePicture(){
         //String timeStamp = new SimpleDateFormat("yyyy_MM_dd_T_HH_mm_ss").format(new Date());

@@ -23,7 +23,9 @@ import com.hics.g500.Library.Connection;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Library.LogicUtils;
 import com.hics.g500.Network.Request.LoginRequest;
+import com.hics.g500.Network.Request.SignUpRequest;
 import com.hics.g500.Network.Response.LoginResponse;
+import com.hics.g500.Network.Response.SignUpResponse;
 import com.hics.g500.Network.Response.SurveyResponse;
 import com.hics.g500.Presenter.Callbacks.LoginCallback;
 import com.hics.g500.Presenter.Callbacks.SurveyCallback;
@@ -68,12 +70,20 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        setHint();
         loginPresenter = new LoginPresenter(this,this);
         surveyPresenter = new SurveyPresenter(this,this);
 
         if (Build.VERSION.SDK_INT >=23) {
             init_permission();
         }
+    }
+
+    private void setHint(){
+        edtConfirmPass.setHint("Confirmar contraseña");
+        edtUsername.setHint("Usuario");
+        edtPassword.setHint("Contraseña");
+        btnEnter.setTag(1);
     }
 
     /*
@@ -142,6 +152,7 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
         edtConfirmPass.setVisibility(View.VISIBLE);
         tilConfirm.setVisibility(View.VISIBLE);
         btnEnter.setText(R.string.act_login_register);
+        btnEnter.setTag(2);
         btnRecovery.setVisibility(View.GONE);
     }
 
@@ -150,21 +161,32 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
         edtConfirmPass.setVisibility(View.GONE);
         tilConfirm.setVisibility(View.GONE);
         btnEnter.setText(R.string.act_login_enter);
+        btnEnter.setTag(1);
         btnRecovery.setVisibility(View.VISIBLE);
     }
     @OnClick(R.id.act_login_enter)
-    void onEnterClick(){
-        String message = loginPresenter.validateCredentials(this,edtUsername.getText().toString().trim(),edtPassword.getText().toString().trim());
-        if (message.isEmpty()) {
-            final String pass = LogicUtils.MD5(edtPassword.getText().toString().trim());
-            LoginRequest loginRequest = new LoginRequest();
-            loginRequest.setEmail(edtUsername.getText().toString().trim());
-            loginRequest.setPassword(pass);
-            mProgressDialog = ProgressDialog.show(this, null, "Autenticando...");
-            mProgressDialog.setCancelable(false);
-            loginPresenter.login(loginRequest);
-        }else{
-            DesignUtils.errorMessage(LoginActivity.this,"Error",message);
+    void onEnterClick(View v){
+        if (((int)v.getTag()) == 1) {
+            String message = loginPresenter.validateCredentials(this, edtUsername.getText().toString().trim(), edtPassword.getText().toString().trim());
+            if (message.isEmpty()) {
+                final String pass = LogicUtils.MD5(edtPassword.getText().toString().trim());
+                LoginRequest loginRequest = new LoginRequest();
+                loginRequest.setEmail(edtUsername.getText().toString().trim());
+                loginRequest.setPassword(pass);
+                mProgressDialog = ProgressDialog.show(this, null, "Autenticando...");
+                mProgressDialog.setCancelable(false);
+                loginPresenter.login(loginRequest);
+            } else {
+                DesignUtils.errorMessage(LoginActivity.this, "Error", message);
+            }
+        }else if (((int) v.getTag()) == 2){
+            String message = loginPresenter.validateCredentialsPassword(this,edtUsername.getText().toString().trim(),edtPassword.getText().toString().trim(),edtConfirmPass.getText().toString().trim());
+            if (message.isEmpty()){
+                SignUpRequest signUpRequest = new SignUpRequest(edtUsername.getText().toString().trim(),edtPassword.getText().toString().trim());
+                mProgressDialog = ProgressDialog.show(this,null,"Regitrando...");
+                mProgressDialog.setCancelable(false);
+                loginPresenter.signUp(signUpRequest);
+            }
         }
     }
 
@@ -185,6 +207,25 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     public void onErrorLogin(String msgError) {
         mProgressDialog.dismiss();
         DesignUtils.errorMessage(this,"Error",msgError);
+    }
+
+    @Override
+    public void onSuccessSignUp(SignUpResponse signUpResponse) {
+        mProgressDialog.dismiss();
+        if (signUpResponse != null){
+            edtConfirmPass.setVisibility(View.GONE);
+            tilConfirm.setVisibility(View.GONE);
+            btnEnter.setText(R.string.act_login_enter);
+            btnEnter.setTag(1);
+            btnRecovery.setVisibility(View.VISIBLE);
+            DesignUtils.successMessage(this,"Registro","Registro exitoso");
+        }
+    }
+
+    @Override
+    public void onErrorSignUp(String msg) {
+        mProgressDialog.dismiss();
+        DesignUtils.errorMessage(this,"Error",msg);
     }
 
     @Override

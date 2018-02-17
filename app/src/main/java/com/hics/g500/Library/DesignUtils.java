@@ -2,6 +2,8 @@ package com.hics.g500.Library;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -107,5 +109,34 @@ public class DesignUtils {
 
     public static int getStatusBarHeight(Context context) {
         return (int) context.getResources().getDimension(R.dimen.status_bar_size);
+    }
+
+    public static  void showDialog(String title, String msg, final Context context){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false);
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public static  void showDialogWithFinish(String title, String msg, final Activity activity){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(activity);
+        builder.setCancelable(false);
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        activity.finish();
+                    }
+                })
+                .show();
     }
 }

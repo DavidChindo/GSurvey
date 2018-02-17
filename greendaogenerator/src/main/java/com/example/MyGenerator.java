@@ -90,6 +90,7 @@ public class MyGenerator {
         answer.addLongProperty("id").primaryKey().autoincrement();
         answer.addLongProperty("encuesta_id");
         answer.addLongProperty("gas_id");
+        answer.addStringProperty("name_gas");
         answer.addStringProperty("email");
         answer.addBooleanProperty("completada");
         answer.addBooleanProperty("enviada");

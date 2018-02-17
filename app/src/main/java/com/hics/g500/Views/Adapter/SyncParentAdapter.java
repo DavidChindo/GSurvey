@@ -37,7 +37,14 @@ public class SyncParentAdapter extends AwesomeTabBarAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return fragments.get(position);
+        switch (position){
+            case 0:
+                return new SyncFragment();
+            case 1:
+                return new NotesVoiceFragment();
+            default:
+                return null;
+        }
     }
 
     @Override

@@ -32,8 +32,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="validate_field">%s es requerido</string>
     <string name="title_activity_maps">Map</string>
+    <string name="locating">Ubicando...</string>
 
     <!--Survey -->
     <string name="capture_coordinate">Capturar Coordenadas</string>
     <string name="maps_indications">Mueva el mapa para cambiar la ubicación del marcador</string>
+
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

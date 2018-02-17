@@ -17,6 +17,7 @@ public class Respuesta {
     private Long id;
     private Long encuesta_id;
     private Long gas_id;
+    private String name_gas;
     private String email;
     private Boolean completada;
     private Boolean enviada;
@@ -36,10 +37,11 @@ public class Respuesta {
     }
 
     @Generated
-    public Respuesta(Long id, Long encuesta_id, Long gas_id, String email, Boolean completada, Boolean enviada, String ticket, String fechaFin, String fechaSyn) {
+    public Respuesta(Long id, Long encuesta_id, Long gas_id, String name_gas, String email, Boolean completada, Boolean enviada, String ticket, String fechaFin, String fechaSyn) {
         this.id = id;
         this.encuesta_id = encuesta_id;
         this.gas_id = gas_id;
+        this.name_gas = name_gas;
         this.email = email;
         this.completada = completada;
         this.enviada = enviada;
@@ -70,6 +72,14 @@ public class Respuesta {
 
     public void setGas_id(Long gas_id) {
         this.gas_id = gas_id;
+    }
+
+    public String getName_gas() {
+        return name_gas;
+    }
+
+    public void setName_gas(String name_gas) {
+        this.name_gas = name_gas;
     }
 
     public String getEmail() {

@@ -35,10 +35,12 @@ public class SyncParentFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         nestedScrollView.setFillViewport (true);
-        pager.setAdapter(new SyncParentAdapter(getFragmentManager()));
+        pager.setAdapter(null);
+        pager.setAdapter(new SyncParentAdapter(getChildFragmentManager()));
         tabBar.setupWithViewPager(pager);
         pager.setCurrentItem(1);
         pager.setCurrentItem(0);
+
     }
 
     @Override
@@ -49,4 +51,13 @@ public class SyncParentFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

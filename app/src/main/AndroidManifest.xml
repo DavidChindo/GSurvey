@@ -48,6 +48,17 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".SurveyEngine.Views.MapsViewActivity"
             android:screenOrientation="portrait"></activity>
+
+        <provider
+            android:name=".Library.GenericFileProvider"
+            android:authorities="${applicationId}.com.hics.g500.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
     </application>
 
 </manifest>

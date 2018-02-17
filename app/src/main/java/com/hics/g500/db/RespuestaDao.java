@@ -25,12 +25,13 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "ID");
         public final static Property Encuesta_id = new Property(1, Long.class, "encuesta_id", false, "ENCUESTA_ID");
         public final static Property Gas_id = new Property(2, Long.class, "gas_id", false, "GAS_ID");
-        public final static Property Email = new Property(3, String.class, "email", false, "EMAIL");
-        public final static Property Completada = new Property(4, Boolean.class, "completada", false, "COMPLETADA");
-        public final static Property Enviada = new Property(5, Boolean.class, "enviada", false, "ENVIADA");
-        public final static Property Ticket = new Property(6, String.class, "ticket", false, "TICKET");
-        public final static Property FechaFin = new Property(7, String.class, "fechaFin", false, "FECHA_FIN");
-        public final static Property FechaSyn = new Property(8, String.class, "fechaSyn", false, "FECHA_SYN");
+        public final static Property Name_gas = new Property(3, String.class, "name_gas", false, "NAME_GAS");
+        public final static Property Email = new Property(4, String.class, "email", false, "EMAIL");
+        public final static Property Completada = new Property(5, Boolean.class, "completada", false, "COMPLETADA");
+        public final static Property Enviada = new Property(6, Boolean.class, "enviada", false, "ENVIADA");
+        public final static Property Ticket = new Property(7, String.class, "ticket", false, "TICKET");
+        public final static Property FechaFin = new Property(8, String.class, "fechaFin", false, "FECHA_FIN");
+        public final static Property FechaSyn = new Property(9, String.class, "fechaSyn", false, "FECHA_SYN");
     }
 
 
@@ -49,12 +50,13 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
                 "\"ID\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ENCUESTA_ID\" INTEGER," + // 1: encuesta_id
                 "\"GAS_ID\" INTEGER," + // 2: gas_id
-                "\"EMAIL\" TEXT," + // 3: email
-                "\"COMPLETADA\" INTEGER," + // 4: completada
-                "\"ENVIADA\" INTEGER," + // 5: enviada
-                "\"TICKET\" TEXT," + // 6: ticket
-                "\"FECHA_FIN\" TEXT," + // 7: fechaFin
-                "\"FECHA_SYN\" TEXT);"); // 8: fechaSyn
+                "\"NAME_GAS\" TEXT," + // 3: name_gas
+                "\"EMAIL\" TEXT," + // 4: email
+                "\"COMPLETADA\" INTEGER," + // 5: completada
+                "\"ENVIADA\" INTEGER," + // 6: enviada
+                "\"TICKET\" TEXT," + // 7: ticket
+                "\"FECHA_FIN\" TEXT," + // 8: fechaFin
+                "\"FECHA_SYN\" TEXT);"); // 9: fechaSyn
     }
 
     /** Drops the underlying database table. */
@@ -82,34 +84,39 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
             stmt.bindLong(3, gas_id);
         }
  
+        String name_gas = entity.getName_gas();
+        if (name_gas != null) {
+            stmt.bindString(4, name_gas);
+        }
+ 
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(4, email);
+            stmt.bindString(5, email);
         }
  
         Boolean completada = entity.getCompletada();
         if (completada != null) {
-            stmt.bindLong(5, completada ? 1L: 0L);
+            stmt.bindLong(6, completada ? 1L: 0L);
         }
  
         Boolean enviada = entity.getEnviada();
         if (enviada != null) {
-            stmt.bindLong(6, enviada ? 1L: 0L);
+            stmt.bindLong(7, enviada ? 1L: 0L);
         }
  
         String ticket = entity.getTicket();
         if (ticket != null) {
-            stmt.bindString(7, ticket);
+            stmt.bindString(8, ticket);
         }
  
         String fechaFin = entity.getFechaFin();
         if (fechaFin != null) {
-            stmt.bindString(8, fechaFin);
+            stmt.bindString(9, fechaFin);
         }
  
         String fechaSyn = entity.getFechaSyn();
         if (fechaSyn != null) {
-            stmt.bindString(9, fechaSyn);
+            stmt.bindString(10, fechaSyn);
         }
     }
 
@@ -132,34 +139,39 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
             stmt.bindLong(3, gas_id);
         }
  
+        String name_gas = entity.getName_gas();
+        if (name_gas != null) {
+            stmt.bindString(4, name_gas);
+        }
+ 
         String email = entity.getEmail();
         if (email != null) {
-            stmt.bindString(4, email);
+            stmt.bindString(5, email);
         }
  
         Boolean completada = entity.getCompletada();
         if (completada != null) {
-            stmt.bindLong(5, completada ? 1L: 0L);
+            stmt.bindLong(6, completada ? 1L: 0L);
         }
  
         Boolean enviada = entity.getEnviada();
         if (enviada != null) {
-            stmt.bindLong(6, enviada ? 1L: 0L);
+            stmt.bindLong(7, enviada ? 1L: 0L);
         }
  
         String ticket = entity.getTicket();
         if (ticket != null) {
-            stmt.bindString(7, ticket);
+            stmt.bindString(8, ticket);
         }
  
         String fechaFin = entity.getFechaFin();
         if (fechaFin != null) {
-            stmt.bindString(8, fechaFin);
+            stmt.bindString(9, fechaFin);
         }
  
         String fechaSyn = entity.getFechaSyn();
         if (fechaSyn != null) {
-            stmt.bindString(9, fechaSyn);
+            stmt.bindString(10, fechaSyn);
         }
     }
 
@@ -174,12 +186,13 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // encuesta_id
             cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // gas_id
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // email
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // completada
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // enviada
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ticket
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // fechaFin
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // fechaSyn
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name_gas
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // email
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // completada
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // enviada
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // ticket
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // fechaFin
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // fechaSyn
         );
         return entity;
     }
@@ -189,12 +202,13 @@ public class RespuestaDao extends AbstractDao<Respuesta, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setEncuesta_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setGas_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setEmail(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setCompletada(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setEnviada(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setTicket(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setFechaFin(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setFechaSyn(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setName_gas(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setEmail(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setCompletada(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setEnviada(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setTicket(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setFechaFin(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setFechaSyn(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     @Override

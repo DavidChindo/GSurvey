@@ -48,6 +48,8 @@ import com.hics.g500.Presenter.Implementations.GasolinerasPresenter;
 import com.hics.g500.R;
 import com.hics.g500.Views.Adapter.RouteAdapter;
 import com.hics.g500.db.Gasolineras;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     @BindView(R.id.fr_route_recycler)RecyclerView recyclerView;
     @BindView(R.id.fr_route_record)FloatingActionButton btnRecord;
     @BindView(R.id.animation_error_open)LottieAnimationView animationView;
+    @BindView(R.id.swiperefresh_route)SwipyRefreshLayout swiperefresh_auth;
 
     Activity mActivity;
     List<Gasolineras> gasos;
@@ -93,6 +96,24 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        swiperefresh_auth.setDirection(SwipyRefreshLayoutDirection.TOP);
+        swiperefresh_auth.setColorSchemeColors(R.color.colorPrimary);
+        swiperefresh_auth.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                swiperefresh_auth.setRefreshing(true);
+                if (checkPlayServices()) {
+
+                    buildGoogleApiClient();
+                }
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_route, container, false);
@@ -106,7 +127,6 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
         getLocationPermission();
         gasolinerasPresenter = new GasolinerasPresenter(this,mActivity);
         gasos = new ArrayList<Gasolineras>();
-
         if (checkPlayServices()) {
 
             buildGoogleApiClient();
@@ -312,6 +332,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
 
     @Override
     public void onSuccessLoadGasolineras(ArrayList<Gasolineras> gasolineras) {
+        swiperefresh_auth.setRefreshing(false);
         focusing = false;
         if (gasolineras != null && gasolineras.size() > 0){
             Dal.insertGasolineras(gasolineras);
@@ -321,6 +342,8 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
                 recyclerView.setLayoutManager(mLayoutManager);
 
                 recyclerView.setAdapter(new RouteAdapter(gasos,mActivity,mActivity));
+                recyclerView.setVisibility(View.VISIBLE);
+                txtError.setVisibility(View.GONE);
             }
         }
         mProgressDialog.dismiss();
@@ -328,8 +351,12 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
 
     @Override
     public void onErrorLoadGasolineras(String msgError) {
+        swiperefresh_auth.setRefreshing(false);
         focusing = false;
         mProgressDialog.dismiss();
         DesignUtils.errorMessage(mActivity,"Error",msgError);
+        txtError.setText(msgError);
+        recyclerView.setVisibility(View.GONE);
+        txtError.setVisibility(View.VISIBLE);
     }
 }

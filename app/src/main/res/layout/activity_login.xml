@@ -73,14 +73,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_sixteen"
                     android:layout_marginRight="@dimen/margin_sixteen"
-                    android:drawableStart="@drawable/ic_user"
                     android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_user"
                     android:hint="@string/act_login_edt_user"
                     android:inputType="text"
                     android:maxLength="100"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_font_form"
-                    />
+
+                    android:textCursorDrawable="@drawable/text_cursor_primary"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -110,6 +111,7 @@
                     android:maxLength="100"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_font_form"
+                    android:textCursorDrawable="@drawable/text_cursor_primary"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -126,6 +128,7 @@
                 android:layout_marginStart="@dimen/margin_fortyeight"
                 android:layout_marginEnd="@dimen/margin_fortyeight"
                 android:visibility="gone"
+                android:textColorHint="@color/gray_font_form"
                 >
 
                 <EditText
@@ -141,6 +144,7 @@
                     android:maxLength="100"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_font_form"
+                    android:textCursorDrawable="@drawable/text_cursor_primary"
                     android:visibility="gone"
                     />
 
@@ -172,6 +176,7 @@
                 android:layout_marginTop="@dimen/margin_four"
                 android:elevation="@dimen/raised_button"
                 android:text="@string/act_login_login"
+                android:tag="1"
                 android:layout_below="@id/act_login_txt_confirm"
                 android:textAllCaps="false" />
 

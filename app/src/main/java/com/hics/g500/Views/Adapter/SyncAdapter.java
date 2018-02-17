@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.hics.g500.Dal.Dal;
 import com.hics.g500.Network.Request.SurveySync;
+import com.hics.g500.Presenter.Callbacks.SyncCallback;
 import com.hics.g500.R;
 import com.hics.g500.SurveyEngine.Views.SurveyActivity;
 import com.hics.g500.db.DaoMaster;
@@ -38,10 +39,12 @@ public class SyncAdapter extends RecyclerView.Adapter<SyncAdapter.ViewHolder> {
 
     List<SurveySync> mSync;
     Context mContext;
+    SyncCallback mSyncCallback;
 
-    public SyncAdapter(List<SurveySync> mSync, Context mContext) {
+    public SyncAdapter(List<SurveySync> mSync, Context mContext,SyncCallback syncCallback) {
         this.mSync = mSync;
         this.mContext = mContext;
+        this.mSyncCallback = syncCallback;
     }
 
 
@@ -59,16 +62,25 @@ public class SyncAdapter extends RecyclerView.Adapter<SyncAdapter.ViewHolder> {
 
         SurveySync sync = mSync.get(position);
         if (sync != null){
-            Gasolineras gasolinera = Dal.gasolineraById(sync.getGasolineraId());
             Respuesta answer = Dal.getAnsweParentById(sync.getParentId());
-            if (gasolinera != null) {
+            if (answer != null) {
                 holder.mId.setText(String.valueOf(sync.getGasolineraId()));
-                holder.mName.setText(gasolinera.getNombre_gas());
+                holder.mName.setText(answer.getName_gas());
                 holder.mCreacion.setText("Creación:\t"+answer.getFechaFin());
                 holder.mSincro.setText("Sincronización:\t"+answer.getFechaSyn());
+                holder.imgSync.setTag(sync);
                 if (answer.getEnviada()){
                     holder.mStatus.setBackground(mContext.getResources().getDrawable(R.drawable.shape_success));
                     holder.imgSync.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_ico_sync));
+                    holder.imgSync.setColorFilter(R.color.divider);
+                }else{
+                    holder.imgSync.setColorFilter(R.color.icon_color);
+                    holder.imgSync.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mSyncCallback.onSentData((SurveySync)view.getTag());
+                        }
+                    });
                 }
             }
         }
