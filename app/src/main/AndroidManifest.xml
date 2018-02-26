@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".G500App"
@@ -16,13 +19,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Views.Activity.MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Views.Activity.LoginActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SurveyEngine.Views.SurveyActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Views.Activity.SplashActivity"
+        <activity
+            android:name=".Views.Activity.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Views.Activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SurveyEngine.Views.SurveyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Views.Activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,13 +48,13 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="10ab83236b90258327340f6035e3c082344c69e0" />
 
         <activity
-            android:name=".Views.Fragment.MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SurveyEngine.Views.MapsViewActivity"
-            android:screenOrientation="portrait"></activity>
+            android:name=".SurveyEngine.Views.MapsViewActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name=".Library.GenericFileProvider"
@@ -56,9 +63,19 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
+        <activity
+            android:name=".Views.Activity.MapsDetailActivity"
+            android:label="@string/title_activity_maps_detail"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
+        <activity
+            android:name=".Views.Activity.RecoveryPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
+        <activity android:name=".Views.Activity.RecordAudioActivity"></activity>
     </application>
 
 </manifest>

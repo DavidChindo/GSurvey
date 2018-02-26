@@ -18,10 +18,7 @@
         app:subtitleTextAppearance="@style/ToolbarAppearanceSubtitle"
         app:titleTextAppearance="@style/ToolbarAppearanceTitle"
         android:gravity="end"
-        android:foregroundTint="@color/colorWhite"
-        android:titleTextColor="@color/colorWhite"
-        app:titleTextColor="@color/colorWhite"
-        >
+        app:theme="@style/ToolBarStyle">
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout

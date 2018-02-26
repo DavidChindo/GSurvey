@@ -92,7 +92,7 @@ public class MapFragment extends Fragment implements
                         .fromLatLngZoom(
                                 new LatLng(lastLocation.getLatitude(),
                                         lastLocation.getLongitude()),
-                                10)
+                                15)
                 ));
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

@@ -62,10 +62,10 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/TextLabel"
                 android:layout_marginTop="@dimen/margin_twelve"
-                android:background="@drawable/shadow_elevation"
-                android:elevation="2dp"
                 android:layout_marginStart="@dimen/margin_fortyeight"
-                android:layout_marginEnd="@dimen/margin_fortyeight">
+                android:layout_marginEnd="@dimen/margin_fortyeight"
+                android:background="@drawable/shadow_elevation"
+                android:elevation="2dp">
 
                 <EditText
                     android:id="@+id/act_login_username"
@@ -92,10 +92,10 @@
                 android:layout_below="@id/act_login_txt_username"
                 android:theme="@style/TextLabel"
                 android:layout_marginTop="@dimen/margin_twelve"
-                android:background="@drawable/shadow_elevation"
-                android:elevation="2dp"
                 android:layout_marginStart="@dimen/margin_fortyeight"
                 android:layout_marginEnd="@dimen/margin_fortyeight"
+                android:background="@drawable/shadow_elevation"
+                android:elevation="2dp"
                 >
 
                 <EditText
@@ -182,6 +182,15 @@
 
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/act_login_version"
+        android:text="V 1.0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_gravity="center|bottom"
+        android:textSize="@dimen/font_size_16"
+        android:layout_marginBottom="@dimen/margin_eigth"
+        />
 
 </FrameLayout>

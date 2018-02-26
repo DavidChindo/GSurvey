@@ -14,7 +14,7 @@
     <string name="act_login_remember">¿Olvidó su contraseña?</string>
     <string name="act_login_enter">Ingresar</string>
     <string name="act_login_register">Registrar</string>
-
+    <string name="general_menu">Cerrar Sesión</string>
 
     <!-- Gasolineras item-->
     <string name="fr_gasolinera_name">Nombre</string>
@@ -40,4 +40,9 @@
 
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
+    <string name="text_version">V %s</string>
+    <string name="title_activity_maps_detail">Map</string>
+    <string name="act_recovery_title">Recuperar Contraseña</string>
+    <string name="act_recovery_email">Correo Electrónico</string>
+    <string name="sent">Enviar</string>
 </resources>

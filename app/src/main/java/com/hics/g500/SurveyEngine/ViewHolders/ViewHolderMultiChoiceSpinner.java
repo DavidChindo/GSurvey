@@ -13,6 +13,8 @@ import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.Preguntas;
 
+import java.util.List;
+
 /**
  * Created by david.barrera on 2/1/18.
  */
@@ -51,5 +53,21 @@ public class ViewHolderMultiChoiceSpinner extends RecyclerView.ViewHolder {
                     }
                 });
     }
+
+    public int returnPostion(List<Opciones> opciones,int respuestaID){
+        int position = 0;
+        int cont = 0;
+        if (opciones != null && opciones.size() > 0){
+            for (Opciones opcion : opciones){
+                if (opcion.getOpcion_id() == respuestaID){
+                    position = cont;
+                    break;
+                }
+                cont++;
+            }
+        }
+        return position;
+    }
+
 }
 

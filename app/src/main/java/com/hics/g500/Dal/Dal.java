@@ -1,9 +1,12 @@
 package com.hics.g500.Dal;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.hics.g500.Dal.Model.Coordinates;
 import com.hics.g500.G500App;
+import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Library.LogicUtils;
 import com.hics.g500.Network.Request.AnswerSync;
 import com.hics.g500.Network.Request.SurveySync;
@@ -38,7 +41,7 @@ import java.util.List;
 public class Dal {
 
     //regionInserts
-    public static User insertUser(User user){
+    public static User insertUser(Context mContext, User user){
         try {
             if (user != null){
                 G500App.getDaoSession().getUserDao().insertOrReplaceInTx(user);
@@ -75,9 +78,10 @@ public class Dal {
         }
     }
 
-    public static long insertSurvey(SurveyResponse surveyResponse){
+    public static long insertSurvey(Context mContex,SurveyResponse surveyResponse){
         long idEncuesta = -1;
         try {
+            deleteSurvey();
             if (surveyResponse != null && surveyResponse.getQuestionResponses() != null && surveyResponse.getQuestionResponses().size() > 0){
                 Encuesta encuesta = new Encuesta(new Long(surveyResponse.getSurveyId()),surveyResponse.getName(),surveyResponse.getDescription());
                 idEncuesta = G500App.getDaoSession().getEncuestaDao().insertOrReplace(encuesta);
@@ -98,12 +102,39 @@ public class Dal {
                             }
                         }
                     }
+                }else{
+                    DesignUtils.showToast(mContex,"2 insertSurvey");
                 }
+            }else{
+                DesignUtils.showToast(mContex,"1 insertSurvey");
             }
         }catch (Exception e){
             e.printStackTrace();
+            DesignUtils.showToast(mContex,"insertSurvey");
         }
         return idEncuesta;
+    }
+
+    public static void deleteSurvey(){
+        try {
+            List<Opciones> opciones = G500App.getDaoSession().getOpcionesDao().queryBuilder().list();
+            if (opciones != null && opciones.size() > 0){
+                G500App.getDaoSession().getOpcionesDao().deleteAll();
+            }
+
+            List<Preguntas> preguntases = G500App.getDaoSession().getPreguntasDao().queryBuilder().list();
+            if (preguntases != null && preguntases.size() > 0){
+                G500App.getDaoSession().getPreguntasDao().deleteAll();
+            }
+
+            List<Encuesta> encuestas = G500App.getDaoSession().getEncuestaDao().queryBuilder().list();
+            if (encuestas != null && encuestas.size() > 0){
+                G500App.getDaoSession().getEncuestaDao().deleteAll();
+            }
+
+        }catch (Exception e){
+            e.getLocalizedMessage();
+        }
     }
 
 
@@ -244,7 +275,10 @@ public class Dal {
                         }
                     }
                 }else{
-                    //VALIDAR QUE HACER
+                    RespuestaDetalle answerDetail = getRespuestaDetalleByIdCodigo(idParent, preguntaId, respuestaCodigo);
+                    if (answerDetail == null) {
+                        G500App.getDaoSession().getRespuestaDetalleDao().delete(answerDetail);
+                    }
                     return -1;
                 }
             }else{
@@ -370,7 +404,7 @@ public class Dal {
                 if (preguntas != null && preguntas.size() > 0){
                     for (Preguntas pregunta : preguntas){
                         List<Opciones> opciones = G500App.getDaoSession().getOpcionesDao().queryBuilder().
-                                where(OpcionesDao.Properties.Pregunta_id.eq(pregunta.getPregunta_id())).list();
+                                where(OpcionesDao.Properties.Pregunta_id.eq(pregunta.getPregunta_id())).orderAsc(OpcionesDao.Properties.Opcion_contenido).list();
                         if (opciones != null && opciones.size() > 0 ){
                             pregunta.setOpciones(opciones);
                         }
@@ -509,6 +543,28 @@ public class Dal {
         }
     }
 
+    public static boolean hasPhoto(long idRespuesta){
+        boolean hasPhoto = false;
+        try {
+            Respuesta respuesta = getAnsweParentById(idRespuesta);
+            if (respuesta != null){
+                List<RespuestaDetalle> respuestaDetalles = getRespuestaDetalleByIdParent(respuesta.getId());
+                if (respuestaDetalles != null && respuestaDetalles.size() > 0){
+                    for (RespuestaDetalle respuestaDetalle : respuestaDetalles){
+                        if (respuestaDetalle.getTipo_id() == QuestionType.IMAGE){
+                            return true;
+
+                        }
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(Dal.class.getSimpleName(),"Error has photo "+e.getMessage());
+        }
+        return hasPhoto;
+    }
+
     public static Gasolineras gasolineraById(long id){
         try {
             List<Gasolineras> gasolinera = G500App.getDaoSession().getGasolinerasDao().queryBuilder().
@@ -551,6 +607,14 @@ public class Dal {
             e.printStackTrace();
             Log.d("DAL","Error en deleteRoutes "+e.getMessage());
 
+        }
+    }
+
+    public static void deleteUser(){
+        try {
+            G500App.getDaoSession().getUserDao().deleteAll();
+        }catch (Exception e){
+            e.getLocalizedMessage();
         }
     }
     //endregion

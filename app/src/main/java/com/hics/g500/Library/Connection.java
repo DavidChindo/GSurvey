@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -52,6 +54,9 @@ public class Connection {
             if (exitValue == 0 )
             {
                 Log.wtf("Ping","Ping existoso");
+               /* Crashlytics.log(1, "LOGIN","ping exitoso");
+                Crashlytics.logException(new Throwable("ping exitoso"));
+                Crashlytics.log("Mensaje: " + "ping exitoso");*/
             }
             else
             {
@@ -60,10 +65,20 @@ public class Connection {
 
             return (exitValue == 0);
 
-        } catch (IOException e)          { e.printStackTrace(); Log.wtf("Ping", "Ping no existoso"); }
-        catch (InterruptedException e) { e.printStackTrace(); Log.wtf("Ping", "Ping no existoso"); }
-
+        } catch (IOException e){ e.printStackTrace(); Log.wtf("Ping", "Ping no existoso");
+           /* Crashlytics.log(1, "LOGIN",e.getMessage());
+            Crashlytics.logException(e.getCause());
+            Crashlytics.log("Mensaje: " + e.getMessage());*/
+            return false;
+        }
+        catch (InterruptedException e) { e.printStackTrace(); Log.wtf("Ping", "Ping no existoso");
+            /*Crashlytics.log(1, "LOGIN",e.getMessage());
+            Crashlytics.logException(e.getCause());
+            Crashlytics.log("Mensaje: " + e.getMessage());*/
         return false;
+        }
+
+        //return false;
     }
 
 
@@ -75,6 +90,7 @@ public class Connection {
             public Boolean call() throws Exception {
 
                 try {
+
                     HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
                     urlc.setRequestProperty("User-Agent", "Test");
                     urlc.setRequestProperty("Connection", "close");
@@ -96,6 +112,9 @@ public class Connection {
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(Connection.class.getSimpleName(),"Error "+e.getMessage());
+            /*Crashlytics.log(1, "LOGIN", e.getMessage());
+            Crashlytics.logException(e);
+            Crashlytics.log("Mensaje: " + e.getMessage() );*/
             return false;
         }
 

@@ -2,9 +2,11 @@ package com.hics.g500.Presenter.Implementations;
 
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.hics.g500.G500App;
 import com.hics.g500.Library.Connection;
+import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Network.HicsWebService;
 import com.hics.g500.Network.Request.LoginRequest;
 import com.hics.g500.Network.Request.SignUpRequest;
@@ -42,6 +44,7 @@ public class LoginPresenter {
                         if (response.code() == 201){
                             mLoginCallback.onSuccessLogin(response.body());
                         }else{
+                            DesignUtils.showToast(mContext,"8 autenticando");
                             try {
                                 LoginResponse errorService = new Gson().fromJson(response.errorBody().string(), LoginResponse.class);
                                 mLoginCallback.onErrorLogin(errorService.getMessage());
@@ -62,7 +65,7 @@ public class LoginPresenter {
             }
         }catch (Exception e){
             e.printStackTrace();
-            mLoginCallback.onErrorLogin(e.getLocalizedMessage());
+            mLoginCallback.onErrorLogin(e.getMessage());
         }
     }
 
@@ -73,7 +76,7 @@ public class LoginPresenter {
                 call.enqueue(new Callback<SignUpResponse>() {
                     @Override
                     public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
-                        if (response.code() == 200){
+                        if (response.code() == 201){
                             mLoginCallback.onSuccessSignUp(response.body());
                         }else{
                             try {

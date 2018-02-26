@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
-
+apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -31,6 +31,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.0@aar') {
+        transitive = true;
+    }
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.github.ganfra:material-spinner:1.1.1'
@@ -50,6 +53,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.google.android.gms:play-services-location:11.0.4'
     compile 'com.github.omadahealth:swipy:1.2.3@aar'
+    compile 'com.github.adrielcafe:AndroidAudioRecorder:0.3.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

@@ -46,6 +46,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:src="@drawable/ic_sync_button"
+        android:visibility="gone"
         android:tint="@color/white_background"/>
 
 </RelativeLayout>

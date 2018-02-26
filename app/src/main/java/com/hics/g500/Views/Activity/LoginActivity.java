@@ -17,11 +17,15 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.hics.g500.BuildConfig;
 import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.Connection;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Library.LogicUtils;
+import com.hics.g500.Library.Validators;
 import com.hics.g500.Network.Request.LoginRequest;
 import com.hics.g500.Network.Request.SignUpRequest;
 import com.hics.g500.Network.Response.LoginResponse;
@@ -35,12 +39,14 @@ import com.hics.g500.R;
 import com.hics.g500.db.User;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends Activity implements LoginCallback,SurveyCallback,ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -53,6 +59,7 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     @BindView(R.id.act_login_enter)Button btnEnter;
     @BindView(R.id.act_login_recovery)Button btnRecovery;
     @BindView(R.id.act_login_txt_confirm)TextInputLayout tilConfirm;
+    @BindView(R.id.act_login_version)TextView txtVersion;
 
     LoginPresenter loginPresenter;
     SurveyPresenter surveyPresenter;
@@ -63,23 +70,32 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 2;
     private static final String[] PHONE_STATE = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO,Manifest.permission.WAKE_LOCK};
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Fabric.with(this, new Crashlytics());
         ButterKnife.bind(this);
         setHint();
         loginPresenter = new LoginPresenter(this,this);
         surveyPresenter = new SurveyPresenter(this,this);
 
         if (Build.VERSION.SDK_INT >=23) {
-            init_permission();
+            //init_permission();
+            LogicUtils.requestPermission(this, Manifest.permission.RECORD_AUDIO);
+            LogicUtils.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            LogicUtils.requestPermission(this, Manifest.permission.CAMERA);
+            LogicUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            LogicUtils.requestPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+            LogicUtils.requestPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            LogicUtils.requestPermission(this, Manifest.permission.WAKE_LOCK);
         }
     }
 
     private void setHint(){
+        txtVersion.setText(getString(R.string.text_version, BuildConfig.VERSION_NAME));
         edtConfirmPass.setHint("Confirmar contraseña");
         edtUsername.setHint("Usuario");
         edtPassword.setHint("Contraseña");
@@ -99,6 +115,8 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
                 if(!addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
                         if(!addPermission(permissionsList, Manifest.permission.ACCESS_COARSE_LOCATION))
                             if(!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))
+                                if(!addPermission(permissionsList, Manifest.permission.RECORD_AUDIO))
+                                    if(!addPermission(permissionsList, Manifest.permission.WAKE_LOCK))
 
                             if (permissionsList.size() > 0) {
                                 requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
@@ -186,6 +204,8 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
                 mProgressDialog = ProgressDialog.show(this,null,"Regitrando...");
                 mProgressDialog.setCancelable(false);
                 loginPresenter.signUp(signUpRequest);
+            }else{
+                DesignUtils.errorMessage(LoginActivity.this, "Error", message);
             }
         }
     }
@@ -194,9 +214,11 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     public void onSuccessLogin(LoginResponse loginResponse) {
         if (loginResponse != null){
             User user = new User(loginResponse.getEmail(),loginResponse.getArray().getJwt());
-            if (Dal.insertUser(user) != null) {
+            if (Dal.insertUser(LoginActivity.this,user) != null) {
                 mProgressDialog.setMessage("Descargando encuesta...");
                 surveyPresenter.getSurvey();
+            }else{
+                mProgressDialog.dismiss();
             }
         }else{
             mProgressDialog.dismiss();
@@ -218,7 +240,7 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
             btnEnter.setText(R.string.act_login_enter);
             btnEnter.setTag(1);
             btnRecovery.setVisibility(View.VISIBLE);
-            DesignUtils.successMessage(this,"Registro","Registro exitoso");
+            DesignUtils.successMessage(this,"Registro", Validators.validateString(signUpResponse.getMessage()));
         }
     }
 
@@ -231,7 +253,7 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     @Override
     public void onSuccessSurvey(SurveyResponse surveyResponse) {
         if (surveyResponse != null){
-            long idEncuesta = Dal.insertSurvey(surveyResponse);
+            long idEncuesta = Dal.insertSurvey(LoginActivity.this,surveyResponse);
             if (idEncuesta > -1){
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
@@ -248,5 +270,10 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     public void onErrorSurvey(String msgError) {
         mProgressDialog.dismiss();
         DesignUtils.errorMessage(this,"Error",msgError);
+    }
+
+    @OnClick(R.id.act_login_recovery)
+    void onOpenRecovery(){
+        startActivity(new Intent(this,RecoveryPasswordActivity.class));
     }
 }

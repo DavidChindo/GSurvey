@@ -23,6 +23,7 @@ import com.hics.g500.SurveyEngine.Model.SurveyComplete;
 import com.hics.g500.SurveyEngine.Presenter.MapCallback;
 import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.SurveyEngine.Utils.Constants;
+import com.hics.g500.SurveyEngine.Utils.Validations;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderDate;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderEditText;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderEditTextNumber;
@@ -40,6 +41,8 @@ import com.hics.g500.db.Respuesta;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /**
  * Created by david.barrera on 2/1/18.
@@ -147,10 +150,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 FilterArray[0] = new InputFilter.LengthFilter(maxLength);
                 holderOpenEnded.editText.setFilters(FilterArray);
                 holderOpenEnded.txtTitle.setText(question.getPregunta_encabezado());
-               /* if (question.getRespuestadetalle() != null) {
-                    holderOpenEnded.editText.setText(Validations.validNotNull(question.getRespuestadetalle().getRespuestacodigo()));
-                    //AQUI VIENE LA VALIDACION PARA LA RESPUESTA
-                }*/
+                if (question.getRespuestaDetalle() != null) {
+                    holderOpenEnded.editText.setText(Validations.validNotNull(question.getRespuestaDetalle().getRespuestatexto()));
+                }
                 break;
             }
             case (QuestionType.OPEN_ENDED_NUMBER): {
@@ -163,10 +165,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 FilterArrayN[0] = new InputFilter.LengthFilter(maxLengthNumber);
                 holderOpenEndedNumber.editText.setFilters(FilterArrayN);
                 holderOpenEndedNumber.txtTitle.setText(question.getPregunta_encabezado());
-               /* if (question.getRespuestadetalle() != null) {
-                    holderOpenEnded.editText.setText(Validations.validNotNull(question.getRespuestadetalle().getRespuestacodigo()));
-                    //AQUI VIENE LA VALIDACION PARA LA RESPUESTA
-                }*/
+                if (question.getRespuestaDetalle() != null) {
+                    holderOpenEndedNumber.editText.setText(Validations.validNotNull(question.getRespuestaDetalle().getRespuestatexto()));
+                }
                 break;
             }
             case (QuestionType.OPEN_SEARCH): {
@@ -176,14 +177,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 holderCatalog.lvResults.setTag(question);
                 holderCatalog.editText.setTag(question);
                 holderCatalog.txtTitle.setText(question.getPregunta_encabezado());
-
-                /*if (question.getRespuestadetalle() != null) {   AQUI LLEVA LA VALIDACION DE LA RESPUESTA
+                if (question.getRespuestaDetalle() != null) {
                     holderCatalog.searching = false;
-                    holderCatalog.editText.setText(Validations.validNotNull(question.getRespuestadetalle().getRespuestacodigo()));
+                    holderCatalog.editText.setText(Validations.validNotNull(question.getRespuestaDetalle().getRespuestatexto()));
                     holderCatalog.searching = true;
-                }else{*/
+                }else{
                 holderCatalog.editText.setText("");
-                //}
+                }
 
                 break;
             }
@@ -193,7 +193,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderMap.titleTxt.setTag(question);
 
                 //Valida si ya tiene guaradado una ubicacion
-                /*if (question.getRespuestadetalle() != null) {
+                /*if (question.getRespuestaDetalle() != null) {
                     viewHolderMap.linearLayout.setVisibility(View.VISIBLE);
                 }*/
                 break;
@@ -202,12 +202,16 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ViewHolderImage viewHolderImage = (ViewHolderImage) holder;
                 viewHolderImage.titleTxt.setText(question.getPregunta_encabezado());
                 viewHolderImage.titleTxt.setTag(question);
-                /* AQUI VALIDA SI TIENE RESPUESTA
-                if (question.getRespuestadetalle() != null && !question.getRespuestadetalle().getRespuestavalor().isEmpty()) {
-                    viewHolderImage.linearLayout.setVisibility(View.VISIBLE);
+
+                if (question.getRespuestaDetalle() != null && !question.getRespuestaDetalle().getRespuestatexto().isEmpty()) {
+                    viewHolderImage.captureImg.setBackground(context.getResources().getDrawable(R.drawable.shape_rectangle));
+                    viewHolderImage.captureImg.setImageDrawable(context.getResources().getDrawable(R.drawable.camera_on));
+                    viewHolderImage.captureImg.setColorFilter(R.color.blue_icon);
                 } else {
-                    viewHolderImage.linearLayout.setVisibility(View.GONE);
-                }*/
+                    viewHolderImage.captureImg.setBackground(context.getResources().getDrawable(R.drawable.shape_rectangle));
+                    viewHolderImage.captureImg.setImageResource(R.drawable.ic_camera);
+                    viewHolderImage.captureImg.setColorFilter(R.color.blue_icon);
+                }
                 break;
             }
             case (QuestionType.MULTI_CHOICE_SPINNER): {
@@ -222,15 +226,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 if (valuesSpinner != null && valuesSpinner.size() > 0) {
                     holderMultiChoiceSpinner.mSpinner.setAdapter(valueAdapter);
-                    //if (question.getRespuestadetalle() != null) {
-                    //AQUI SE RELLENA LA RESPUESTA
-                    //holderMultiChoiceSpinner.mSpinner.setSelection(Integer.valueOf(question.getRespuestadetalle().getRespuestacodigo()) );
-                    //}
+                    if (question.getRespuestaDetalle() != null) {
+                    holderMultiChoiceSpinner.mSpinner.setSelection(holderMultiChoiceSpinner.returnPostion(valuesSpinner,question.getRespuestaDetalle().getRespuestacodigo()));
+                    }
                 }
-                            /*holderMultiChoiceSpinner.mSpinner.setHint(question.getTitulo());
-                            holderMultiChoiceSpinner.mSpinner.setBaseColor(context.getResources()
-                                    .getColor(R.color.primary_dark));
-                            holderMultiChoiceSpinner.spinner.setFloatingLabelText(question.getTitulo());*/
                 Log.d(getClass().getName(), "Position precharged: " + position);
 
                 break;
@@ -245,40 +244,38 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     for (int i = 0; i < valuesRadio.size(); i++) {
                         final Opciones value = valuesRadio.get(i);
                         final RadioButton radioButton = new RadioButton(context);
-                        radioButton.setId(View.generateViewId());
+                        radioButton.setId(value.getOpcion_id().intValue());
                         radioButton.setText(value.getOpcion_contenido());
+                        radioButton.setTextSize(18);
                         radioButton.setTag(value);
 
                         //SET RADIO CHECKED
                         /*if (value.getSeleccionado()) {
                             radioButton.setChecked(true);
-                            vh.setCheckedDefault(value, radioButton.isChecked(), question, i, vh, question.getRespuestadetalle() == null);
+                            vh.setCheckedDefault(value, radioButton.isChecked(), question, i, vh, question.getRespuestaDetalle() == null);
                         }*/
+                        try {
+                                if (question.getRespuestaDetalle() != null) {
+                                    try {
+                                        int id = Integer.valueOf(question.getRespuestaDetalle().getRespuestacodigo());
+                                        if (radioButton.getId() == id) {
+                                            radioButton.setChecked(true);
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            Log.d(getClass().getName(), "Error en spinner " + ex.getMessage());
+                        }
                         radioButton.setOnCheckedChangeListener(vh.getCheckedChangeListener(radioButton, question, i));
                         vh.radioGroup.addView(radioButton);
                     }
                 }
 
                 //PINTA EL RADIO SELECCIONADO
-               /* try {
-                    List<Opciones> OpcionesRadio = new ArrayList<Opciones>(); //GreenDao.getOpciones(question.getXid()); hacer consulta para traer opciones
-                    if (OpcionesRadio != null && OpcionesRadio.size() > 0) {
-                        if (question.getRespuestadetalle() != null) {
-                            try {
-                                int id = Integer.valueOf(question.getRespuestadetalle().getRespuestacodigo());
-                                RadioButton selectedRadio = (RadioButton) vh.radioGroup.getChildAt(id);
-                                if (id >= 0) {
-                                    vh.radioGroup.check(selectedRadio.getId());
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Log.d(getClass().getName(), "Error en spinner " + ex.getMessage());
-                }*/
+
                 break;
             }
             case  (QuestionType.MULTI_CHOICE_CHECK): {
@@ -290,20 +287,24 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (values != null && values.size() > 0) {
                     for (int i = 0; i < values.size(); i++) {
                         final Opciones value = values.get(i);
-                        final CheckBox checkBox = new CheckBox(context);
-                        checkBox.setId(View.generateViewId());
+
+                        CheckBox checkBox = (CheckBox)((LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.check_right_checkbox,null);
+                        checkBox.setId(value.getOpcion_id().intValue());
                         checkBox.setText(value.getOpcion_contenido());
                         checkBox.setTag(value);
 
-                        //CHECK BOX guardado
-                       /* if (value.getSeleccionado()) {
-                            checkBox.setChecked(true);
-                        }*/
+                        if (question.getRespuestaDetalle() != null) {
+                            if (question.getRespuestaDetalle().getRespuestacodigo() >= 0){
+                                checkBox.setChecked(true);
+                            }else{
+                                checkBox.setChecked(false);
+                            }
+                        }
+
                         checkBox.setOnCheckedChangeListener(vh1.getCheckedChangeListener(checkBox, question, i));
                         vh1.linearLayout.addView(checkBox);
                     }
                 }
-                
                 break;
             }
         }

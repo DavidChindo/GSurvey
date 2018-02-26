@@ -168,6 +168,7 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
         if(id >= 0){
             RespuestaDetalle respuestaDetalle = Dal.getRespuestaDetalleByIdLong(id);
             pregunta.setRespuestaDetalle(respuestaDetalle);
+            mQuestionAdapter.notifyDataSetChanged();
         }
     }
 
@@ -191,56 +192,63 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
 
     @OnClick(R.id.act_survey_finish)
     void onSaveSurveyClick(){
-        try {
-            if (Connection.isConnected(SurveyActivity.this)) {
-                final AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(SurveyActivity.this);
-                builder.setTitle("Finalizar")
-                        .setMessage("La información se sincronizara")
-                        .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (mAnswerParent != null) {
-                                    Dal.insertRespuestaParent(mAnswerParent.getEncuesta_id(), mAnswerParent.getGas_id(), true, false, LogicUtils.getCurrentHour(), "");
-                                    Gasolineras gasolinera = Dal.gasolineraById(mAnswerParent.getGas_id());
-                                    if (gasolinera != null) {
-                                        Dal.insertOrUpdateGasolinera(gasolinera, true);
-                                        //finish();
-                                        surveySync = Dal.surveysSyncById(mAnswerParent.getId());
-                                        mProgressDialog = ProgressDialog.show(SurveyActivity.this, null, "Enviando...");
-                                        mProgressDialog.setCancelable(false);
-                                        syncPresenter.uploadFile(surveySync);
+        if (isValid()) {
+            try {
+                if (Connection.isConnected(SurveyActivity.this)) {
+                    final AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(SurveyActivity.this);
+                    builder.setTitle("Finalizar")
+                            .setMessage("La información se sincronizara")
+                            .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (mAnswerParent != null) {
+                                        Dal.insertRespuestaParent(mAnswerParent.getEncuesta_id(), mAnswerParent.getGas_id(), true, false, LogicUtils.getCurrentHour(), "");
+                                        Gasolineras gasolinera = Dal.gasolineraById(mAnswerParent.getGas_id());
+                                        if (gasolinera != null) {
+                                            Dal.insertOrUpdateGasolinera(gasolinera, true);
+                                            //finish();
+                                            surveySync = Dal.surveysSyncById(mAnswerParent.getId());
+                                            mProgressDialog = ProgressDialog.show(SurveyActivity.this, null, "Enviando...");
+                                            mProgressDialog.setCancelable(false);
+                                            if (Dal.hasPhoto(mAnswerParent.getId())) {
+                                                syncPresenter.uploadFile(surveySync);
+                                            }else{
+                                                syncPresenter.syncData(surveySync);
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-                            }
-                        })
-                        .show();
-            }else{
-                final AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(SurveyActivity.this);
-                builder.setTitle("Guardar")
-                        .setMessage("La información se guardara solamente para su sincronización manúal, cuando tenga conexión a internet")
-                        .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (mAnswerParent != null) {
-                                    Dal.insertRespuestaParent(mAnswerParent.getEncuesta_id(), mAnswerParent.getGas_id(), true, false, LogicUtils.getCurrentHour(), "");
-                                    Gasolineras gasolinera = Dal.gasolineraById(mAnswerParent.getGas_id());
-                                    if (gasolinera != null) {
-                                        Dal.insertOrUpdateGasolinera(gasolinera, true);
-                                        finish();
+                                }
+                            })
+                            .show();
+                } else {
+                    final AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(SurveyActivity.this);
+                    builder.setTitle("Guardar")
+                            .setMessage("La información se guardara solamente para su sincronización manúal, cuando tenga conexión a internet")
+                            .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (mAnswerParent != null) {
+                                        Dal.insertRespuestaParent(mAnswerParent.getEncuesta_id(), mAnswerParent.getGas_id(), true, false, LogicUtils.getCurrentHour(), "");
+                                        Gasolineras gasolinera = Dal.gasolineraById(mAnswerParent.getGas_id());
+                                        if (gasolinera != null) {
+                                            Dal.insertOrUpdateGasolinera(gasolinera, true);
+                                            finish();
+                                        }
                                     }
                                 }
-                            }
-                        })
-                        .show();
+                            })
+                            .show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("SurveyActivity", "Excepcion saveSurvey " + e.getMessage());
             }
-        }catch (Exception e){
-            e.printStackTrace();
-            Log.d("SurveyActivity","Excepcion saveSurvey "+e.getMessage());
+
         }
     }
 
@@ -314,5 +322,26 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     public void onUploadFileErro(String msg) {
         mProgressDialog.dismiss();
         DesignUtils.errorMessage(this,"",msg);
+    }
+
+    private boolean isValid(){
+        boolean isValid = true;
+        if (surveyComplete.getEncuesta().getPreguntas() != null && surveyComplete.getEncuesta().getPreguntas().size() > 0){
+            for (Preguntas preguntas : surveyComplete.getEncuesta().getPreguntas()){
+                if (preguntas.getPregunta_obligatoria() == 1){
+                    if (preguntas.getRespuestaDetalle() != null){
+                        isValid&= true;
+                    }else{
+                        DesignUtils.showToast(this,"pregunta obligatoria : "+preguntas.getPregunta_encabezado());
+                        return false;
+                    }
+                }else{
+                    isValid&=true;
+                }
+            }
+            return isValid;
+        }else{
+            return false;
+        }
     }
 }

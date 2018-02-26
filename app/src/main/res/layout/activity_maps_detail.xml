@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="500dp"
+xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.hics.g500.Views.Activity.MapsDetailActivity" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
+<ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/act_maps_detail_close"
+    android:layout_alignParentRight="true"
+    android:background="@android:color/transparent"
+    android:src="@android:drawable/ic_menu_close_clear_cancel"
+    android:layout_margin="@dimen/margin_four"
+    android:tint="@color/colorWhite"
+    tools:ignore="RtlHardcoded" />
+<TextView
+    android:id="@+id/act_maps_detail_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:textColor="@color/colorWhite"
+    android:gravity="center"
+    android:layout_toLeftOf="@id/act_maps_detail_close"
+    android:maxLines="2"
+    tools:ignore="UnknownIdInLayout" />
+    </RelativeLayout>
+</RelativeLayout>

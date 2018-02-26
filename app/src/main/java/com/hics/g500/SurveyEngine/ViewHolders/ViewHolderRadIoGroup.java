@@ -76,9 +76,11 @@ public class ViewHolderRadIoGroup extends RecyclerView.ViewHolder {
                         //else {
                 //Se envia la opcion seleccionda to saves
                         //EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), false, question.getRespuestadetalle(),false));
-                mSurveyCallback.onSaveAnswer(null,answerTag.getOpcion_id().intValue(),question,
-                        Integer.parseInt(question.getPregunta_tipo()),question.getRespuestaDetalle());
-                        Log.d(getClass().getName(), "Position saved: " + position);
+                if (b) {
+                    mSurveyCallback.onSaveAnswer(null, answerTag.getOpcion_id().intValue(), question,
+                            Integer.parseInt(question.getPregunta_tipo()), question.getRespuestaDetalle());
+                    Log.d(getClass().getName(), "Position saved: " + position);
+                }
 
 
             }
@@ -97,8 +99,6 @@ public class ViewHolderRadIoGroup extends RecyclerView.ViewHolder {
     public void setCheckedDefault(Opciones value,boolean isChecked, final Preguntas question,int position,ViewHolderRadIoGroup vh1,boolean firstSave){
         final Opciones answerTag = value;
             if (isChecked) {
-
-
                 if (firstSave){
                     Log.d("RadioGroup","position first "+position);
                     //EventBus.getDefault().postSticky(new EventSaveOption(question, answerTag, String.valueOf(position), false, question.getRespuestadetalle(),false));

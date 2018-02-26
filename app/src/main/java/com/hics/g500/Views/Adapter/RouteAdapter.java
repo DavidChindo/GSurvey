@@ -22,6 +22,7 @@ import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.R;
 import com.hics.g500.SurveyEngine.Views.SurveyActivity;
+import com.hics.g500.Views.Activity.MapsDetailActivity;
 import com.hics.g500.db.Gasolineras;
 import com.hics.g500.db.Respuesta;
 
@@ -62,6 +63,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.mId.setText(String.valueOf(gasolinera.getGas_id()));
             holder.mName.setText(gasolinera.getNombre_gas());
             holder.mAddress.setText(capitalize(gasolinera.getDireccion()));
+            holder.imgViewOpenSurvey.setTag(gasolinera);
             final Bitmap mBitmap;
             Respuesta respuesta = Dal.getAnswerParent(Dal.idSurvey(),gasolinera.getGas_id());
             if (respuesta != null) {
@@ -122,7 +124,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.imgViewOpenMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mContext, "Mostrar en mapa", Toast.LENGTH_SHORT).show();
+                    Gasolineras gasoMap = gasolinera;
+                    if (gasoMap != null ){
+                        Intent intent = new Intent(mContext, MapsDetailActivity.class);
+                        intent.putExtra("coordinates",gasoMap.getCoordenadas());
+                        intent.putExtra("name",gasoMap.getNombre_gas());
+                        mContext.startActivity(intent);
+                    }else{
+                        DesignUtils.showToast(mContext,"No es posible abrir el mapa");
+                    }
                 }
             });
         }

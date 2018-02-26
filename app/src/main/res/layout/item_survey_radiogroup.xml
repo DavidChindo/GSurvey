@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cards_gral"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    card_view:cardUseCompatPadding="true"
+    android:layout_margin="@dimen/margin_eigth">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,7 +37,8 @@
             android:layout_toRightOf="@id/item_survey_list_list_radio_required"
             android:layout_height="wrap_content"
             android:text="Pregunta combo"
-            android:textSize="@dimen/font_size_14"
+            android:textSize="@dimen/font_size_18"
+            android:layout_marginBottom="@dimen/margin_eigth"
             android:textColor="@color/font_gray"/>
     </RelativeLayout>
     <RadioGroup
@@ -51,3 +62,4 @@
         android:orientation="vertical"/>
 
 </LinearLayout>
+</android.support.v7.widget.CardView>
