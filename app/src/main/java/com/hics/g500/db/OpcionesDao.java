@@ -26,6 +26,7 @@ public class OpcionesDao extends AbstractDao<Opciones, Long> {
         public final static Property Encuenta_id = new Property(1, Long.class, "encuenta_id", false, "ENCUENTA_ID");
         public final static Property Opcion_id = new Property(2, Long.class, "opcion_id", true, "OPCION_ID");
         public final static Property Opcion_contenido = new Property(3, String.class, "opcion_contenido", false, "OPCION_CONTENIDO");
+        public final static Property Opcion_url = new Property(4, String.class, "opcion_url", false, "OPCION_URL");
     }
 
 
@@ -44,7 +45,8 @@ public class OpcionesDao extends AbstractDao<Opciones, Long> {
                 "\"PREGUNTA_ID\" INTEGER," + // 0: pregunta_id
                 "\"ENCUENTA_ID\" INTEGER," + // 1: encuenta_id
                 "\"OPCION_ID\" INTEGER PRIMARY KEY ," + // 2: opcion_id
-                "\"OPCION_CONTENIDO\" TEXT);"); // 3: opcion_contenido
+                "\"OPCION_CONTENIDO\" TEXT," + // 3: opcion_contenido
+                "\"OPCION_URL\" TEXT);"); // 4: opcion_url
     }
 
     /** Drops the underlying database table. */
@@ -76,6 +78,11 @@ public class OpcionesDao extends AbstractDao<Opciones, Long> {
         if (opcion_contenido != null) {
             stmt.bindString(4, opcion_contenido);
         }
+ 
+        String opcion_url = entity.getOpcion_url();
+        if (opcion_url != null) {
+            stmt.bindString(5, opcion_url);
+        }
     }
 
     @Override
@@ -101,6 +108,11 @@ public class OpcionesDao extends AbstractDao<Opciones, Long> {
         if (opcion_contenido != null) {
             stmt.bindString(4, opcion_contenido);
         }
+ 
+        String opcion_url = entity.getOpcion_url();
+        if (opcion_url != null) {
+            stmt.bindString(5, opcion_url);
+        }
     }
 
     @Override
@@ -114,7 +126,8 @@ public class OpcionesDao extends AbstractDao<Opciones, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // pregunta_id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // encuenta_id
             cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // opcion_id
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // opcion_contenido
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // opcion_contenido
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // opcion_url
         );
         return entity;
     }
@@ -125,6 +138,7 @@ public class OpcionesDao extends AbstractDao<Opciones, Long> {
         entity.setEncuenta_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setOpcion_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
         entity.setOpcion_contenido(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setOpcion_url(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     @Override

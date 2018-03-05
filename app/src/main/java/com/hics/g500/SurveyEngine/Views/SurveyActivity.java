@@ -73,7 +73,7 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
     @BindView(R.id.act_survey_recycler)RecyclerView recyclerView;
     @BindView(R.id.toolbar)Toolbar toolbar;
     @BindView(R.id.act_survey_toolbar_container)LinearLayout toolbarLayout;
-    @BindView(R.id.act_survey_finish)FloatingActionButton done;
+    @BindView(R.id.act_survey_finish)Button done;
     int toolbarHeight;
     QuestionAdapter mQuestionAdapter;
     private List<Preguntas> mQuestions;
@@ -112,6 +112,7 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.smoothScrollToPosition(0);
         recyclerView.setAdapter(mQuestionAdapter);
         recyclerView.addOnScrollListener(new RecyclerScroll() {
             @Override
@@ -146,6 +147,7 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
         mQuestionAdapter.setmMapCallback(this);
         mQuestionAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(mQuestionAdapter);
+
         syncPresenter = new SyncPresenter(this,this);
         surveySync  = null;
     }

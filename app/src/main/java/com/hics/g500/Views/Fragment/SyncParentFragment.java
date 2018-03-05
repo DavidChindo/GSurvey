@@ -38,7 +38,6 @@ public class SyncParentFragment extends Fragment {
         pager.setAdapter(null);
         pager.setAdapter(new SyncParentAdapter(getChildFragmentManager()));
         tabBar.setupWithViewPager(pager);
-        pager.setCurrentItem(1);
         pager.setCurrentItem(0);
 
     }

@@ -22,6 +22,7 @@ import com.hics.g500.Presenter.MainPresenter;
 import com.hics.g500.R;
 import com.hics.g500.Views.Fragment.MapFragment;
 import com.hics.g500.Views.Fragment.RouteFragment;
+import com.hics.g500.Views.Fragment.SyncFragment;
 import com.hics.g500.Views.Fragment.SyncParentFragment;
 
 import butterknife.BindView;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainCallback {
                                 selectedFragment = new RouteFragment();
                                 break;
                             case R.id.action_item2:
-                                selectedFragment = new SyncParentFragment();
+                                selectedFragment = new SyncFragment();
                                 break;
                             case R.id.action_item3:
                                 selectedFragment = new MapFragment();

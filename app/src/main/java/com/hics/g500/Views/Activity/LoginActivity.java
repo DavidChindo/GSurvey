@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -47,11 +49,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import io.fabric.sdk.android.Fabric;
+import retrofit2.http.Body;
 
 public class LoginActivity extends Activity implements LoginCallback,SurveyCallback,ActivityCompat.OnRequestPermissionsResultCallback {
 
 
-    @BindView(R.id.act_login_login) Button btnLogin;
     @BindView(R.id.act_login_signup)Button btnRegister;
     @BindView(R.id.act_login_confirm)EditText edtConfirmPass;
     @BindView(R.id.act_login_username)EditText edtUsername;
@@ -60,6 +62,7 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     @BindView(R.id.act_login_recovery)Button btnRecovery;
     @BindView(R.id.act_login_txt_confirm)TextInputLayout tilConfirm;
     @BindView(R.id.act_login_version)TextView txtVersion;
+    @BindView(R.id.act_login_no_acount)TextView txtNoAccount;
 
     LoginPresenter loginPresenter;
     SurveyPresenter surveyPresenter;
@@ -167,21 +170,26 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
 
     @OnClick(R.id.act_login_signup)
     void onSignUpChange(){
-        edtConfirmPass.setVisibility(View.VISIBLE);
-        tilConfirm.setVisibility(View.VISIBLE);
-        btnEnter.setText(R.string.act_login_register);
-        btnEnter.setTag(2);
-        btnRecovery.setVisibility(View.GONE);
+        if (((int)btnEnter.getTag()) == 1) {
+            edtConfirmPass.setVisibility(View.VISIBLE);
+            tilConfirm.setVisibility(View.VISIBLE);
+            btnEnter.setText(R.string.act_login_register);
+            btnEnter.setTag(2);
+            btnRegister.setText("Iniciar Sesión");
+            txtNoAccount.setVisibility(View.GONE);
+            btnRecovery.setVisibility(View.GONE);
+        }else {
+            edtConfirmPass.setVisibility(View.GONE);
+            tilConfirm.setVisibility(View.GONE);
+            btnEnter.setText(R.string.act_login_enter);
+            btnRegister.setText("Regístrate aquí");
+            txtNoAccount.setVisibility(View.VISIBLE);
+            btnEnter.setTag(1);
+            btnRecovery.setVisibility(View.VISIBLE);
+        }
     }
 
-    @OnClick(R.id.act_login_login)
-    void onSignInChange(){
-        edtConfirmPass.setVisibility(View.GONE);
-        tilConfirm.setVisibility(View.GONE);
-        btnEnter.setText(R.string.act_login_enter);
-        btnEnter.setTag(1);
-        btnRecovery.setVisibility(View.VISIBLE);
-    }
+
     @OnClick(R.id.act_login_enter)
     void onEnterClick(View v){
         if (((int)v.getTag()) == 1) {
@@ -276,4 +284,5 @@ public class LoginActivity extends Activity implements LoginCallback,SurveyCallb
     void onOpenRecovery(){
         startActivity(new Intent(this,RecoveryPasswordActivity.class));
     }
+
 }

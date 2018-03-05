@@ -45,11 +45,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/item_survey_list_radio_group"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
         <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Opción Uno"/>
+            android:text="Opción Uno"
+            android:buttonTint="@color/colorAccent"/>
         <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

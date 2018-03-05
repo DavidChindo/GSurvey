@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="112dp"
+    android:layout_height="112dp"
+    android:padding="@dimen/margin_eigth">
+
+    <ImageView
+        android:id="@+id/item_carrusel_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/foto01a"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/item_carrusel_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue_background"
+        android:text="GASOLINERA"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="@dimen/margin_eigth"/>
+    <View
+        android:id="@+id/item_carrusel_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:alpha=".7"
+        android:visibility="gone"/>
+</RelativeLayout>

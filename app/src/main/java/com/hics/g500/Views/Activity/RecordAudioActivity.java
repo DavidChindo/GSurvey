@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Library.LogicUtils;
 import com.hics.g500.Library.Statics;
 import com.hics.g500.R;
+import com.hics.g500.db.Gasolineras;
 
 import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder;
 import cafe.adriel.androidaudiorecorder.model.AudioChannel;
@@ -25,8 +27,9 @@ public class RecordAudioActivity extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO = 0;
     private static final String AUDIO_FILE_PATH =
             Environment.getExternalStorageDirectory().getPath() +"/"+ Statics.NAME_FOLDER;
-//"/recorded_audio.wav"
     String name;
+    String url;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class RecordAudioActivity extends AppCompatActivity {
             name = bundle.getString("name","");
         }
 
+        url = "";
         LogicUtils.requestPermission(this, Manifest.permission.RECORD_AUDIO);
         LogicUtils.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -54,6 +58,11 @@ public class RecordAudioActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_RECORD_AUDIO) {
             if (resultCode == RESULT_OK) {
+                Gasolineras gasolineras = Dal.gasolineraById(Long.valueOf(name));
+                if (gasolineras != null){
+                    gasolineras.setAudio(url);
+                    Dal.updateGasolinera(gasolineras);
+                }
                 Toast.makeText(this, "Grabación exitosa", Toast.LENGTH_SHORT).show();
                 finish();
             } else if (resultCode == RESULT_CANCELED) {
@@ -65,7 +74,7 @@ public class RecordAudioActivity extends AppCompatActivity {
 
     public void recordAudio() {
         if (name != null && !name.isEmpty()) {
-            String url = AUDIO_FILE_PATH+"/"+name+".wav";
+            url = AUDIO_FILE_PATH+"/"+name+".wav";
             AndroidAudioRecorder.with(this)
                     // Required
                     .setFilePath(url)

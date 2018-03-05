@@ -14,11 +14,13 @@ public class OptionResponse {
     private int optionId;
     @SerializedName("opcion_contenido")
     private String optionDescription;
+    @SerializedName("opcion_url")
+    private String url;
 
-
-    public OptionResponse(int optionId, String optionDescription) {
+    public OptionResponse(int optionId, String optionDescription, String url) {
         this.optionId = optionId;
         this.optionDescription = optionDescription;
+        this.url = url;
     }
 
     public int getOptionId() {
@@ -35,6 +37,14 @@ public class OptionResponse {
 
     public void setOptionDescription(String optionDescription) {
         this.optionDescription = optionDescription;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
 

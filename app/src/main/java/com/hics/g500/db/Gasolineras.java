@@ -20,6 +20,7 @@ public class Gasolineras {
     private String direccion;
     private Boolean visited;
     private String fecha;
+    private String audio;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -33,13 +34,14 @@ public class Gasolineras {
     }
 
     @Generated
-    public Gasolineras(Long gas_id, String nombre_gas, String coordenadas, String direccion, Boolean visited, String fecha) {
+    public Gasolineras(Long gas_id, String nombre_gas, String coordenadas, String direccion, Boolean visited, String fecha, String audio) {
         this.gas_id = gas_id;
         this.nombre_gas = nombre_gas;
         this.coordenadas = coordenadas;
         this.direccion = direccion;
         this.visited = visited;
         this.fecha = fecha;
+        this.audio = audio;
     }
 
     public Long getGas_id() {
@@ -88,6 +90,14 @@ public class Gasolineras {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public String getAudio() {
+        return audio;
+    }
+
+    public void setAudio(String audio) {
+        this.audio = audio;
     }
 
     // KEEP METHODS - put your custom methods here

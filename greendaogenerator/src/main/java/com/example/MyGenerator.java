@@ -47,6 +47,7 @@ public class MyGenerator {
         gasolinera.addStringProperty("direccion");
         gasolinera.addBooleanProperty("visited");
         gasolinera.addStringProperty("fecha");
+        gasolinera.addStringProperty("audio");
 
         return gasolinera;
     }
@@ -81,6 +82,7 @@ public class MyGenerator {
         option.addLongProperty("encuenta_id");
         option.addLongProperty("opcion_id").primaryKey();
         option.addStringProperty("opcion_contenido");
+        option.addStringProperty("opcion_url");
 
         return option;
     }

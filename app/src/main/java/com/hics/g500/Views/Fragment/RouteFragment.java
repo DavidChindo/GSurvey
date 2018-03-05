@@ -31,6 +31,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.jean.jcplayer.JcAudio;
+import com.example.jean.jcplayer.JcPlayerService;
+import com.example.jean.jcplayer.JcPlayerView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,10 +57,16 @@ import com.google.android.gms.tasks.Task;
 import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.AnnimationsBuilding;
 import com.hics.g500.Library.DesignUtils;
+import com.hics.g500.Library.LogicUtils;
 import com.hics.g500.Network.Request.GasolinerasRequest;
+import com.hics.g500.Network.Response.SurveyResponse;
 import com.hics.g500.Presenter.Callbacks.GasolinerasCallback;
+import com.hics.g500.Presenter.Callbacks.SurveyCallback;
 import com.hics.g500.Presenter.Implementations.GasolinerasPresenter;
+import com.hics.g500.Presenter.Implementations.SurveyPresenter;
 import com.hics.g500.R;
+import com.hics.g500.Views.Activity.LoginActivity;
+import com.hics.g500.Views.Activity.MainActivity;
 import com.hics.g500.Views.Activity.RecordAudioActivity;
 import com.hics.g500.Views.Adapter.RouteAdapter;
 import com.hics.g500.db.Gasolineras;
@@ -83,13 +92,13 @@ import static android.content.Context.LOCATION_SERVICE;
  * A simple {@link Fragment} subclass.
  */
 public class RouteFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,
-        ActivityCompat.OnRequestPermissionsResultCallback,GasolinerasCallback{
+        ActivityCompat.OnRequestPermissionsResultCallback,GasolinerasCallback, JcPlayerView.JcPlayerViewServiceListener,SurveyCallback {
 
     @BindView(R.id.fr_route_txt_error)TextView txtError;
     @BindView(R.id.fr_route_recycler)RecyclerView recyclerView;
-    @BindView(R.id.fr_route_record)FloatingActionButton btnRecord;
     @BindView(R.id.animation_error_open)LottieAnimationView animationView;
     @BindView(R.id.swiperefresh_route)SwipyRefreshLayout swiperefresh_auth;
+    @BindView(R.id.jcplayer)JcPlayerView jcPlayerView;
 
     Activity mActivity;
     List<Gasolineras> gasos;
@@ -107,6 +116,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     private boolean focusing = false;
     private RecyclerView.LayoutManager mLayoutManager;
     private boolean GpsStatus = false;
+    SurveyPresenter surveyPresenter;
 
     public RouteFragment() {
 
@@ -116,6 +126,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+
     }
 
     @Override
@@ -152,11 +163,11 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
 
     private void initView(){
         mActivity = getActivity();
-        btnRecord.setAnimation(AnnimationsBuilding.getDown(mActivity));
         getLocationPermission();
         gasolinerasPresenter = new GasolinerasPresenter(this,mActivity);
+        surveyPresenter = new SurveyPresenter(this,mActivity);
         gasos = new ArrayList<Gasolineras>();
-
+        jcPlayerView.registerServiceListener(this);
         if (!isInabledGPS()) {
             txtError.setText("Una vez activado el GPS, deslize hacia abajo para actualizar.");
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -422,12 +433,15 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
                 mLayoutManager = new LinearLayoutManager(mActivity);
                 recyclerView.setLayoutManager(mLayoutManager);
 
-                recyclerView.setAdapter(new RouteAdapter(gasos,mActivity,mActivity));
+                recyclerView.setAdapter(new RouteAdapter(gasos,mActivity,mActivity,this));
                 recyclerView.setVisibility(View.VISIBLE);
                 txtError.setVisibility(View.GONE);
+                mProgressDialog.dismiss();
+                mProgressDialog.setMessage("Descargando encuesta...");
+                surveyPresenter.getSurvey();
             }
         }
-        mProgressDialog.dismiss();
+
     }
 
     @Override
@@ -442,6 +456,25 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     }
 
     @Override
+    public void onOpenVoice(String name) {
+        dialogRecord(name);
+    }
+
+    @Override
+    public void onPlayAudio(String url) {
+        if (url != null && !url.isEmpty()){
+            JcAudio jcAudio = JcAudio.createFromFilePath("grabación",url);
+            jcPlayerView.playAudio(jcAudio);
+            jcPlayerView.createNotification();
+        }
+    }
+
+    @Override
+    public void onDeleteGasolinera(Gasolineras gasolineras) {
+        logoutDialog(gasolineras);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (!isInabledGPS()) {
@@ -453,25 +486,8 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
         }
     }
 
-    @OnClick(R.id.fr_route_record)
-    public void onRecordAudioLib(){
-        dialogRecord();
 
-    }
-
-
-    private void dialogRecord(){
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mActivity);
-        LayoutInflater inflater = mActivity.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.dialog_record_name, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText edt = (EditText) dialogView.findViewById(R.id.record_name);
-
-        dialogBuilder.setTitle("Nombre de la grabación");
-        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String name = edt.getText().toString().trim();
+    private void dialogRecord(String name){
                 if (name != null && !name.isEmpty()){
                     Intent intent = new Intent(mActivity,RecordAudioActivity.class);
                     intent.putExtra("name",name);
@@ -479,15 +495,90 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
                 }else{
                     DesignUtils.showToast(mActivity,"Ingrese nombre");
                 }
-            }
-        });
-        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //pass
-            }
-        });
-        AlertDialog b = dialogBuilder.create();
-        b.show();
     }
 
+
+    private void logoutDialog(final Gasolineras gasolineras){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setTitle("Eliminar");
+        builder.setMessage("¿Está seguro de eliminar la gasolinera?");
+        builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Dal.deleteRoute(gasolineras);
+                if (!isInabledGPS()) {
+                    txtError.setText("Una vez activado el GPS, deslize hacia abajo para actualizar.");
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }else {
+                    initData();
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onPreparedAudio(String audioName, int duration) {
+
+    }
+
+    @Override
+    public void onCompletedAudio() {
+        if (jcPlayerView.isShown()){
+            jcPlayerView.setVisibility(View.GONE);
+        }
+        jcPlayerView.kill();
+    }
+
+    @Override
+    public void onPaused() {
+
+    }
+
+    @Override
+    public void onContinueAudio() {
+
+    }
+
+    @Override
+    public void onPlaying() {
+
+    }
+
+    @Override
+    public void onTimeChanged(long currentTime) {
+
+    }
+
+    @Override
+    public void updateTitle(String title) {
+
+    }
+
+    @Override
+    public void onSuccessSurvey(SurveyResponse surveyResponse) {
+        if (surveyResponse != null){
+            long idEncuesta = Dal.insertSurvey(mActivity,surveyResponse);
+            if (idEncuesta > -1){
+                Log.d(RouteFragment.class.getSimpleName(),"Survey saved success");
+            }else{
+                DesignUtils.errorMessage(mActivity,"Error","No se pudo guardar la encuesta");
+            }
+        }
+
+        mProgressDialog.dismiss();
+
+    }
+
+    @Override
+    public void onErrorSurvey(String msgError) {
+        mProgressDialog.dismiss();
+        DesignUtils.errorMessage(mActivity,"Error",msgError);
+    }
 }

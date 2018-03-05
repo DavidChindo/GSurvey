@@ -18,16 +18,16 @@ import in.galaxyofandroid.awesometablayout.AwesomeTabBarAdapter;
 public class SyncParentAdapter extends AwesomeTabBarAdapter {
     ArrayList<Fragment> fragments = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
-    int[] colors = {R.color.colorWhite, R.color.colorWhite};
-    int[] textColors = {R.color.text_tab_unselect, R.color.text_tab_unselect};
+    int[] colors = {R.color.colorWhite};
+    int[] textColors = {R.color.text_tab_unselect};
 
     public SyncParentAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
         fragments.add(new SyncFragment());
-        fragments.add(new NotesVoiceFragment());
+        //fragments.add(new NotesVoiceFragment());
 
         titles.add("GASOLINERAS");
-        titles.add("NOTAS DE VOZ");
+        //titles.add("NOTAS DE VOZ");
     }
 
     @Override
@@ -40,8 +40,8 @@ public class SyncParentAdapter extends AwesomeTabBarAdapter {
         switch (position){
             case 0:
                 return new SyncFragment();
-            case 1:
-                return new NotesVoiceFragment();
+           /* case 1:
+                return new NotesVoiceFragment();*/
             default:
                 return null;
         }

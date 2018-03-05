@@ -30,6 +30,7 @@ import com.hics.g500.db.User;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.io.File;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,12 @@ public class Dal {
     public static void insertGasolineras(ArrayList<Gasolineras> gasolinerases){
         try {
             if (gasolinerases != null && gasolinerases.size() > 0){
-                G500App.getDaoSession().getGasolinerasDao().insertOrReplaceInTx(gasolinerases);
+                for (Gasolineras gasolinera : gasolinerases){
+                    Gasolineras gasolineraTemp = Dal.gasolineraById(gasolinera.getGas_id());
+                    if (gasolineraTemp == null){
+                        G500App.getDaoSession().getGasolinerasDao().insertOrReplaceInTx(gasolinera);
+                    }
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -71,11 +77,21 @@ public class Dal {
                 gasolineras.setVisited(visited);
                 gasolineras.setFecha(LogicUtils.getCurrentHour());
                 G500App.getDaoSession().getGasolinerasDao().insertOrReplaceInTx(gasolineras);
-
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static void updateGasolinera(Gasolineras gasolineras){
+        try {
+            if (gasolineras != null){
+                G500App.getDaoSession().getGasolinerasDao().insertOrReplaceInTx(gasolineras);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public static long insertSurvey(Context mContex,SurveyResponse surveyResponse){
@@ -180,6 +196,10 @@ public class Dal {
                     answerParent.setFechaFin(fechaFin);
                     answerParent.setFechaSyn(fechaSync);
                     G500App.getDaoSession().getRespuestaDao().updateInTx(answerParent);
+                    Gasolineras gasolineras = gasolineraById(answerParent.getGas_id());
+                        if (gasolineras != null) {
+                            deleteRoute(gasolineras);
+                        }
                 return answerParent;
                 }else {
                 return null;
@@ -495,8 +515,12 @@ public class Dal {
                         surveySync.setSurveyId(idSurvey());
                         surveySync.setParentId(answerParent.getId());
                         surveySync.setSync(answerParent.getEnviada());
-
+                        Gasolineras gasolineras = gasolineraById(answerParent.getGas_id());
+                        if (gasolineras != null) {
+                            deleteRoute(gasolineras);
+                        }
                         surveySyncs.add(surveySync);
+
                     }
                 }
                 return surveySyncs;
@@ -602,7 +626,11 @@ public class Dal {
     //regionDelete
     public static void deleteRoutes(){
         try {
-            G500App.getDaoSession().getGasolinerasDao().deleteAll();
+            List<Gasolineras> gasolinerases = G500App.getDaoSession().getGasolinerasDao().queryBuilder().
+                    where(GasolinerasDao.Properties.Audio.isNull()).list();
+            if (gasolinerases != null && gasolinerases.size() > 0) {
+                G500App.getDaoSession().getGasolinerasDao().deleteInTx(gasolinerases);
+            }
         }catch (Exception e){
             e.printStackTrace();
             Log.d("DAL","Error en deleteRoutes "+e.getMessage());
@@ -610,6 +638,22 @@ public class Dal {
         }
     }
 
+    public static void deleteRoute(Gasolineras gasolineras){
+        try {
+            if (gasolineras != null ){
+                if (gasolineras.getAudio() != null && !gasolineras.getAudio().isEmpty()){
+                    File file = new File(gasolineras.getAudio());
+                    if (file.exists()){
+                        boolean deleted = file.delete();
+                        Log.d("BORRAR ARCHIVO ","Valor "+deleted);
+                    }
+                }
+                G500App.getDaoSession().getGasolinerasDao().deleteInTx(gasolineras);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void deleteUser(){
         try {
             G500App.getDaoSession().getUserDao().deleteAll();

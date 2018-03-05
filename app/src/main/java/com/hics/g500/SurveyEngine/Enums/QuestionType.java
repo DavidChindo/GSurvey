@@ -15,8 +15,9 @@ public class QuestionType {
     public static final int MULTI_CHOICE_RADIO = 6;
     public static final int MULTI_CHOICE_CHECK = 7;
     public static final int MULTI_CHOICE_SPINNER = 8;
+    public static final int CARRUSEL = 9;
+    public static final int DISCLAIMER = 10;
     public static final int SECTION_LABEL = 5;
-    public static final int DISCLAIMER = 6;
 
     public static final int START_DATE = 12;
     public static final int END_DATE = 13;

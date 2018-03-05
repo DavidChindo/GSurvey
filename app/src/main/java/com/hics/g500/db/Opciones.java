@@ -18,6 +18,7 @@ public class Opciones {
     @Id
     private Long opcion_id;
     private String opcion_contenido;
+    private String opcion_url;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -31,11 +32,12 @@ public class Opciones {
     }
 
     @Generated
-    public Opciones(Long pregunta_id, Long encuenta_id, Long opcion_id, String opcion_contenido) {
+    public Opciones(Long pregunta_id, Long encuenta_id, Long opcion_id, String opcion_contenido, String opcion_url) {
         this.pregunta_id = pregunta_id;
         this.encuenta_id = encuenta_id;
         this.opcion_id = opcion_id;
         this.opcion_contenido = opcion_contenido;
+        this.opcion_url = opcion_url;
     }
 
     public Long getPregunta_id() {
@@ -68,6 +70,14 @@ public class Opciones {
 
     public void setOpcion_contenido(String opcion_contenido) {
         this.opcion_contenido = opcion_contenido;
+    }
+
+    public String getOpcion_url() {
+        return opcion_url;
+    }
+
+    public void setOpcion_url(String opcion_url) {
+        this.opcion_url = opcion_url;
     }
 
     // KEEP METHODS - put your custom methods here

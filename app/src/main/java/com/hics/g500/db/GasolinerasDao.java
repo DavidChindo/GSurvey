@@ -28,6 +28,7 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Long> {
         public final static Property Direccion = new Property(3, String.class, "direccion", false, "DIRECCION");
         public final static Property Visited = new Property(4, Boolean.class, "visited", false, "VISITED");
         public final static Property Fecha = new Property(5, String.class, "fecha", false, "FECHA");
+        public final static Property Audio = new Property(6, String.class, "audio", false, "AUDIO");
     }
 
 
@@ -48,7 +49,8 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Long> {
                 "\"COORDENADAS\" TEXT," + // 2: coordenadas
                 "\"DIRECCION\" TEXT," + // 3: direccion
                 "\"VISITED\" INTEGER," + // 4: visited
-                "\"FECHA\" TEXT);"); // 5: fecha
+                "\"FECHA\" TEXT," + // 5: fecha
+                "\"AUDIO\" TEXT);"); // 6: audio
     }
 
     /** Drops the underlying database table. */
@@ -90,6 +92,11 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Long> {
         if (fecha != null) {
             stmt.bindString(6, fecha);
         }
+ 
+        String audio = entity.getAudio();
+        if (audio != null) {
+            stmt.bindString(7, audio);
+        }
     }
 
     @Override
@@ -125,6 +132,11 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Long> {
         if (fecha != null) {
             stmt.bindString(6, fecha);
         }
+ 
+        String audio = entity.getAudio();
+        if (audio != null) {
+            stmt.bindString(7, audio);
+        }
     }
 
     @Override
@@ -140,7 +152,8 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // coordenadas
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // direccion
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // visited
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // fecha
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // fecha
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // audio
         );
         return entity;
     }
@@ -153,6 +166,7 @@ public class GasolinerasDao extends AbstractDao<Gasolineras, Long> {
         entity.setDireccion(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setVisited(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setFecha(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setAudio(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

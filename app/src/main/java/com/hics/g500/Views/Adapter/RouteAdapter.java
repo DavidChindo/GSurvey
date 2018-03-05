@@ -1,11 +1,17 @@
 package com.hics.g500.Views.Adapter;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +20,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.DesignUtils;
+import com.hics.g500.Library.LogicUtils;
+import com.hics.g500.Presenter.Callbacks.GasolinerasCallback;
 import com.hics.g500.R;
 import com.hics.g500.SurveyEngine.Views.SurveyActivity;
 import com.hics.g500.Views.Activity.MapsDetailActivity;
@@ -33,6 +42,8 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.support.design.R.attr.icon;
+
 /**
  * Created by david.barrera on 2/1/18.
  */
@@ -42,10 +53,12 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     List<Gasolineras> mGasos;
     Context mContext;
     Activity mActivity;
-    public RouteAdapter(List<Gasolineras> mGasos, Context mContext, Activity activity) {
+    GasolinerasCallback mGasolinerasCallback;
+    public RouteAdapter(List<Gasolineras> mGasos, Context mContext, Activity activity, GasolinerasCallback gasolinerasCallback) {
         this.mGasos = mGasos;
         this.mContext = mContext;
         this.mActivity = activity;
+        this.mGasolinerasCallback = gasolinerasCallback;
     }
 
 
@@ -56,7 +69,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
         final Gasolineras gasolinera = mGasos.get(position);
         if (gasolinera != null){
@@ -64,6 +77,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.mName.setText(gasolinera.getNombre_gas());
             holder.mAddress.setText(capitalize(gasolinera.getDireccion()));
             holder.imgViewOpenSurvey.setTag(gasolinera);
+            holder.imgMenu.setVisibility(gasolinera.getAudio() != null && !gasolinera.getAudio().isEmpty() ? View.VISIBLE :  View.GONE);
             final Bitmap mBitmap;
             Respuesta respuesta = Dal.getAnswerParent(Dal.idSurvey(),gasolinera.getGas_id());
             if (respuesta != null) {
@@ -135,6 +149,37 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                     }
                 }
             });
+
+            if (gasolinera.getAudio() != null && !gasolinera.getAudio().isEmpty()){
+                holder.imgOpenRecord.setImageDrawable(mContext.getResources().getDrawable(R.drawable.aar_ic_play));
+                holder.imgOpenRecord.setColorFilter(R.color.colorAccent);
+            }else{
+                holder.imgOpenRecord.setColorFilter(R.color.colorAccent);
+                holder.imgOpenRecord.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_voicenote));
+            }
+            holder.imgRecord.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (gasolinera.getAudio() != null && !gasolinera.getAudio().isEmpty()){
+                        try {
+                            mGasolinerasCallback.onPlayAudio(gasolinera.getAudio());
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        mGasolinerasCallback.onOpenVoice(String.valueOf(gasolinera.getGas_id()));
+                    }
+                }
+            });
+
+            holder.imgMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mGasolinerasCallback.onDeleteGasolinera(gasolinera);
+                }
+            });
         }
     }
 
@@ -151,8 +196,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         @BindView(R.id.item_route_survey)LinearLayout mSurvey;
         @BindView(R.id.item_route_ln_info)LinearLayout mInfo;
         @BindView(R.id.item_route_img_gas)ImageView imgViewGas;
-        @BindView(R.id.item_route_open_survey)ImageView imgViewOpenSurvey;
-        @BindView(R.id.item_route_open_map)ImageView imgViewOpenMap;
+        @BindView(R.id.item_route_open_survey)RelativeLayout imgViewOpenSurvey;
+        @BindView(R.id.item_route_open_map)RelativeLayout imgViewOpenMap;
+        @BindView(R.id.item_route_open_record)RelativeLayout imgRecord;
+        @BindView(R.id.item_route_img_open_record)ImageView imgOpenRecord;
+        @BindView(R.id.ib_popup_menu)ImageView imgMenu;
 
 
         public ViewHolder(View itemView) {

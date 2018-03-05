@@ -1,6 +1,7 @@
 package com.hics.g500.SurveyEngine.Adapters;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.provider.SyncStateContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.hics.g500.SurveyEngine.Presenter.MapCallback;
 import com.hics.g500.SurveyEngine.Presenter.SurveySaveCallback;
 import com.hics.g500.SurveyEngine.Utils.Constants;
 import com.hics.g500.SurveyEngine.Utils.Validations;
+import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderCarrusel;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderDate;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderEditText;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderEditTextNumber;
@@ -34,6 +36,7 @@ import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderMultiChoiceCheck;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderMultiChoiceSpinner;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderRadIoGroup;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderSearch;
+import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderText;
 import com.hics.g500.SurveyEngine.ViewHolders.ViewHolderTime;
 import com.hics.g500.db.Opciones;
 import com.hics.g500.db.Preguntas;
@@ -43,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  * Created by david.barrera on 2/1/18.
@@ -128,7 +132,37 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             .inflate(R.layout.item_suvey_choice_spinner, parent, false);
                     return new ViewHolderMultiChoiceSpinner(v,mSurveySaveCallback);
                 }
+                case (QuestionType.CARRUSEL):{
+                    List<Opciones> values = question.getOpciones();
+                    View v = LayoutInflater.from(parent.getContext()).
+                            inflate(R.layout.item_survey_carrusel,parent,false);
+                     Opciones selectedOption = null;
+                    for (int i = 0; i < values.size(); i++) {
+                        final Opciones value = values.get(i);
 
+                        try {
+                            if (question.getRespuestaDetalle() != null) {
+                                try {
+                                    int id = Integer.valueOf(question.getRespuestaDetalle().getRespuestacodigo());
+                                    if (value.getOpcion_id() == id){
+                                        selectedOption = value;
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            Log.d(getClass().getName(), "Error en spinner " + ex.getMessage());
+                        }
+                    }
+                    return new ViewHolderCarrusel(v,mSurveySaveCallback,question,values,selectedOption);
+                }
+                case (QuestionType.DISCLAIMER): {
+                    View v = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.item_survey_text, parent, false);
+                    return new ViewHolderText(v);
+                }
                 default:
                     View v = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.item_suvey_choice_spinner, parent, false);
@@ -206,11 +240,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (question.getRespuestaDetalle() != null && !question.getRespuestaDetalle().getRespuestatexto().isEmpty()) {
                     viewHolderImage.captureImg.setBackground(context.getResources().getDrawable(R.drawable.shape_rectangle));
                     viewHolderImage.captureImg.setImageDrawable(context.getResources().getDrawable(R.drawable.camera_on));
-                    viewHolderImage.captureImg.setColorFilter(R.color.blue_icon);
+                    viewHolderImage.captureImg.setColorFilter(R.color.colorAccent);
                 } else {
                     viewHolderImage.captureImg.setBackground(context.getResources().getDrawable(R.drawable.shape_rectangle));
                     viewHolderImage.captureImg.setImageResource(R.drawable.ic_camera);
-                    viewHolderImage.captureImg.setColorFilter(R.color.blue_icon);
+                    viewHolderImage.captureImg.setColorFilter(R.color.colorAccent);
                 }
                 break;
             }
@@ -248,6 +282,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         radioButton.setText(value.getOpcion_contenido());
                         radioButton.setTextSize(18);
                         radioButton.setTag(value);
+                        radioButton.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
 
                         //SET RADIO CHECKED
                         /*if (value.getSeleccionado()) {
@@ -292,6 +327,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         checkBox.setId(value.getOpcion_id().intValue());
                         checkBox.setText(value.getOpcion_contenido());
                         checkBox.setTag(value);
+                        checkBox.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
 
                         if (question.getRespuestaDetalle() != null) {
                             if (question.getRespuestaDetalle().getRespuestacodigo() >= 0){
@@ -305,6 +341,39 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         vh1.linearLayout.addView(checkBox);
                     }
                 }
+                break;
+            }
+            case (QuestionType.CARRUSEL):{
+                Log.d(TAG, String.valueOf(getItemViewType(position)));
+                ViewHolderCarrusel viewHolderCarrusel = (ViewHolderCarrusel) holder;
+                ((ViewHolderCarrusel) holder).txtTitle.setText(question.getPregunta_encabezado());
+                List<Opciones> valuesRadio = question.getOpciones();
+                for (int i = 0; i < valuesRadio.size(); i++) {
+                    final Opciones value = valuesRadio.get(i);
+
+                    try {
+                        if (question.getRespuestaDetalle() != null) {
+                            try {
+                                int id = Integer.valueOf(question.getRespuestaDetalle().getRespuestacodigo());
+                                if (value.getOpcion_id() == id){
+                                    viewHolderCarrusel.selectedOption = value;
+                                    viewHolderCarrusel.recyclerView.notify();
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        Log.d(getClass().getName(), "Error en spinner " + ex.getMessage());
+                    }
+                }
+
+                break;
+            }
+            case (QuestionType.DISCLAIMER): {
+                ViewHolderText viewHolderDisclaimer = (ViewHolderText) holder;
+                viewHolderDisclaimer.textView.setText(question.getPregunta_encabezado());
                 break;
             }
         }

@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_route"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    card_view:cardCornerRadius="4dp"
+    android:elevation="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    >
+<RelativeLayout
+    android:id="@+id/item_sync_linear_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_eigth">
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/item_sync_linear_container"
+        android:id="@+id/item_route_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="@dimen/margin_sixtyfour"
             android:layout_height="@dimen/margin_sixtyfour"
@@ -21,40 +36,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-               />
+                />
         </LinearLayout>
-        <RelativeLayout
-            android:id="@+id/item_route_btn_container"
+        <ImageButton
+            android:id="@+id/ib_popup_menu"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/margin_twelve">
-            <ImageView
-                android:id="@+id/item_route_open_survey"
-                android:layout_width="@dimen/margin_thirtytwo"
-                android:layout_height="@dimen/margin_thirtytwo"
-                android:src="@drawable/ic_encuesta"
-                android:tint="@color/icon_color"
-                android:layout_marginBottom="@dimen/margin_four"
-                android:layout_marginTop="@dimen/margin_eigth"
-                android:layout_alignParentTop="true"
-                />
-            <ImageView
-                android:id="@+id/item_route_open_map"
-                android:layout_width="@dimen/margin_thirtytwo"
-                android:layout_height="@dimen/margin_thirtytwo"
-                android:src="@drawable/ic_ubicacion"
-                android:tint="@color/icon_color"
-                android:layout_marginBottom="@dimen/margin_sixteen"
-                android:layout_marginTop="@dimen/margin_four"
-                android:layout_below="@id/item_route_open_survey"
-                android:layout_alignParentBottom="true"
-
-                />
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/ic_action_navigation_more_vert"/>
         <LinearLayout
             android:layout_toRightOf="@id/item_route_survey"
-            android:layout_toLeftOf="@id/item_route_btn_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_eigth"
@@ -62,13 +54,14 @@
             android:layout_marginTop="@dimen/margin_eigth"
             android:orientation="vertical"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/ib_popup_menu"
             android:id="@+id/item_route_ln_info">
 
             <TextView
                 android:id="@+id/item_route_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre de gasolinera"
+                android:text="Inmuebles Venta de Carpio, S.A. de C.V (jaltenco)"
                 android:textSize="@dimen/font_size_16"
                 android:textStyle="bold"
                 android:layout_marginLeft="@dimen/margin_eigth"
@@ -108,15 +101,84 @@
                         android:maxLines="3"/>
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider"
-        android:layout_below="@id/item_route_ln_info"
-        android:layout_marginTop="@dimen/margin_twelve"
-        android:layout_alignStart="@id/item_route_ln_info"
-        android:layout_alignEnd="@id/item_route_btn_container"
-        android:layout_marginBottom="@dimen/margin_four"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:layout_below="@id/item_route_ln_info"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:layout_marginBottom="@dimen/margin_four"/>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/item_route_btn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/item_route_container"
+        android:weightSum="3"
+        android:layout_centerVertical="true">
+        <RelativeLayout
+            android:id="@+id/item_route_open_record"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/item_route_img_open_record"
+                android:layout_width="@dimen/margin_fortyeight"
+                android:layout_height="@dimen/margin_fortyeight"
+                android:src="@drawable/ic_voicenote"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/margin_four"
+                android:tint="@color/colorAccent" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider"
+            android:layout_marginBottom="@dimen/margin_eigth"
+            android:layout_marginTop="@dimen/margin_eigth"/>
+
+        <RelativeLayout
+            android:id="@+id/item_route_open_survey"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/margin_fortyeight"
+                android:layout_height="@dimen/margin_fortyeight"
+                android:src="@drawable/ic_encuesta"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/margin_four"
+                android:tint="@color/colorAccent" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider"
+            android:layout_marginBottom="@dimen/margin_eigth"
+            android:layout_marginTop="@dimen/margin_eigth"/>
+
+        <RelativeLayout
+            android:id="@+id/item_route_open_map"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="@dimen/margin_fortyeight"
+                android:layout_height="@dimen/margin_fortyeight"
+                android:src="@drawable/ic_ubicacion"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/margin_four"
+                android:tint="@color/colorAccent" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+</android.support.v7.widget.CardView>

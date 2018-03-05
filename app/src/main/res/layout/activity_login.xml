@@ -20,41 +20,14 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="120dp"
+            android:layout_width="match_parent"
             android:layout_height="120dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/logo"
+            android:layout_marginEnd="@dimen/margin_seventytwo"
+            android:layout_marginStart="@dimen/margin_seventytwo"
             android:layout_marginTop="@dimen/margin_fortyeight"
             android:id="@+id/act_login_img_logo"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center|top">
-            <Button
-                android:id="@+id/act_login_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ingreso"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/font_size_14"
-                android:layout_marginEnd="@dimen/margin_twelve"
-                android:layout_marginBottom="@dimen/margin_twelve"
-                android:background="@android:color/transparent"
-                />
-            <Button
-                android:id="@+id/act_login_signup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Registro"
-                android:layout_marginStart="@dimen/margin_twelve"
-                android:layout_marginBottom="@dimen/margin_twelve"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/font_size_14"
-                android:background="@android:color/transparent"/>
-        </LinearLayout>
-
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/act_login_txt_username"
@@ -62,26 +35,20 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/TextLabel"
                 android:layout_marginTop="@dimen/margin_twelve"
-                android:layout_marginStart="@dimen/margin_fortyeight"
-                android:layout_marginEnd="@dimen/margin_fortyeight"
-                android:background="@drawable/shadow_elevation"
-                android:elevation="2dp">
+                android:layout_marginStart="@dimen/margin_thirtytwo"
+                android:layout_marginEnd="@dimen/margin_thirtytwo">
 
                 <EditText
                     android:id="@+id/act_login_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_sixteen"
-                    android:layout_marginRight="@dimen/margin_sixteen"
                     android:drawablePadding="8dp"
                     android:drawableStart="@drawable/ic_user"
+                    android:drawableTint="@color/colorWhite"
                     android:hint="@string/act_login_edt_user"
                     android:inputType="text"
                     android:maxLength="100"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray_font_form"
-
-                    android:textCursorDrawable="@drawable/text_cursor_primary"/>
+                    android:textColor="@color/colorWhite"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -92,26 +59,21 @@
                 android:layout_below="@id/act_login_txt_username"
                 android:theme="@style/TextLabel"
                 android:layout_marginTop="@dimen/margin_twelve"
-                android:layout_marginStart="@dimen/margin_fortyeight"
-                android:layout_marginEnd="@dimen/margin_fortyeight"
-                android:background="@drawable/shadow_elevation"
-                android:elevation="2dp"
+                android:layout_marginStart="@dimen/margin_thirtytwo"
+                android:layout_marginEnd="@dimen/margin_thirtytwo"
                 >
 
                 <EditText
                     android:id="@+id/act_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_sixteen"
-                    android:layout_marginRight="@dimen/margin_sixteen"
                     android:drawablePadding="@dimen/margin_eigth"
                     android:drawableStart="@drawable/ic_pass"
+                    android:drawableTint="@color/colorWhite"
                     android:hint="@string/act_login_password"
                     android:inputType="textPassword"
                     android:maxLength="100"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray_font_form"
-                    android:textCursorDrawable="@drawable/text_cursor_primary"
+                    android:textColor="@color/colorWhite"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -123,29 +85,22 @@
                 android:layout_below="@id/act_login_txt_pass"
                 android:theme="@style/TextLabel"
                 android:layout_marginTop="@dimen/margin_twelve"
-                android:background="@drawable/shadow_elevation"
-                android:elevation="2dp"
-                android:layout_marginStart="@dimen/margin_fortyeight"
-                android:layout_marginEnd="@dimen/margin_fortyeight"
-                android:visibility="gone"
-                android:textColorHint="@color/gray_font_form"
-                >
+                android:layout_marginStart="@dimen/margin_thirtytwo"
+                android:layout_marginEnd="@dimen/margin_thirtytwo"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/act_login_confirm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_sixteen"
-                    android:layout_marginRight="@dimen/margin_sixteen"
                     android:drawablePadding="@dimen/margin_eigth"
                     android:drawableStart="@drawable/ic_pass"
+                    android:drawableTint="@color/colorWhite"
                     android:hint="@string/act_login_confirm"
                     android:inputType="textPassword"
                     android:maxLength="100"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray_font_form"
-                    android:textCursorDrawable="@drawable/text_cursor_primary"
                     android:visibility="gone"
+                    android:textColor="@color/colorWhite"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -157,22 +112,21 @@
                 android:layout_height="@dimen/margin_thirtytwo"
                 android:layout_marginTop="@dimen/margin_eigth"
                 android:background="@android:color/transparent"
-                android:textColor="@color/gray_secondary_button"
+                android:textColor="@color/colorWhite"
                 android:layout_below="@id/act_login_txt_confirm"
                 android:textAllCaps="false"
                 android:layout_marginBottom="@dimen/margin_eigth"
-                android:layout_gravity="end"
+                android:layout_gravity="center"
                 android:textStyle="normal"
-                android:layout_marginEnd="@dimen/margin_fortyeight"
                 />
 
             <Button
                 android:id="@+id/act_login_enter"
-                style="@style/StrokeButton"
+                style="@style/StrokeButtonWith"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_fortyeight"
-                android:layout_marginEnd="@dimen/margin_fortyeight"
-                android:layout_marginStart="@dimen/margin_fortyeight"
+                android:layout_marginStart="@dimen/margin_thirtytwo"
+                android:layout_marginEnd="@dimen/margin_thirtytwo"
                 android:layout_marginTop="@dimen/margin_four"
                 android:elevation="@dimen/raised_button"
                 android:text="@string/act_login_login"
@@ -182,15 +136,48 @@
 
 
     </LinearLayout>
-    <TextView
-        android:id="@+id/act_login_version"
-        android:text="V 1.0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_gravity="center|bottom"
-        android:textSize="@dimen/font_size_16"
-        android:layout_marginBottom="@dimen/margin_eigth"
-        />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="@dimen/margin_sixteen">
+
+        <TextView
+            android:id="@+id/act_login_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_eigth"
+            android:text="V 1.0"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/font_size_16"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/act_login_signup"
+            style="@style/StrokeButtonWith"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_fortyeight"
+            android:layout_marginBottom="@dimen/margin_four"
+            android:layout_marginStart="@dimen/margin_thirtytwo"
+            android:layout_marginEnd="@dimen/margin_thirtytwo"
+            android:text="Regístrate aquí"
+            android:layout_alignParentBottom="true"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/act_login_no_acount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/act_login_signup"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="@dimen/margin_fortyeight"
+            android:layout_marginStart="@dimen/margin_fortyeight"
+            android:text="¿No tienes cuenta?"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite" />
+
+    </RelativeLayout>
 </FrameLayout>
