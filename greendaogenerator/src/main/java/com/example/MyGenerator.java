@@ -72,6 +72,7 @@ public class MyGenerator {
         question.addIntProperty("tipo_max");
         question.addStringProperty("tipo_dato");
         question.addIntProperty("num_opciones");
+        question.addIntProperty("pregunta_orden");
 
         return question;
     }

@@ -28,9 +28,12 @@ public class QuestionResponse {
     private int optionesNum;
     @SerializedName("opciones")
     private ArrayList<OptionResponse> optionResponses;
+    @SerializedName("pregunta_orden")
+    private int order;
 
-    public QuestionResponse(int quesionId, int mandatory, String title, String questionType, int minLength,
-                            int maxLegth, String dataType, int optionesNum, ArrayList<OptionResponse> optionResponses) {
+    public QuestionResponse(int quesionId, int mandatory, String title, String questionType,
+                            int minLength, int maxLegth, String dataType, int optionesNum,
+                            ArrayList<OptionResponse> optionResponses, int order) {
         this.quesionId = quesionId;
         this.mandatory = mandatory;
         this.title = title;
@@ -40,6 +43,7 @@ public class QuestionResponse {
         this.dataType = dataType;
         this.optionesNum = optionesNum;
         this.optionResponses = optionResponses;
+        this.order = order;
     }
 
     public int getQuesionId() {
@@ -112,6 +116,14 @@ public class QuestionResponse {
 
     public void setOptionResponses(ArrayList<OptionResponse> optionResponses) {
         this.optionResponses = optionResponses;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
 

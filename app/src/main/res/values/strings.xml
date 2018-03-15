@@ -3,7 +3,8 @@
 
     <!-- URLS -->
     <string name="url_qa">http://mandragoragourmet.com/wsb/app/index.php/</string>
-    <string name="url_prod">http://mandragoragourmet.com/wsb/app/index.php/</string>
+    <string name="url_prod">http://mandragoragourmet.com/qa/index.php/</string>
+
 
     <!--Login -->
     <string name="act_login_edt_user">Usuario</string>

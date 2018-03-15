@@ -6,8 +6,8 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.hics.g500.Dal.Model.Coordinates;
 import com.hics.g500.G500App;
-import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Library.LogicUtils;
+import com.hics.g500.Library.Validators;
 import com.hics.g500.Network.Request.AnswerSync;
 import com.hics.g500.Network.Request.SurveySync;
 import com.hics.g500.Network.Response.OptionResponse;
@@ -105,7 +105,7 @@ public class Dal {
                     for (QuestionResponse questionResponse : surveyResponse.getQuestionResponses()){
                         Preguntas preguntas = new Preguntas(new Long(questionResponse.getQuesionId()), idEncuesta, questionResponse.getMandatory(),
                                 questionResponse.getTitle(), questionResponse.getQuestionType(), questionResponse.getMinLength(), questionResponse.getMaxLegth(),
-                                questionResponse.getDataType(), questionResponse.getOptionesNum());
+                                questionResponse.getDataType(), questionResponse.getOptionesNum(),questionResponse.getOrder());
                         long idQuestion = G500App.getDaoSession().getPreguntasDao().insertOrReplace(preguntas);
                         if (questionResponse.getOptionResponses() != null && questionResponse.getOptionResponses().size() > 0) {
                             for (OptionResponse optionResponse : questionResponse.getOptionResponses()) {
@@ -114,19 +114,19 @@ public class Dal {
                                 opciones.setPregunta_id(new Long(questionResponse.getQuesionId()));
                                 opciones.setOpcion_id(new Long(optionResponse.getOptionId()));
                                 opciones.setOpcion_contenido(optionResponse.getOptionDescription());
+                                opciones.setOpcion_url(Validators.validateString(optionResponse.getUrl()));
                                 G500App.getDaoSession().getOpcionesDao().insertOrReplace(opciones);
                             }
                         }
                     }
                 }else{
-                    DesignUtils.showToast(mContex,"2 insertSurvey");
+
                 }
             }else{
-                DesignUtils.showToast(mContex,"1 insertSurvey");
             }
         }catch (Exception e){
             e.printStackTrace();
-            DesignUtils.showToast(mContex,"insertSurvey");
+
         }
         return idEncuesta;
     }
@@ -420,7 +420,7 @@ public class Dal {
             List<Encuesta> encuestas = G500App.getDaoSession().getEncuestaDao().queryBuilder().list();
             if (encuestas != null && encuestas.size() > 0){
                 List<Preguntas> preguntas = G500App.getDaoSession().getPreguntasDao().queryBuilder().
-                        where(PreguntasDao.Properties.Encuesta_id.eq(encuestas.get(0).getEncuesta_id())).list();
+                        where(PreguntasDao.Properties.Encuesta_id.eq(encuestas.get(0).getEncuesta_id())).orderAsc(PreguntasDao.Properties.Pregunta_orden).list();
                 if (preguntas != null && preguntas.size() > 0){
                     for (Preguntas pregunta : preguntas){
                         List<Opciones> opciones = G500App.getDaoSession().getOpcionesDao().queryBuilder().

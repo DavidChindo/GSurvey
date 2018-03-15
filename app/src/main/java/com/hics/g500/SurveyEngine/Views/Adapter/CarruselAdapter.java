@@ -54,18 +54,17 @@ public class CarruselAdapter extends RecyclerView.Adapter<CarruselAdapter.Carrus
     @Override
     public void onBindViewHolder(CarruselViewHolder holder, int position) {
 
-        Opciones opciones = mValues.get(position);
+        final Opciones opciones = mValues.get(position);
 
         if (opciones != null){
             if (opciones.getOpcion_url() != null && !opciones.getOpcion_url().isEmpty()){
                 try {
                     holder.imgView.setVisibility(View.VISIBLE);
                     holder.txt.setVisibility(View.GONE);
+
                     Glide.with(context).load(opciones.getOpcion_url())
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true)
                             .error(R.drawable.placeholder_image)
-                            .placeholder(R.drawable.placeholder_image)
+                            .fitCenter()
                             .into(holder.imgView);
                     if (mOption != null){
                         if (mOption.getOpcion_id() == opciones.getOpcion_id()){
@@ -79,9 +78,9 @@ public class CarruselAdapter extends RecyclerView.Adapter<CarruselAdapter.Carrus
                     holder.imgView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            mSurveyCallback.onSaveAnswer(null,((Opciones)view.getTag()).getOpcion_id().intValue(),mQuestion,
+                            mSurveyCallback.onSaveAnswer(null,opciones.getOpcion_id().intValue(),mQuestion,
                                     Integer.parseInt(mQuestion.getPregunta_tipo()),mQuestion.getRespuestaDetalle());
-                            mOption = ((Opciones)view.getTag());
+                            mOption = opciones;
                             notifyDataSetChanged();
                         }
                     });

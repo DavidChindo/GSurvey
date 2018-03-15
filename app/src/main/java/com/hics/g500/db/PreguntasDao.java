@@ -31,6 +31,7 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
         public final static Property Tipo_max = new Property(6, Integer.class, "tipo_max", false, "TIPO_MAX");
         public final static Property Tipo_dato = new Property(7, String.class, "tipo_dato", false, "TIPO_DATO");
         public final static Property Num_opciones = new Property(8, Integer.class, "num_opciones", false, "NUM_OPCIONES");
+        public final static Property Pregunta_orden = new Property(9, Integer.class, "pregunta_orden", false, "PREGUNTA_ORDEN");
     }
 
 
@@ -54,7 +55,8 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
                 "\"TIPO_MIN\" INTEGER," + // 5: tipo_min
                 "\"TIPO_MAX\" INTEGER," + // 6: tipo_max
                 "\"TIPO_DATO\" TEXT," + // 7: tipo_dato
-                "\"NUM_OPCIONES\" INTEGER);"); // 8: num_opciones
+                "\"NUM_OPCIONES\" INTEGER," + // 8: num_opciones
+                "\"PREGUNTA_ORDEN\" INTEGER);"); // 9: pregunta_orden
     }
 
     /** Drops the underlying database table. */
@@ -111,6 +113,11 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
         if (num_opciones != null) {
             stmt.bindLong(9, num_opciones);
         }
+ 
+        Integer pregunta_orden = entity.getPregunta_orden();
+        if (pregunta_orden != null) {
+            stmt.bindLong(10, pregunta_orden);
+        }
     }
 
     @Override
@@ -161,6 +168,11 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
         if (num_opciones != null) {
             stmt.bindLong(9, num_opciones);
         }
+ 
+        Integer pregunta_orden = entity.getPregunta_orden();
+        if (pregunta_orden != null) {
+            stmt.bindLong(10, pregunta_orden);
+        }
     }
 
     @Override
@@ -179,7 +191,8 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // tipo_min
             cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // tipo_max
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // tipo_dato
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // num_opciones
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // num_opciones
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9) // pregunta_orden
         );
         return entity;
     }
@@ -195,6 +208,7 @@ public class PreguntasDao extends AbstractDao<Preguntas, Long> {
         entity.setTipo_max(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
         entity.setTipo_dato(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setNum_opciones(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setPregunta_orden(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
      }
     
     @Override
