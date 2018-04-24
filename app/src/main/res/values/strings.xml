@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Gasobook</string>
+    <string name="app_name">Gasurvey</string>
 
     <!-- URLS -->
     <string name="url_qa">http://mandragoragourmet.com/wsb/app/index.php/</string>

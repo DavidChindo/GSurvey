@@ -28,7 +28,8 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/margin_eigth">
+            android:layout_margin="@dimen/margin_eigth"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/item_route_img_gas"
@@ -36,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
+                android:visibility="gone"
                 />
         </LinearLayout>
         <ImageButton

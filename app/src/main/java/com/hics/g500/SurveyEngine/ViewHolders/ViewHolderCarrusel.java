@@ -45,10 +45,10 @@ public class ViewHolderCarrusel extends RecyclerView.ViewHolder {
         this.question = questiont;
         this.selectedOption = opciones;
         //int spanCount = listValues.size() / 6;
-        int spanCount = 4;
+        int spanCount = 3;
 
         recyclerView.setHasFixedSize(true);
-        layoutManager = new GridLayoutManager(v.getContext(),spanCount, LinearLayoutManager.HORIZONTAL,false);
+        layoutManager = new GridLayoutManager(v.getContext(),spanCount, LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(new CarruselAdapter(listValues,v.getContext(),R.layout.item_carrusel,mSurveyCallback,selectedOption,question));
