@@ -80,28 +80,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.imgMenu.setVisibility(gasolinera.getAudio() != null && !gasolinera.getAudio().isEmpty() ? View.VISIBLE :  View.GONE);
             final Bitmap mBitmap;
             Respuesta respuesta = Dal.getAnswerParent(Dal.idSurvey(),gasolinera.getGas_id());
-            if (respuesta != null) {
-                mBitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableResource(position, respuesta.getCompletada() != null ? respuesta.getCompletada() : false));
-                setCorner(holder.imgViewGas, mBitmap, mContext);
-            }else{
-                mBitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableResource(position, false));
-                setCorner(holder.imgViewGas, mBitmap, mContext);
-            }
-            holder.mSurvey.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Respuesta answer = Dal.insertRespuestaParent(Dal.idSurvey(),gasolinera.getGas_id(),false,false,"","");
-                    if (answer != null){
-                        if (!answer.getCompletada()){
-                            Intent intent = new Intent(mContext,SurveyActivity.class);
-                            intent.putExtra("answerParent", (new Gson()).toJson(answer));
-                            mContext.startActivity(intent);
-                        }else{
-                            DesignUtils.infoMessage(mActivity,"Contestada","La gasolinera ya fue contestada");
-                        }
-                    }
-                }
-            });
+
 
             holder.mInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -193,9 +172,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         @BindView(R.id.item_route_id)TextView mId;
         @BindView(R.id.item_route_name)TextView mName;
         @BindView(R.id.item_route_address)TextView mAddress;
-        @BindView(R.id.item_route_survey)LinearLayout mSurvey;
         @BindView(R.id.item_route_ln_info)LinearLayout mInfo;
-        @BindView(R.id.item_route_img_gas)ImageView imgViewGas;
         @BindView(R.id.item_route_open_survey)RelativeLayout imgViewOpenSurvey;
         @BindView(R.id.item_route_open_map)RelativeLayout imgViewOpenMap;
         @BindView(R.id.item_route_open_record)RelativeLayout imgRecord;
