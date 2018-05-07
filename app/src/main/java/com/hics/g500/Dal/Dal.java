@@ -209,7 +209,6 @@ public class Dal {
             e.printStackTrace();
             return null;
         }
-
     }
 
 
@@ -365,6 +364,17 @@ public class Dal {
         }
     }
 
+    public static void deleteAnswer(Respuesta answerParent){
+        try {
+            List<RespuestaDetalle> respuestaDetalles = getRespuestaDetalleByIdParent(answerParent.getId());
+            if (respuestaDetalles != null && respuestaDetalles.size() > 0){
+                G500App.getDaoSession().getRespuestaDetalleDao().deleteInTx(respuestaDetalles);
+                G500App.getDaoSession().getRespuestaDao().deleteInTx(answerParent);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public static String token(){
         try {

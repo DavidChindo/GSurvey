@@ -45,7 +45,7 @@ public class ViewHolderCarrusel extends RecyclerView.ViewHolder {
         this.question = questiont;
         this.selectedOption = opciones;
         //int spanCount = listValues.size() / 6;
-        int spanCount = 3;
+        int spanCount = 4;
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(v.getContext(),spanCount, LinearLayoutManager.VERTICAL,false);

@@ -4,6 +4,7 @@
     <!-- URLS -->
     <string name="url_qa">http://mandragoragourmet.com/wsb/app/index.php/</string>
     <string name="url_prod">http://mandragoragourmet.com/qa/index.php/</string>
+    <!-- <string name="url_prod">http://mandragoragourmet.com/qa/app/index.php/</string> -->
 
 
     <!--Login -->

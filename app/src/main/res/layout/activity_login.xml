@@ -153,7 +153,7 @@
             android:text="V 1.0"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/font_size_16"
-            android:visibility="gone"/>
+            />
 
         <Button
             android:id="@+id/act_login_signup"
@@ -165,7 +165,8 @@
             android:layout_marginEnd="@dimen/margin_thirtytwo"
             android:text="Regístrate aquí"
             android:layout_alignParentBottom="true"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/act_login_no_acount"
@@ -177,7 +178,8 @@
             android:layout_marginStart="@dimen/margin_fortyeight"
             android:text="¿No tienes cuenta?"
             android:textAlignment="center"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </FrameLayout>

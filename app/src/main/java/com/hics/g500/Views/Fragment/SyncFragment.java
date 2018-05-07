@@ -99,7 +99,6 @@ public class SyncFragment extends Fragment implements SyncCallback{
     private void initView(){
         mActivity = getActivity();
         btnRecord.setAnimation(AnnimationsBuilding.getDown(mActivity));
-        /*Dummy*/
         sync = Dal.surveysSync();
 
         initRecycler();

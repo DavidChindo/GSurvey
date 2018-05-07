@@ -299,8 +299,9 @@ public class SurveyActivity extends AppCompatActivity implements ImageCallback, 
         if (sentDataReponse != null){
             Respuesta respuesta = Dal.getAnsweParentById(mAnswerParent.getId());
             if (respuesta != null) {
-                Dal.updateRespuestaParent(respuesta.getEncuesta_id(),respuesta.getGas_id(),
+                Respuesta answerParent = Dal.updateRespuestaParent(respuesta.getEncuesta_id(),respuesta.getGas_id(),
                         respuesta.getCompletada(),true,respuesta.getFechaFin(), LogicUtils.getCurrentHour());
+                Dal.deleteAnswer(answerParent);
             }
             mProgressDialog.dismiss();
             DesignUtils.showDialogWithFinish("Sincronización",sentDataReponse.getMessage() +" y archivos recibidos",this);
