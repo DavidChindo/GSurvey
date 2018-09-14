@@ -31,9 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.jean.jcplayer.JcAudio;
-import com.example.jean.jcplayer.JcPlayerService;
-import com.example.jean.jcplayer.JcPlayerView;
+import com.example.jean.jcplayer.JcPlayerManager;
+
+import com.example.jean.jcplayer.JcPlayerManagerListener;
+import com.example.jean.jcplayer.general.JcStatus;
+import com.example.jean.jcplayer.model.JcAudio;
+import com.example.jean.jcplayer.view.JcPlayerView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -92,7 +95,7 @@ import static android.content.Context.LOCATION_SERVICE;
  * A simple {@link Fragment} subclass.
  */
 public class RouteFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,
-        ActivityCompat.OnRequestPermissionsResultCallback,GasolinerasCallback, JcPlayerView.JcPlayerViewServiceListener,SurveyCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback,GasolinerasCallback, JcPlayerManagerListener,SurveyCallback {
 
     @BindView(R.id.fr_route_txt_error)TextView txtError;
     @BindView(R.id.fr_route_recycler)RecyclerView recyclerView;
@@ -117,6 +120,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     private RecyclerView.LayoutManager mLayoutManager;
     private boolean GpsStatus = false;
     SurveyPresenter surveyPresenter;
+    JcAudio jcAudio;
 
     public RouteFragment() {
 
@@ -167,7 +171,8 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
         gasolinerasPresenter = new GasolinerasPresenter(this,mActivity);
         surveyPresenter = new SurveyPresenter(this,mActivity);
         gasos = new ArrayList<Gasolineras>();
-        jcPlayerView.registerServiceListener(this);
+
+
         if (!isInabledGPS()) {
             txtError.setText("Una vez activado el GPS, deslize hacia abajo para actualizar.");
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -463,9 +468,12 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     @Override
     public void onPlayAudio(String url) {
         if (url != null && !url.isEmpty()){
-            JcAudio jcAudio = JcAudio.createFromFilePath("grabación",url);
+            jcAudio = JcAudio.createFromFilePath("grabación",url);
+            jcPlayerView.setJcPlayerManagerListener(this);
             jcPlayerView.playAudio(jcAudio);
-            jcPlayerView.createNotification();
+            //jcplayerView.initPlaylist(jcAudios, null);
+
+            //   jcPlayerView.createNotification();
         }
     }
 
@@ -524,11 +532,6 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     }
 
     @Override
-    public void onPreparedAudio(String audioName, int duration) {
-
-    }
-
-    @Override
     public void onCompletedAudio() {
         if (jcPlayerView.isShown()){
             jcPlayerView.setVisibility(View.GONE);
@@ -536,30 +539,7 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
         jcPlayerView.kill();
     }
 
-    @Override
-    public void onPaused() {
 
-    }
-
-    @Override
-    public void onContinueAudio() {
-
-    }
-
-    @Override
-    public void onPlaying() {
-
-    }
-
-    @Override
-    public void onTimeChanged(long currentTime) {
-
-    }
-
-    @Override
-    public void updateTitle(String title) {
-
-    }
 
     @Override
     public void onSuccessSurvey(SurveyResponse surveyResponse) {
@@ -580,5 +560,41 @@ public class RouteFragment extends Fragment implements GoogleApiClient.Connectio
     public void onErrorSurvey(String msgError) {
         mProgressDialog.dismiss();
         DesignUtils.errorMessage(mActivity,"Error",msgError);
+    }
+
+    @Override
+    public void onContinueAudio(JcStatus jcStatus) {
+        Log.d("Tag",""+jcStatus);
+    }
+
+    @Override
+    public void onPreparedAudio(JcStatus jcStatus) {
+        Log.d("Tag",""+jcStatus);
+    }
+
+    @Override
+    public void onPaused(JcStatus jcStatus) {
+        Log.d("Tag",""+jcStatus);
+    }
+
+    @Override
+    public void onPlaying(JcStatus jcStatus) {
+        Log.d("Tag",""+jcStatus);
+    }
+
+    @Override
+    public void onTimeChanged(JcStatus jcStatus) {
+        Log.d("Tag",""+jcStatus);
+    }
+
+    @Override
+    public void onStopped(JcStatus jcStatus) {
+        Log.d("Tag",""+jcStatus);
+        jcPlayerView.removeAudio(jcAudio);
+    }
+
+    @Override
+    public void onJcpError(Throwable throwable) {
+        Log.d("Tag",""+throwable);
     }
 }

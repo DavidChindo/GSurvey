@@ -1,7 +1,9 @@
 package com.hics.g500;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Environment;
+import android.support.multidex.MultiDex;
 
 import com.hics.g500.Library.Statics;
 import com.hics.g500.Network.Definitions.Urls;
@@ -54,6 +56,12 @@ public class G500App extends Application {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+      //  MultiDex.install(this);
     }
 
 }

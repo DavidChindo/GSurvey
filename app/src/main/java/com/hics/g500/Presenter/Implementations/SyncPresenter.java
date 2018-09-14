@@ -112,9 +112,13 @@ public class SyncPresenter {
                                         mSyncCallback.onUploadFileErro(t.getMessage());
                                     }
                                 });
+                            }else{
+                                mSyncCallback.onUploadFileErro("No existe el archivo");
                             }
                         }
                     }
+                }else{
+                    mSyncCallback.onUploadFileErro("No hay conexión a internet");
                 }
             }
         }catch (Exception e){

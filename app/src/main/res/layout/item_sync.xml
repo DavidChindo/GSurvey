@@ -59,7 +59,8 @@
                 android:src="@drawable/ic_ubicacion"
                 android:tint="@color/icon_color"
                 android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp"
+                android:visibility="gone"/>
         </LinearLayout>
         <LinearLayout
             android:layout_alignParentStart="true"

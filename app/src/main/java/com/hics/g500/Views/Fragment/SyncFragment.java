@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.hics.g500.Dal.Dal;
 import com.hics.g500.Library.AnnimationsBuilding;
+import com.hics.g500.Library.Connection;
 import com.hics.g500.Library.DesignUtils;
 import com.hics.g500.Library.LogicUtils;
 import com.hics.g500.Network.Request.AnswerSync;
@@ -131,8 +132,13 @@ public class SyncFragment extends Fragment implements SyncCallback{
         if (respuesta != null){
             mProgressDialog = ProgressDialog.show(mActivity, null, "Enviando...");
             mProgressDialog.setCancelable(false);
-            mSurveySync = respuesta;
-            syncPresenter.uploadFile(respuesta);
+            if (Connection.isConnected(mActivity)) {
+                mSurveySync = respuesta;
+                syncPresenter.uploadFile(respuesta);
+            }else{
+                mProgressDialog.dismiss();
+                DesignUtils.errorMessage(mActivity,"","No hay conexión a internet");
+            }
         }else{
             DesignUtils.errorMessage(mActivity,"","Por el momento no se pueden enviar las respuestas");
         }
@@ -148,8 +154,9 @@ public class SyncFragment extends Fragment implements SyncCallback{
         if (sentDataReponse != null){
             Respuesta respuesta = Dal.getAnsweParentById(mSurveySync.getParentId());
             if (respuesta != null) {
-                Dal.updateRespuestaParent(respuesta.getEncuesta_id(),respuesta.getGas_id(),
+               Respuesta answer =  Dal.updateRespuestaParent(respuesta.getEncuesta_id(),respuesta.getGas_id(),
                         respuesta.getCompletada(),true,respuesta.getFechaFin(), LogicUtils.getCurrentHour());
+                Dal.deleteAnswer(answer);
                 sync = Dal.surveysSync();
                 initRecycler();
             }

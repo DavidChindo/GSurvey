@@ -42,7 +42,7 @@
             />
     </com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 
-    <com.example.jean.jcplayer.JcPlayerView
+    <com.example.jean.jcplayer.view.JcPlayerView
         android:id="@+id/jcplayer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -51,3 +51,12 @@
         android:visibility="gone"/>
 
 </RelativeLayout>
+
+<!--
+<com.example.jean.jcplayer.JcPlayerView
+        android:id="@+id/jcplayer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        android:visibility="gone"/> -->
